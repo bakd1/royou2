@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>위험물산업기사 실기 단원별 반반 암기장 - 1. 위험물 분류·품명·지정수량</title>
+  <style>
+    body { font-family: 'Malgun Gothic', sans-serif; margin: 30px; max-width: 900px; background-color: #f4f6f9; color: #333; }
+    h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+    .instruction { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 0.95em; }
+    
+    /* 모드 선택 토글 스타일 */
+    .mode-selection { text-align: center; margin-bottom: 30px; }
+    .mode-selection label {
+      display: inline-block; margin: 0 10px; padding: 10px 20px;
+      font-size: 1.05em; font-weight: bold; border-radius: 8px; cursor: pointer;
+      border: 2px solid #ced4da; transition: all 0.2s; background-color: #fff; color: #666;
+    }
+    .mode-selection label.active { border-color: #1976d2; background-color: #e3f2fd; color: #1976d2; }
+
+    .question-card { background-color: #fff; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .main-q-title { font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #1976d2; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; line-height: 1.4; }
+    
+    .sub-q-container { margin-top: 15px; padding-left: 10px; }
+    .sub-q-label { font-weight: bold; margin-bottom: 8px; font-size: 1.05em; line-height: 1.4; }
+    
+    .input-standard, .input-calc { 
+      width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; transition: border-color 0.2s;
+    }
+    .input-standard:focus, .input-calc:focus, .textarea-formula:focus { outline: none; border-color: #1976d2; box-shadow: 0 0 0 3px rgba(25,118,210,0.15); }
+    
+    .textarea-formula {
+      width: 100%; padding: 12px; font-size: 15px; border: 1px dashed #adb5bd; border-radius: 6px; box-sizing: border-box; margin-bottom: 5px; resize: vertical; min-height: 80px; background-color: #f8f9fa; line-height: 1.4;
+    }
+    .calc-label { font-size: 0.85em; color: #6c757d; font-weight: bold; margin-bottom: 3px; display: block; }
+    
+    .feedback-box { margin-top: 5px; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 0.95em; display: none; line-height: 1.5; }
+    .is-correct { background-color: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; }
+    .is-incorrect { background-color: #ffebee; border: 1px solid #ffcdd2; color: #c62828; }
+    .is-partial { background-color: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; }
+    
+    .override-btns { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc; }
+    .btn-override { padding: 6px 12px; font-size: 0.85em; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px; color: #fff; transition: opacity 0.2s; }
+    .btn-override:hover { opacity: 0.8; }
+    .btn-correct { background-color: #4caf50; }
+    .btn-partial { background-color: #ff9800; }
+    .btn-incorrect { background-color: #f44336; }
+    
+    .btn-grade-single { margin-top: 15px; padding: 10px 20px; font-size: 0.95em; background-color: #607d8b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; float: right; transition: background-color 0.2s; }
+    .btn-grade-single:hover { background-color: #455a64; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+
+    .submit-section { text-align: center; margin-top: 40px; margin-bottom: 50px; }
+    .btn-submit { padding: 15px 40px; font-size: 1.2em; background-color: #1976d2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(25,118,210,0.3); }
+    .btn-submit:hover { background-color: #1565c0; }
+    .btn-submit:disabled { background-color: #9e9e9e; cursor: not-allowed; box-shadow: none; }
+    
+    #final-result { margin-top: 25px; font-size: 1.4em; font-weight: bold; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; display: none; line-height: 1.5; }
+    .q-score-badge { float: right; font-size: 0.8em; background-color: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 20px; margin-left: 10px; }
+  /* ================== 우측 문항 내비게이션 패널 스타일 ================== */
+#q-nav-panel {
+  position: fixed;
+  top: 50px;
+  right: 20px;
+  width: 170px;
+  background-color: #fff;
+  border: 2px solid #ced4da;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 120px); /* 화면 높이에 맞게 스크롤 자동 생성 */
+}
+
+.q-nav-header {
+  background-color: #f8f9fa;
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.95em;
+  border-bottom: 1px solid #ced4da;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: #1976d2;
+}
+
+.q-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.q-nav-btn {
+  padding: 8px 0;
+  font-size: 0.9em;
+  font-weight: bold;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.q-nav-btn:hover { background-color: #e9ecef; color: #495057; }
+
+/* 상태별 버튼 색상 */
+.q-nav-btn.answered { background-color: #e3f2fd; border-color: #90caf9; color: #1976d2; } /* 답안 작성 중 */
+.q-nav-btn.correct { background-color: #e8f5e9; border-color: #81c784; color: #2e7d32; }  /* 정답 */
+.q-nav-btn.partial { background-color: #fff3e0; border-color: #ffb74d; color: #e65100; }  /* 부분 점수 */
+.q-nav-btn.incorrect { background-color: #ffebee; border-color: #e57373; color: #c62828; } /* 오답 */
+
+.q-nav-legend {
+  font-size: 0.75em;
+  padding: 10px;
+  border-top: 1px solid #ced4da;
+  background-color: #f8f9fa;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.q-nav-legend .box {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* 해상도가 낮을 경우 본문을 가리지 않게 숨김 처리 */
+@media (max-width: 1150px) {
+  #q-nav-panel { display: none; }
+}
+  </style>
+</head>
+<body>
+
+  <h1>📝 1. 위험물 분류·품명·지정수량</h1>
+  <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.</p>
+  
+<div class="mode-selection" id="mode-selection">
+    <label class="active" id="label-basic" onclick="setMode('basic')">
+      📝 시험 모드 (실전 테스트)
+    </label>
+    <label id="label-study" onclick="setMode('study')">
+      📖 해설 모드 (해설 펼쳐보기)
+    </label>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <div class="submit-section">
+    <button id="submit-btn" class="btn-submit" onclick="gradeAll()">전체 제출 및 채점하기</button>
+    <div id="final-result"></div>
+  </div>
+
+  <script>
+    let gradingState = [];
+    let isTestSubmitted = false;
+
+    // 문제 데이터 배열 (1~55)
+    const quizData = [
+      {
+        mainQuestion: "문제 1. [출제 22-1]<br>다음 물질(황린, 칼륨, 나이트로벤젠, 글리세린, 수소화나트륨, 트리나이트로페놀) 중 자연발화성이면서 금수성인 것은 ( ① )이다.",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["칼륨"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법상</b> 제3류는 <b>자연발화성 및 금수성물질</b>이고, 칼륨은 두 성질을 모두 가진 대표 물질이다.<br>칼륨은 공기 중에서 산화·발화하고, 물과 만나면 수소를 내며 격렬히 반응한다. 그래서 <b>석유(등유) 속</b>에 저장한다.<br>혼동 주의: 황린은 자연발화성만 있어 물속에 저장하고, 수소화나트륨은 금수성이 두드러진다. 나이트로벤젠·글리세린은 제4류, 트리나이트로페놀은 제5류다."
+      },
+      {
+        mainQuestion: "문제 2. [출제 22-1]<br>제3류 위험물 중 위험등급 I에 해당하는 품명 5가지는 ( ① ), ( ② ), ( ③ ), ( ④ ), ( ⑤ )이다.",
+        score: 5,
+        isUnordered: true,
+        subs: [
+          { label: "①", type: "short", answers: ["칼륨"] },
+          { label: "②", type: "short", answers: ["나트륨"] },
+          { label: "③", type: "short", answers: ["알킬알루미늄"] },
+          { label: "④", type: "short", answers: ["알킬리튬"] },
+          { label: "⑤", type: "short", answers: ["황린"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 19</b>의 위험등급 기준에 따르면, 제3류에서는 지정수량이 <b>10kg</b>인 품명과 황린(<b>20kg</b>)이 위험등급 I이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>칼륨 — 지정수량 10kg이며, 물과 반응해 수소를 내는 금속이다.</li><li>나트륨 — 지정수량 10kg이며, 칼륨과 마찬가지로 석유 속에 보관한다.</li><li>알킬알루미늄 — 지정수량 10kg이며, 공기 중에서 자연발화하는 유기금속이다.</li><li>알킬리튬 — 지정수량 10kg이며, 알킬알루미늄과 같은 자연발화성 물질이다.</li><li>황린 — 지정수량 20kg이며, 물속에 저장하는 자연발화성 물질이다.</li></ul>혼동 주의: 알칼리금속·알칼리토금속과 유기금속화합물은 지정수량이 50kg이라 위험등급 II다."
+      },
+      {
+        mainQuestion: "문제 3. [출제 22-2/21-1]<br>다음 위험물의 정의에서 빈칸을 채우시오.<br>① 인화성 고체: 고형알코올, 그 밖에 1기압에서 인화점이 섭씨 ( ① )도 미만인 고체<br>② 철분: 철의 분말로서 ( ② )마이크로미터의 표준체를 통과하는 것이 ( ③ )중량퍼센트 미만인 것은 제외<br>③ 제2석유류: 등유, 경유, 그 밖에 1기압에서 인화점이 섭씨 ( ④ )도 이상 ( ⑤ )도 미만인 것",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["40"] },
+          { label: "②", type: "short", answers: ["53"] },
+          { label: "③", type: "short", answers: ["50"] },
+          { label: "④", type: "short", answers: ["21"] },
+          { label: "⑤", type: "short", answers: ["70"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b> 비고에 정한 정의 수치를 그대로 묻는 문항이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>인화성 고체 — 1기압에서 인화점이 <b>40℃ 미만</b>인 고체다.</li><li>철분 — <b>53μm</b> 표준체를 통과하는 양이 <b>50중량%</b> 미만인 굵은 가루는 철분에서 뺀다.</li><li>제2석유류 — 인화점 <b>21℃ 이상 70℃ 미만</b>인 것이다.</li></ul>혼동 주의: 금속분은 150μm 표준체 기준으로 제외하므로 철분의 53μm와 섞어 외우지 않는다."
+      },
+      {
+        mainQuestion: "문제 4. [출제 22-2]<br>제1류 위험물 중 위험등급 I에 해당하는 품명을 쓰시오.<br>( ① ), ( ② ), ( ③ ), ( ④ )",
+        score: 5,
+        isUnordered: true,
+        subs: [
+          { label: "①", type: "short", answers: ["아염소산염류"] },
+          { label: "②", type: "short", answers: ["염소산염류"] },
+          { label: "③", type: "short", answers: ["과염소산염류"] },
+          { label: "④", type: "short", answers: ["무기과산화물"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 19</b>에 따르면, 제1류에서는 지정수량이 <b>50kg</b>인 품명이 위험등급 I이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>아염소산염류 — ClO<sub>2</sub><sup>-</sup>의 염이다(예: 아염소산나트륨).</li><li>염소산염류 — ClO<sub>3</sub><sup>-</sup>의 염이다(예: 염소산칼륨).</li><li>과염소산염류 — ClO<sub>4</sub><sup>-</sup>의 염이다(예: 과염소산암모늄).</li><li>무기과산화물 — 과산화칼륨·과산화나트륨처럼 물과 반응해 산소를 내는 물질이다.</li></ul>혼동 주의: 브로민산염류·질산염류·아이오딘산염류(300kg)는 위험등급 II이고, 과망간산염류·중크롬산염류(1,000kg)는 위험등급 III이다."
+      },
+      {
+        mainQuestion: "문제 5. [출제 22-2]<br>나이트로셀룰로오스에 대하여 답하시오.<br>① 제조 방법: 셀룰로오스에 진한 ( ① )과 진한 ( ② )을 혼합하여 제조<br>③ 품명: ( ③ )<br>④ 지정수량: ( ④ )<br>⑤ 운반용기 외부 표시 주의사항: ( ⑤ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["황산"] },
+          { label: "②", type: "short", answers: ["질산"] },
+          { label: "③", type: "short", answers: ["질산에스테르류", "질산에스테르"] },
+          { label: "④", type: "short", answers: ["10kg", "10"] },
+          { label: "⑤", type: "short", answers: ["화기엄금, 충격주의", "화기엄금,충격주의", "충격주의, 화기엄금", "충격주의,화기엄금"] }
+        ],
+        explanation: "[해설]<br>나이트로셀룰로오스는 셀룰로오스를 <b>진한 황산</b>과 <b>진한 질산</b>의 혼산으로 나이트로화해 만들며, 제5류 <b>질산에스테르류</b>에 속한다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>질산 — 셀룰로오스의 -OH를 질산에스테르(-ONO<sub>2</sub>)로 바꾸는 원료다.</li><li>황산 — 반응에서 생기는 물을 흡수하는 탈수제 역할을 한다.</li><li>지정수량 — 현행 제5류는 위험성 시험 결과에 따라 제1종 10kg, 제2종 100kg이며, 나이트로셀룰로오스는 제1종으로 <b>10kg</b>이다.</li><li>주의사항 — 제5류 운반용기에는 <b>화기엄금</b>과 <b>충격주의</b>를 함께 표시한다.</li></ul>혼동 주의: 제조소 게시판에는 제5류라도 화기엄금만 쓴다. 충격주의는 운반용기 표시에만 붙는다."
+      },
+      {
+        mainQuestion: "문제 6. [출제 22-2]<br>유별·성질·품명·지정수량 표의 빈칸을 채우시오.<br>제2류 / 성질 ( ① ) / 철분 500kg<br>제2류 / ( ① ) / 금속분<br>제2류 / ( ① ) / 마그네슘<br>제2류 / ( ① ) / ( ② ) / 1,000kg<br>제1류 / 산화성고체 / 아이오딘산염류 / ( ③ )kg<br>제1류 / 산화성고체 / ( ④ ), 과망간산염류 / 1,000kg<br>제4류 / 제2석유류 비수용성 / ( ⑤ )L<br>제4류 / 제3석유류 수용성 / ( ⑥ )L",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["가연성고체"] },
+          { label: "②", type: "short", answers: ["인화성고체"] },
+          { label: "③", type: "short", answers: ["300"] },
+          { label: "④", type: "short", answers: ["중크롬산염류"] },
+          { label: "⑤", type: "short", answers: ["1000", "1,000"] },
+          { label: "⑥", type: "short", answers: ["4000", "4,000"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 제2류의 성질은 <b>가연성고체</b>이고, 제1류의 성질은 산화성고체다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>제2류 성질 — 철분·금속분·마그네슘은 모두 가연성고체다.</li><li>인화성고체 — 고형알코올처럼 인화점이 40℃ 미만인 고체이며, 지정수량은 1,000kg이다.</li><li>아이오딘산염류 — 제1류이며, 지정수량은 300kg이다.</li><li>중크롬산염류 — 과망간산염류와 함께 지정수량이 1,000kg인 제1류 품명이다.</li><li>제2석유류 비수용성 — 1,000L이다(수용성은 2,000L).</li><li>제3석유류 수용성 — 4,000L이다(비수용성은 2,000L).</li></ul>외우는 요령: 제4류 석유류는 수용성의 지정수량이 비수용성의 <b>2배</b>다."
+      },
+      {
+        mainQuestion: "문제 7. [출제 21-3]<br>[보기] 중 위험등급 II에 해당하는 것(황 100kg, 질산염류 600kg)을 골라 지정수량 배수의 합을 구하시오.<br>지정수량 배수 합 = 100/지정수량 + 600/지정수량 = ( ① )배",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["3", "3배"] }
+        ],
+        explanation: "[해설]<br>지정수량 배수의 합은 각 위험물의 저장량을 그 <b>지정수량</b>으로 나눈 값을 모두 더해 구한다.<br>황과 질산염류는 둘 다 <b>위험등급 II</b>에 속하므로 두 물질을 모두 합산한다.<br>배수 합 = 100/100 + 600/300<br>= 1 + 2 = <b>3배</b><br>혼동 주의: 배수 합이 1 이상이면 지정수량 이상을 저장·취급하는 것으로 보아 허가 대상이 된다."
+      },
+      {
+        mainQuestion: "문제 8. [출제 21-1]<br>다음 중 위험물과 지정수량이 바르게 연결된 것을 모두 고르시오.<br>① 테레핀유 : 2,000L<br>② 기어유 : 6,000L<br>③ 아닐린 : 2,000L<br>④ 피리딘 : 400L<br>⑤ 산화프로필렌 : 200L<br>정답: ( ① )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["2,3,4", "②,③,④", "2, 3, 4", "②, ③, ④", "234", "②③④", "2,3,4번", "②,③,④번"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 제4류의 지정수량은 품명과 <b>수용성 여부</b>로 정해진다. 따라서 바르게 연결된 것은 기어유·아닐린·피리딘이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>기어유 — 제4석유류이며, 지정수량은 6,000L이다.</li><li>아닐린 — 제3석유류 비수용성이며, 지정수량은 2,000L이다.</li><li>피리딘 — 제1석유류 수용성이며, 지정수량은 400L이다.</li></ul>테레핀유는 제2석유류 비수용성이라 <b>1,000L</b>이고, 산화프로필렌은 특수인화물이라 <b>50L</b>이므로 둘 다 틀린 연결이다."
+      },
+      {
+        mainQuestion: "문제 9. [출제 21-1]<br>제5류 위험물(자기반응성물질)의 품명 5가지는 ( ① ), ( ② ), ( ③ ), ( ④ ), ( ⑤ )이다.",
+        score: 5,
+        isUnordered: true,
+        subs: [
+          { label: "①", type: "short", answers: ["나이트로화합물", "니트로화합물"] },
+          { label: "②", type: "short", answers: ["나이트로소화합물", "니트로소화합물"] },
+          { label: "③", type: "short", answers: ["아조화합물"] },
+          { label: "④", type: "short", answers: ["디아조화합물"] },
+          { label: "⑤", type: "short", answers: ["히드라진유도체"] }
+        ],
+        explanation: "[해설]<br>제5류 위험물은 <b>자기반응성물질</b>이다. 분자 안에 산소나 불안정한 결합이 있어 외부 산소 없이도 가열·충격에 분해·폭발한다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>나이트로화합물 — 유기화합물에 나이트로기(-NO<sub>2</sub>)가 붙은 것이다(TNT·피크르산).</li><li>나이트로소화합물 — 나이트로소기(-NO)가 붙은 유기화합물이다.</li><li>아조화합물 — 아조기(-N=N-)를 가진 화합물이다.</li><li>디아조화합물 — 디아조기(=N<sub>2</sub>)를 가진 화합물이다.</li><li>히드라진유도체 — 히드라진(N<sub>2</sub>H<sub>4</sub>)에서 유도된 화합물이다.</li></ul>혼동 주의: 제5류에는 <b>유기과산화물·질산에스테르류</b>와 하이드록실아민·하이드록실아민염류도 있으니 함께 외운다."
+      },
+      {
+        mainQuestion: "문제 10. [출제 21-1]<br>알코올류 정의에서 빈칸을 채우시오.<br>알코올류는 탄소의 수가 1부터 ( ① )개까지인 포화 1가 알코올을 의미하며 다음은 제외한다.<br>· 포화 1가 알코올의 함유량이 ( ② )중량퍼센트 미만인 수용액<br>· 가연성 액체량이 60중량퍼센트 미만이고 인화점·연소점이 에틸알코올 ( ③ )중량퍼센트 수용액의 인화점·연소점을 초과하는 것",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["3"] },
+          { label: "②", type: "short", answers: ["60"] },
+          { label: "③", type: "short", answers: ["60"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b> 비고에 있는 알코올류 정의의 수치다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>탄소 수 1~<b>3개</b> — 메틸·에틸·프로필알코올까지 해당한다(탄소 4개인 부탄올은 제2석유류).</li><li>함유량 <b>60중량퍼센트</b> 미만 수용액 — 물이 많아 위험성이 낮으므로 알코올류에서 제외한다.</li><li>에틸알코올 <b>60중량퍼센트</b> 수용액 — 인화점·연소점이 이 수용액보다 높으면 제외하는 비교 기준이다.</li></ul>외우는 요령: 탄소 수는 3개까지이고, 두 농도 기준은 모두 <b>60중량퍼센트</b>다."
+      },
+      {
+        mainQuestion: "문제 11. [출제 20-3]<br>질산칼륨에 대하여 빈칸을 채우시오.<br>① 품명 ( ① )<br>② 지정수량 ( ② )<br>③ 위험등급 ( ③ )<br>④ 제조소 등의 표지판 주의사항 ( ④ )<br>⑤ 산소가 생성되는 분해반응식: 2KNO<sub>3</sub> → ( ⑤ ) + ( ⑥ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["질산염류"] },
+          { label: "②", type: "short", answers: ["300kg", "300"] },
+          { label: "③", type: "short", answers: ["II 등급", "2등급", "II등급", "2", "II"] },
+          { label: "④", type: "short", answers: ["없음"] },
+          { label: "⑤", type: "formula", answers: ["2KNO2"] },
+          { label: "⑥", type: "formula", answers: ["O2"] }
+        ],
+        explanation: "[해설]<br>질산칼륨(KNO<sub>3</sub>)은 제1류 산화성고체 중 <b>질산염류</b>이며, 지정수량 <b>300kg</b>, 위험등급 <b>II</b>다.<br>제조소 등의 게시판 주의사항은 제1류 중 알칼리금속의 과산화물에만 <b>물기엄금</b>을 쓴다. 그 밖의 제1류는 해당 게시판이 없으므로 질산칼륨은 <b>없음</b>이다.<br>가열하면 아질산칼륨과 산소로 분해되고, 이 산소가 가연물의 연소를 돕는다.<br>2KNO<sub>3</sub> → 2KNO<sub>2</sub> + O<sub>2</sub><br>혼동 주의: 운반용기에는 질산칼륨도 화기·충격주의와 가연물접촉주의를 표시한다."
+      },
+      {
+        mainQuestion: "문제 12. [출제 20-3]<br>[보기]의 동식물유류를 요오드값에 따라 구분하시오.<br>[보기] a.아마인유 b.야자유 c.들기름 d.쌀겨유 e.목화씨유 f.땅콩유<br>건성유: ( ① )<br>반건성유: ( ② )<br>불건성유: ( ③ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["a, c", "a,c", "c, a", "c,a"] },
+          { label: "②", type: "short", answers: ["d, e", "d,e", "e, d", "e,d"] },
+          { label: "③", type: "short", answers: ["b, f", "b,f", "f, b", "f,b"] }
+        ],
+        explanation: "[해설]<br>동식물유류는 <b>요오드값</b>(유지 100g에 흡수되는 요오드의 g수)으로 구분한다. 요오드값이 클수록 불포화도가 높아 산화되기 쉽다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>건성유(130 이상) — 아마인유·들기름이다.</li><li>반건성유(100~130) — 쌀겨유·목화씨유(면실유)다.</li><li>불건성유(100 이하) — 야자유·땅콩유다.</li></ul>건성유가 스며든 헝겊을 쌓아 두면 산화열이 축적되어 <b>자연발화</b>할 수 있다."
+      },
+      {
+        mainQuestion: "문제 13. [출제 20-3]<br>다음 물질의 화학식과 지정수량을 쓰시오.<br>① 과산화벤조일: 화학식 ( ① ), 지정수량 ( ② )<br>② 과망간산암모늄: 화학식 ( ③ ), 지정수량 ( ④ )<br>③ 인화아연: 화학식 ( ⑤ ), 지정수량 ( ⑥ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "formula", answers: ["(C6H5CO)2O2", "C14H10O4"] },
+          { label: "②", type: "short", answers: ["10kg", "10"] },
+          { label: "③", type: "formula", answers: ["NH4MnO4"] },
+          { label: "④", type: "short", answers: ["1000kg", "1000", "1,000kg", "1,000"] },
+          { label: "⑤", type: "formula", answers: ["Zn3P2"] },
+          { label: "⑥", type: "short", answers: ["300kg", "300"] }
+        ],
+        explanation: "[해설]<br>지정수량은 <b>품명</b>에 따라 정해지므로 각 물질이 몇 류의 어느 품명인지부터 확인한다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>과산화벤조일 (C<sub>6</sub>H<sub>5</sub>CO)<sub>2</sub>O<sub>2</sub> — 제5류 유기과산화물이고 현행 기준 제1종에 해당해 <b>10kg</b>이다.</li><li>과망간산암모늄 NH<sub>4</sub>MnO<sub>4</sub> — 제1류 과망간산염류로 <b>1,000kg</b>이다.</li><li>인화아연 Zn<sub>3</sub>P<sub>2</sub> — 제3류 금속의 인화물로 <b>300kg</b>이다.</li></ul>혼동 주의: 인화아연은 물과 반응하면 유독한 포스핀(PH<sub>3</sub>)을 내므로 금수성 물질로 다룬다."
+      },
+      {
+        mainQuestion: "문제 14. [출제 20-2]<br>트리나이트로페놀에 대하여 빈칸을 채우시오.<br>① 구조식(화학식): ( ① ) — 벤젠고리에 -OH 1개(1번), -NO<sub>2</sub> 3개(2,4,6번)<br>② 품명 ( ② )<br>③ 지정수량 ( ③ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "formula", answers: ["C6H2(OH)(NO2)3", "C6H2OH(NO2)3"] },
+          { label: "②", type: "short", answers: ["나이트로화합물", "니트로화합물"] },
+          { label: "③", type: "short", answers: ["10kg(제1종)/100kg(제2종)", "10kg", "100kg", "10", "100", "10kg 또는 100kg"] }
+        ],
+        explanation: "[해설]<br>트리나이트로페놀(피크린산)은 <b>위험물안전관리법 시행령 별표 1</b>의 제5류 자기반응성물질이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>화학식 — C<sub>6</sub>H<sub>2</sub>(OH)(NO<sub>2</sub>)<sub>3</sub>이며, 페놀의 2·4·6번 자리에 나이트로기 3개가 붙은 구조다.</li><li>품명 — 나이트로기(-NO<sub>2</sub>)가 탄소에 직접 결합하므로 <b>나이트로화합물</b>이다.</li><li>지정수량 — 위험성 시험 결과가 제1종이면 <b>10kg</b>, 제2종이면 <b>100kg</b>이다.</li></ul>혼동 주의: 나이트로셀룰로오스·나이트로글리세린은 이름에 '나이트로'가 들어가도 질산에스테르류다."
+      },
+      {
+        mainQuestion: "문제 15. [출제 20-2]<br>[보기]의 제5류 위험물을 위험등급별로 구분하시오. (없으면 없음)<br>[보기] 히드라진유도체, 질산에스테르류, 나이트로화합물, 아조화합물, 유기과산화물, 하이드록실아민<br>① I등급: ( ① )<br>② II등급: ( ② )<br>③ III등급: ( ③ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["질산에스테르류, 유기과산화물", "질산에스테르류,유기과산화물", "유기과산화물, 질산에스테르류", "유기과산화물,질산에스테르류"] },
+          { label: "②", type: "short", answers: ["히드라진유도체, 나이트로화합물, 아조화합물, 하이드록실아민", "히드라진유도체,나이트로화합물,아조화합물,하이드록실아민"] },
+          { label: "③", type: "short", answers: ["없음"] }
+        ],
+        explanation: "[해설]<br>제5류 위험물의 위험등급은 지정수량을 기준으로 정해지며, 지정수량이 10kg인 품명만 위험등급 I에 해당한다.<br>질산에스테르류와 유기과산화물은 지정수량 10kg으로 <b>위험등급 I</b>이고, 나머지 히드라진유도체·나이트로화합물·아조화합물·하이드록실아민 등은 지정수량 100~200kg으로 <b>위험등급 II</b>에 속한다.<br>제5류 위험물에는 위험등급 III로 분류되는 품명이 존재하지 않는다는 점도 함께 기억해 둔다."
+      },
+      {
+        mainQuestion: "문제 16. [출제 20-2]<br>다음 위험물의 품명과 지정수량을 쓰시오.<br>① KIO<sub>3</sub>: 품명 ( ① ), 지정수량 ( ② )<br>② AgNO<sub>3</sub>: 품명 ( ③ ), 지정수량 ( ② )<br>③ KMnO<sub>4</sub>: 품명 ( ④ ), 지정수량 ( ⑤ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["아이오딘산염류"] },
+          { label: "②", type: "short", answers: ["300kg", "300"] },
+          { label: "③", type: "short", answers: ["질산염류"] },
+          { label: "④", type: "short", answers: ["과망간산염류"] },
+          { label: "⑤", type: "short", answers: ["1,000kg", "1000kg", "1000", "1,000"] }
+        ],
+        explanation: "[해설]<br>세 물질 모두 <b>제1류 위험물</b>(산화성고체)이며, 품명은 음이온의 종류로 정해진다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>KIO<sub>3</sub>(아이오딘산칼륨) — IO<sub>3</sub><sup>-</sup>의 염이라 아이오딘산염류이며, 지정수량은 300kg이다.</li><li>AgNO<sub>3</sub>(질산은) — NO<sub>3</sub><sup>-</sup>의 염이라 질산염류이며, 지정수량은 300kg이다.</li><li>KMnO<sub>4</sub>(과망간산칼륨) — MnO<sub>4</sub><sup>-</sup>의 염이라 과망간산염류이며, 지정수량은 <b>1,000kg</b>이다.</li></ul>외우는 요령: 브로민산·질산·아이오딘산염류는 <b>300kg</b>이고, 과망간산·중크롬산염류는 1,000kg이다."
+      },
+      {
+        mainQuestion: "문제 17. [출제 26-1/20-3/20-1]<br>제4류 위험물의 분류 기준에서 빈칸을 채우시오.<br>① 특수인화물: 발화점이 섭씨 ( ① )도 이하인 것 또는 인화점 -20도 이하·비점 40도 이하인 것<br>② 제1석유류: 인화점 섭씨 ( ② )도 미만<br>③ 제2석유류: 인화점 ( ② )도 이상 ( ③ )도 미만<br>④ 제3석유류: 인화점 ( ③ )도 이상 ( ④ )도 미만<br>⑤ 제4석유류: 인화점 ( ④ )도 이상 ( ⑤ )도 미만",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["100"] },
+          { label: "②", type: "short", answers: ["21"] },
+          { label: "③", type: "short", answers: ["70"] },
+          { label: "④", type: "short", answers: ["200"] },
+          { label: "⑤", type: "short", answers: ["250"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>은 제4류 위험물을 <b>인화점</b> 구간에 따라 차례로 나눈다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>특수인화물 — 발화점 <b>100℃</b> 이하, 또는 인화점 -20℃ 이하이면서 비점 40℃ 이하인 것.</li><li>제1석유류 — 인화점 21℃ 미만(아세톤·휘발유 등).</li><li>제2석유류 — 인화점 21℃ 이상 70℃ 미만(등유·경유 등).</li><li>제3석유류 — 인화점 70℃ 이상 200℃ 미만(중유 등).</li><li>제4석유류 — 인화점 200℃ 이상 <b>250℃</b> 미만(기어유 등).</li></ul>외우는 요령: 경계값 21-70-200-250을 한 줄로 외운다. 앞 구간의 '미만'이 다음 구간의 '이상'이 된다."
+      },
+      {
+        mainQuestion: "문제 18. [출제 22-1/20-1]<br>동식물유류에 대하여 빈칸을 채우시오.<br>① 요오드가의 정의: 유지 100g에 부가되는 ( ① )의 g수<br>② 요오드값에 따른 구분<br>건성유: 요오드값 ( ② ) 이상<br>반건성유: 요오드값 ( ③ )<br>불건성유: 요오드값 ( ④ ) 이하",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["아이오딘(I2)", "아이오딘", "요오드", "I2"] },
+          { label: "②", type: "short", answers: ["130"] },
+          { label: "③", type: "short", answers: ["100~130", "100 ~ 130", "100-130"] },
+          { label: "④", type: "short", answers: ["100"] }
+        ],
+        explanation: "[해설]<br><b>요오드값(아이오딘값)</b>은 유지 100g에 부가되는 <b>아이오딘(I<sub>2</sub>)</b>의 g수로, 불포화 이중결합이 많을수록 커진다. 이중결합이 많으면 공기 중 산소와 잘 반응해 산화·자연발화하기 쉽다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>건성유 — 요오드값 <b>130 이상</b>으로, 공기 중에서 잘 굳고 자연발화 위험이 가장 크다(아마인유·들기름).</li><li>반건성유 — 요오드값 100~130으로, 중간 정도로 굳는다(참기름·콩기름).</li><li>불건성유 — 요오드값 <b>100 이하</b>로, 잘 굳지 않는다(올리브유·피마자유).</li></ul>외우는 요령: 요오드값이 클수록 잘 마르고(건성) 자연발화 위험도 커진다."
+      },
+      {
+        mainQuestion: "문제 19. [출제 20-4]<br>제2류 위험물의 정의에서 빈칸을 채우시오.<br>① 황은 순도가 ( ① )중량퍼센트 이상인 것<br>② 철분은 ( ② )마이크로미터의 표준체를 통과하는 것이 ( ③ )중량퍼센트 미만인 것은 제외<br>③ 금속분은 구리분·니켈분과 ( ④ )마이크로미터의 체를 통과하는 것이 ( ③ )중량퍼센트 미만인 것은 제외",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["60"] },
+          { label: "②", type: "short", answers: ["53"] },
+          { label: "③", type: "short", answers: ["50"] },
+          { label: "④", type: "short", answers: ["150"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b> 비고에서 제2류는 순도와 입자 크기 기준을 채워야 위험물로 본다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>황 — 순도 <b>60중량퍼센트</b> 이상인 것만 위험물이다.</li><li>철분 — <b>53마이크로미터</b> 표준체를 통과하는 것이 50중량퍼센트 미만이면 제외한다.</li><li>금속분 — 구리분·니켈분, 그리고 <b>150마이크로미터</b> 체 통과분이 50중량퍼센트 미만인 것은 제외한다.</li></ul>혼동 주의: 철분은 53μm, 금속분은 150μm이다. 제외 기준인 '50중량퍼센트 미만'은 둘이 같다."
+      },
+      {
+        mainQuestion: "문제 20. [출제 20-4]<br>다음 제4류 위험물(석유류는 모두 수용성)의 지정수량 배수 총합을 구하시오.<br>특수인화물 200L, 제1석유류 400L, 제2석유류 4,000L, 제3석유류 12,000L, 제4석유류 24,000L<br>배수 총합 = ( ① )배",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["14", "14배"] }
+        ],
+        explanation: "[해설]<br><b>지정수량 배수</b>는 저장량을 품명별 지정수량으로 나눈 값을 모두 더해 구한다. 수용성 석유류의 지정수량은 제1석유류 400L, 제2석유류 2,000L, 제3석유류 4,000L이고, 특수인화물 50L와 제4석유류 <b>6,000L</b>는 수용성 구분이 없다.<br>배수 합 = Σ(저장량 ÷ 지정수량)<br>= 200/50 + 400/400 + 4,000/2,000 + 12,000/4,000 + 24,000/6,000<br>= 4 + 1 + 2 + 3 + 4 = <b>14배</b><br>혼동 주의: 비수용성이면 제1·2·3석유류 지정수량이 200L·1,000L·2,000L로 절반이 된다."
+      },
+      {
+        mainQuestion: "문제 21. [출제 20-4]<br>다음 위험물 중 위험등급 II에 해당하는 품명을 2가지씩 쓰시오.<br>① 제1류 위험물: ( ① )<br>② 제2류 위험물: ( ② )<br>③ 제4류 위험물: ( ③ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["브로민산염류, 아이오딘산염류", "브로민산염류,아이오딘산염류", "브로민산염류, 질산염류", "브로민산염류,질산염류", "아이오딘산염류, 질산염류", "아이오딘산염류,질산염류", "아이오딘산염류, 브로민산염류", "질산염류, 브로민산염류", "질산염류, 아이오딘산염류"] },
+          { label: "②", type: "short", answers: ["황화인, 적린", "황화인,적린", "황화인, 황", "황화인,황", "적린, 황", "적린,황", "적린, 황화인", "황, 황화인", "황, 적린"] },
+          { label: "③", type: "short", answers: ["제1석유류, 알코올류", "제1석유류,알코올류", "알코올류, 제1석유류", "알코올류,제1석유류"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 19</b>의 위험등급 기준에 따르면 위험등급 II는 각 유별에서 중간 위험도의 품명이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>제1류 — 지정수량 300kg인 브로민산염류·아이오딘산염류·질산염류.</li><li>제2류 — 지정수량 100kg인 황화인·적린·황.</li><li>제4류 — <b>제1석유류</b>와 <b>알코올류</b>.</li></ul>혼동 주의: 제4류에서 특수인화물은 위험등급 I이다. 제2·3·4석유류와 동식물유류는 위험등급 III이다."
+      },
+      {
+        mainQuestion: "문제 22. [출제 20-4]<br>다음 위험물의 품명과 지정수량을 쓰시오.<br>① HCN: ( ① ), ( ② )<br>② C<sub>2</sub>H<sub>4</sub>(OH)<sub>2</sub>: ( ③ ), ( ④ )<br>③ CH<sub>3</sub>COOH: ( ⑤ ), ( ⑥ )<br>④ C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub>: ( ③ ), ( ④ )<br>⑤ N<sub>2</sub>H<sub>4</sub>: ( ⑤ ), ( ⑥ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["제1석유류"] },
+          { label: "②", type: "short", answers: ["400L", "400"] },
+          { label: "③", type: "short", answers: ["제3석유류"] },
+          { label: "④", type: "short", answers: ["4000L", "4,000L", "4000", "4,000"] },
+          { label: "⑤", type: "short", answers: ["제2석유류"] },
+          { label: "⑥", type: "short", answers: ["2000L", "2,000L", "2000", "2,000"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 제4류는 인화점으로 석유류를 나누며, 제1~3석유류는 수용성이면 비수용성의 2배를 지정수량으로 한다. 문항의 다섯 물질은 모두 <b>수용성</b>이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>HCN(사이안화수소) — 인화점 21℃ 미만인 제1석유류 수용성으로 400L.</li><li>C<sub>2</sub>H<sub>4</sub>(OH)<sub>2</sub>(에틸렌글리콜) — 인화점 70℃ 이상 200℃ 미만인 제3석유류 수용성으로 4,000L.</li><li>CH<sub>3</sub>COOH(아세트산) — 인화점 21℃ 이상 70℃ 미만인 제2석유류 수용성으로 2,000L.</li><li>C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub>(글리세린) — 에틸렌글리콜과 같은 제3석유류 수용성으로 4,000L.</li><li>N<sub>2</sub>H<sub>4</sub>(하이드라진) — 아세트산과 같은 제2석유류 수용성으로 2,000L.</li></ul>혼동 주의: 하이드라진 자체는 제4류지만, 하이드라진 유도체는 제5류 자기반응성물질이다."
+      },
+      {
+        mainQuestion: "문제 23. [출제 20-4]<br>제2류 위험물(가연성 고체) 설명 중 옳은 것을 모두 고르시오.<br>① 황화인, 적린, 황은 위험등급 II이다.<br>② 고형알코올은 지정수량이 1,000kg이고 품명은 알코올류이다.<br>③ 대부분 비중이 1보다 작다.<br>④ 대부분 물에 녹는다.<br>⑤ 산화성 물질이다.<br>⑥ 지정수량은 100kg, 500kg, 1,000kg이다.<br>⑦ 제조소 게시판의 주의사항은 화기엄금과 화기주의 중 경우에 따라 한 개를 표시한다.<br>",
+        score: 5,
+        subs: [
+          { label: "정답", type: "short", answers: ["1,6,7", "1, 6, 7", "①,⑥,⑦", "①, ⑥, ⑦", "167", "①⑥⑦", "1,6,7번", "①,⑥,⑦번"] }
+        ],
+        explanation: "[해설]<br>옳은 보기는 ①·⑥·⑦이며, 나머지는 제2류 위험물의 정의나 물성을 잘못 서술하고 정답이다.<br>①은 황화인·적린·황이 위험등급 II라는 사실, ⑥은 제2류 지정수량이 <b>100kg·500kg·1,000kg</b> 세 구간으로 정해져 있다는 점, ⑦은 게시판 주의사항이 인화성고체는 화기엄금, 나머지는 화기주의로 나뉜다는 점을 각각 정확히 담고 있다.<br>②는 고형알코올의 품명이 알코올류가 아니라 <b>인화성고체</b>라는 점에서, ③·④·⑤는 제2류 위험물이 대체로 비중이 1보다 <b>크고</b> 물에 잘 녹지 않으며 산화성이 아니라 <b>가연성(환원성)</b> 물질이라는 점에서 틀렸다."
+      },
+      {
+        mainQuestion: "문제 24. [출제 20-4]<br>제3류 위험물의 품명·지정수량(kg) 빈칸을 채우시오.<br>칼륨: ( ① )<br>나트륨: ( ① )<br>알킬알루미늄: ( ① )<br>( ② ): 10<br>( ③ ): 20<br>알칼리금속(K, Na 제외) 및 알칼리토금속(Mg 제외): ( ④ )<br>유기금속화합물: ( ④ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["10"] },
+          { label: "②", type: "short", answers: ["알킬리튬"] },
+          { label: "③", type: "short", answers: ["황린"] },
+          { label: "④", type: "short", answers: ["50"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>의 제3류(자연발화성 및 금수성 물질)는 반응성이 클수록 지정수량이 작다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>10kg — 칼륨·나트륨·알킬알루미늄에 <b>알킬리튬</b>까지 네 가지로, 물·공기와 격렬히 반응한다.</li><li>20kg — <b>황린</b>으로, 공기 중에서 스스로 발화하므로 물속에 저장한다.</li><li>50kg — 알칼리금속(K·Na 제외)·알칼리토금속(Mg 제외)과 유기금속화합물(알킬알루미늄·알킬리튬 제외)이다.</li></ul>외우는 요령: 10kg은 「칼·나·알·알(칼륨·나트륨·알킬알루미늄·알킬리튬)」로 묶어 외운다."
+      },
+      {
+        mainQuestion: "문제 25. [출제 20-5]<br>제3류 위험물 중 지정수량이 10kg인 품명 4가지를 쓰시오.<br>( ① ), ( ② ), ( ③ ), ( ④ )",
+        score: 5,
+        isUnordered: true,
+        subs: [
+          { label: "①", type: "short", answers: ["칼륨"] },
+          { label: "②", type: "short", answers: ["나트륨"] },
+          { label: "③", type: "short", answers: ["알킬알루미늄"] },
+          { label: "④", type: "short", answers: ["알킬리튬"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 제3류 중 지정수량이 가장 작은 <b>10kg</b> 그룹은 반응성이 가장 강한 네 품명이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>칼륨 — 물과 격렬히 반응해 수소를 내는 알칼리금속이다.</li><li>나트륨 — 칼륨과 같은 알칼리금속으로, 석유 속에 보관한다.</li><li>알킬알루미늄 — 공기 중에서 스스로 발화하는 유기금속화합물이다.</li><li>알킬리튬 — 알킬알루미늄처럼 자연발화성이 강한 유기금속화합물이다.</li></ul>혼동 주의: 같은 제3류인 <b>황린은 20kg</b>이라 이 그룹에 들지 않는다."
+      },
+      {
+        mainQuestion: "문제 26. [출제 20-5]<br>아세톤 20L 드럼 100개와 경유 200L 드럼 5개의 지정수량 배수 합을 구하시오. (아세톤 지정수량 400L, 경유 1,000L)<br>배수 합 = ( ① )배",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["6", "6배"] }
+        ],
+        explanation: "[해설]<br><b>지정수량 배수</b>는 품명별로 (저장량 ÷ 지정수량)을 구해 더한다. 아세톤은 제1석유류 수용성(400L), 경유는 제2석유류 비수용성(1,000L)이다.<br>배수 합 = (20 × 100)/400 + (200 × 5)/1,000<br>= 2,000/400 + 1,000/1,000<br>= 5 + 1 = <b>6배</b><br>배수 합이 <b>1 이상</b>이면 지정수량 이상을 저장하는 것이어서 위험물안전관리법의 규제 대상이 된다."
+      },
+      {
+        mainQuestion: "문제 27. [출제 23-2/20-5]<br>흑색화약의 원료 중 위험물에 해당하는 것의 화학식·품명·지정수량을 쓰시오.<br>· 화학식 ( ① ), 품명 ( ② ), 지정수량 ( ③ )<br>· 화학식 ( ④ ), 품명 ( ⑤ ), 지정수량 ( ⑥ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "formula", answers: ["KNO3", "S"] },
+          { label: "②", type: "short", answers: ["질산염류", "황"] },
+          { label: "③", type: "short", answers: ["300kg", "300", "100kg", "100"] },
+          { label: "④", type: "formula", answers: ["S", "KNO3"] },
+          { label: "⑤", type: "short", answers: ["황", "질산염류"] },
+          { label: "⑥", type: "short", answers: ["100kg", "100", "300kg", "300"] }
+        ],
+        explanation: "[해설]<br>흑색화약은 질산칼륨·황·목탄을 섞어 만든다. 이 가운데 <b>위험물안전관리법상</b> 위험물은 질산칼륨과 황이고, 목탄(탄소)은 위험물이 아니다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>질산칼륨(KNO<sub>3</sub>) — 산소를 공급하는 산화제로, <b>제1류 질산염류</b>이며 지정수량은 300kg이다.</li><li>황(S) — 불에 타는 가연물로, <b>제2류 황</b>이며 지정수량은 100kg이다.</li></ul>외우는 요령: 산화제(제1류)와 가연물(제2류)이 한데 섞여 있어 폭발적으로 연소한다고 기억한다."
+      },
+      {
+        mainQuestion: "문제 28. [출제 19-1]<br>황 100kg, 철분 500kg, 질산염류 600kg을 저장할 때 지정수량 배수의 합을 구하시오.<br>배수 합 = ( ① )배",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["4", "4배"] }
+        ],
+        explanation: "[해설]<br>유별이 달라도 <b>지정수량 배수</b>는 품명별로 구해 그대로 더한다. 지정수량은 황 100kg·철분 500kg(제2류), 질산염류 300kg(제1류)이다.<br>배수 합 = 100/100 + 500/500 + 600/300<br>= 1 + 1 + 2 = <b>4배</b>"
+      },
+      {
+        mainQuestion: "문제 29. [출제 19-2]<br>제4류 위험물 중 위험등급 II에 해당하는 품명을 모두 쓰시오.<br>( ① ), ( ② )",
+        score: 5,
+        isUnordered: true,
+        subs: [
+          { label: "①", type: "short", answers: ["제1석유류"] },
+          { label: "②", type: "short", answers: ["알코올류"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 19</b>에 따라 제4류는 인화점이 낮아 위험할수록 등급이 높다.<br>인화점이 가장 낮은 특수인화물이 위험등급 I이고, 그다음인 <b>제1석유류</b>와 <b>알코올류</b>가 위험등급 II이다.<br>혼동 주의: 제2석유류·제3석유류·제4석유류·동식물유류는 모두 위험등급 III이다."
+      },
+      {
+        mainQuestion: "문제 30. [출제 19-2]<br>다음 위험물의 지정수량을 쓰시오.<br>① 중유 ( ① )<br>② 경유 ( ② )<br>③ 다이에틸에터 ( ③ )<br>④ 아세톤 ( ④ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["2000L", "2000", "2,000L", "2,000"] },
+          { label: "②", type: "short", answers: ["1000L", "1000", "1,000L", "1,000"] },
+          { label: "③", type: "short", answers: ["50L", "50"] },
+          { label: "④", type: "short", answers: ["400L", "400"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 제4류 지정수량은 인화점에 따른 품명과 수용성 여부로 정해진다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>중유 — 제3석유류 비수용성으로 2,000L.</li><li>경유 — 제2석유류 비수용성으로 1,000L.</li><li>다이에틸에터 — 인화점이 약 -45℃인 <b>특수인화물</b>로, 가장 작은 50L.</li><li>아세톤 — 제1석유류 <b>수용성</b>으로 400L.</li></ul>혼동 주의: 휘발유 같은 제1석유류 비수용성은 200L로, 아세톤의 절반이다."
+      },
+      {
+        mainQuestion: "문제 31. [출제 19-2]<br>다음 위험물의 유별과 지정수량을 쓰시오.<br>① 질산염류 - 유별 ( ① ), 지정수량 ( ② )<br>② 칼륨 - 유별 ( ③ ), 지정수량 ( ④ )<br>③ 황린 - 유별 ( ③ ), 지정수량 ( ⑤ )<br>④ 나이트로화합물 - 유별 ( ⑥ ), 지정수량 ( ⑦ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["제1류 위험물", "제1류", "1류", "1"] },
+          { label: "②", type: "short", answers: ["300kg", "300"] },
+          { label: "③", type: "short", answers: ["제3류 위험물", "제3류", "3류", "3"] },
+          { label: "④", type: "short", answers: ["10kg", "10"] },
+          { label: "⑤", type: "short", answers: ["20kg", "20"] },
+          { label: "⑥", type: "short", answers: ["제5류 위험물", "제5류", "5류", "5"] },
+          { label: "⑦", type: "short", answers: ["10kg(제1종)/100kg(제2종)", "10kg 또는 100kg", "10kg", "100kg", "10", "100"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>의 품명별 유별과 지정수량을 묻는 문항이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>질산염류 — <b>제1류</b>(산화성 고체), 300kg.</li><li>칼륨 — <b>제3류</b>(자연발화성·금수성), 10kg.</li><li>황린 — 칼륨과 같은 제3류지만 지정수량은 20kg.</li><li>나이트로화합물 — <b>제5류</b>(자기반응성), 제1종 10kg·제2종 100kg.</li></ul>혼동 주의: 제5류의 제1종·제2종은 위험등급이 아니라 열분석·압력용기 시험 결과로 가른다."
+      },
+      {
+        mainQuestion: "문제 32. [출제 19-3]<br>제3류 위험물 중 지정수량이 50kg인 위험물의 품명을 쓰시오.<br>① ( ① )(칼륨 및 나트륨 제외) 및 ( ② )<br>② ( ③ )(알킬알루미늄 및 알킬리튬 제외)",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["알칼리금속"] },
+          { label: "②", type: "short", answers: ["알칼리토금속"] },
+          { label: "③", type: "short", answers: ["유기금속화합물"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>의 제3류 중 지정수량 <b>50kg</b>인 품명은 알칼리금속·알칼리토금속과 유기금속화합물이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>알칼리금속 — 리튬·루비듐·세슘 등이며, 반응성이 특히 큰 칼륨·나트륨(10kg)은 따로 뺀다.</li><li>알칼리토금속 — 칼슘·바륨 등이며, 마그네슘은 제2류라서 제외한다.</li><li>유기금속화합물 — 금속과 탄소가 결합한 화합물이며, 알킬알루미늄·알킬리튬(10kg)은 따로 뺀다.</li></ul>외우는 요령: 칼륨·나트륨·알킬알루미늄·알킬리튬은 더 위험해서 10kg으로 따로 분류됐다고 기억한다."
+      },
+      {
+        mainQuestion: "문제 33. [출제 19-3]<br>어떤 제5류 위험물(담황색 주상 결정, 분자량 227, 융점 81℃, 물에 불용, 알코올·벤젠·아세톤에 가용)에 대하여 빈칸을 채우시오.<br>① 품명 ( ① )<br>② 지정수량 ( ② )<br>③ 제조과정: ( ③ )과 질산을 황산 촉매 하에 나이트로화 반응시켜 트리나이트로톨루엔 생성<br>반응식: ( ④ ) + 3HNO<sub>3</sub> → C<sub>6</sub>H<sub>2</sub>CH<sub>3</sub>(NO<sub>2</sub>)<sub>3</sub> + 3H<sub>2</sub>O",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["나이트로화합물", "니트로화합물"] },
+          { label: "②", type: "short", answers: ["10kg(제1종)", "10kg", "10", "제1종-10kg", "제1종 10kg"] },
+          { label: "③", type: "short", answers: ["톨루엔"] },
+          { label: "④", type: "formula", answers: ["C6H5CH3"] }
+        ],
+        explanation: "[해설]<br>담황색 주상 결정, 분자량 227, 융점 81℃라는 물성은 <b>트리나이트로톨루엔(TNT)</b>의 것이다. TNT는 <b>위험물안전관리법 시행령 별표 1</b>의 제5류 위험물 중 <b>나이트로화합물</b>에 속한다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>품명 나이트로화합물 — 탄소에 나이트로기(-NO<sub>2</sub>)가 직접 결합한 유기화합물이다.</li><li>지정수량 — 위험성 시험 결과에 따라 제1종은 <b>10kg</b>, 제2종은 100kg이다.<br>현재 TNT는 제1종으로 분류되어 지정수량은 10kg입니다.2024년 4월 개정(7월 시행)된 「위험물안전관리법 시행령」</li><li>원료 톨루엔 — 벤젠 고리에 메틸기가 붙은 방향족 탄화수소(C<sub>6</sub>H<sub>5</sub>CH<sub>3</sub>)이다.</li></ul>황산 촉매 아래에서 톨루엔 1몰과 질산 3몰이 나이트로화 반응을 하면 TNT 1몰과 물 3몰이 생긴다.<br>C<sub>6</sub>H<sub>5</sub>CH<sub>3</sub> + 3HNO<sub>3</sub> → C<sub>6</sub>H<sub>2</sub>CH<sub>3</sub>(NO<sub>2</sub>)<sub>3</sub> + 3H<sub>2</sub>O"
+      },
+      {
+        mainQuestion: "문제 34. [출제 26-1/22-1]<br>다음 위험물의 류별과 지정수량을 쓰시오.<br>칼륨: ( ① )류, ( ⑥ )kg<br>질산: ( ② )류, ( ⑦ )kg<br>나이트로화합물(1종): ( ③ )류, ( ⑧ )kg<br>질산염류: ( ④ )류, ( ⑨ )kg<br>아조화합물(2종): ( ⑤ )류, ( ⑩ )kg",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["제3", "3"] },
+          { label: "②", type: "short", answers: ["제6", "6"] },
+          { label: "③", type: "short", answers: ["제5", "5"] },
+          { label: "④", type: "short", answers: ["제1", "1"] },
+          { label: "⑤", type: "short", answers: ["제5", "5"] },
+          { label: "⑥", type: "short", answers: ["10"] },
+          { label: "⑦", type: "short", answers: ["300"] },
+          { label: "⑧", type: "short", answers: ["10"] },
+          { label: "⑨", type: "short", answers: ["300"] },
+          { label: "⑩", type: "short", answers: ["100"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 품명별로 유별과 지정수량을 정한다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>칼륨 — 자연발화성·금수성 물질인 제3류이고 지정수량은 10kg이다.</li><li>질산 — 산화성 액체인 제6류이고 지정수량은 300kg이다.</li><li>나이트로화합물(제1종) — 자기반응성 물질인 제5류이고 지정수량은 10kg이다.</li><li>질산염류 — 산화성 고체인 제1류이고 지정수량은 300kg이다.</li><li>아조화합물(제2종) — 같은 제5류이지만 제2종이라 지정수량은 100kg이다.</li></ul>혼동 주의: 제5류는 품명이 아니라 위험성 시험 결과인 종별로 지정수량이 정해지며, <b>제1종은 10kg, 제2종은 100kg</b>이다."
+      },
+      {
+        mainQuestion: "문제 35. [출제 25-3]<br>TNT(제1종)에 대하여 답하시오.<br>① 시성식: ( ① )<br>② TNT 1,000kg 저장 시 지정수량 배수(지정수량 제1종): = ( ② )",
+        score: 5,
+        subs: [
+          { label: "①", type: "formula", answers: ["C6H2CH3(NO2)3"] },
+          { label: "②", type: "short", answers: ["100", "100배"] }
+        ],
+        explanation: "[해설]<br>TNT는 톨루엔의 벤젠 고리에서 수소 3개가 나이트로기로 바뀐 <b>제5류 나이트로화합물</b>이다. 그래서 시성식은 C<sub>6</sub>H<sub>2</sub>CH<sub>3</sub>(NO<sub>2</sub>)<sub>3</sub>이다.<br>지정수량 배수는 저장량을 지정수량으로 나눈 값이다.<br>배수 = 저장량 ÷ 지정수량<br>= 1,000kg ÷ 10kg<br>= <b>100배</b><br>혼동 주의: 제2종(지정수량 100kg)으로 판정되면 같은 1,000kg이라도 10배가 된다."
+      },
+      {
+        mainQuestion: "문제 36. [출제 25-3]<br>동식물유류에 대하여 답하시오.<br>① 아이오딘가의 정의: 유지 ( ① )g에 흡수되는 아이오딘의 ( ② )<br>② 분류 및 범위<br>- 건성유: 아이오딘가 ( ③ ) 이상<br>- 반건성유: 아이오딘가 ( ④ ) 초과 130 미만<br>- 불건성유: 아이오딘가 ( ⑤ ) 이하",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["100"] },
+          { label: "②", type: "short", answers: ["g수", "g 수", "그램수", "g"] },
+          { label: "③", type: "short", answers: ["130"] },
+          { label: "④", type: "short", answers: ["100"] },
+          { label: "⑤", type: "short", answers: ["100"] }
+        ],
+        explanation: "[해설]<br><b>아이오딘값</b>은 유지 100g에 흡수되는 아이오딘의 g수이며, 유지의 불포화도(이중결합 수)를 나타낸다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>건성유 — 아이오딘값이 <b>130 이상</b>이고, 이중결합이 많아 산화·자연발화 위험이 가장 크다.</li><li>반건성유 — 아이오딘값이 100 초과 130 미만이다.</li><li>불건성유 — 아이오딘값이 <b>100 이하</b>이고, 산화가 가장 느리다.</li></ul>외우는 요령: 경계값 100과 130만 기억하면 되며, 값이 클수록 잘 굳고(건성) 자연발화 위험이 크다."
+      },
+      {
+        mainQuestion: "문제 37. [출제 25-3]<br>염소산칼륨에 대하여 답하시오.<br>① 화학식: ( ① )<br>② 지정수량: ( ② )<br>③ 분해 시 생성 기체 명칭: ( ③ )<br>④ 완전분해반응식: 2KClO<sub>3</sub> → ( ④ ) + ( ⑤ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "formula", answers: ["KClO3"] },
+          { label: "②", type: "short", answers: ["50kg", "50"] },
+          { label: "③", type: "short", answers: ["산소", "O2"] },
+          { label: "④", type: "formula", answers: ["2KCl"] },
+          { label: "⑤", type: "formula", answers: ["3O2"] }
+        ],
+        explanation: "[해설]<br>염소산칼륨(KClO<sub>3</sub>)은 <b>제1류 위험물 염소산염류</b>이고 지정수량은 <b>50kg</b>이다.<br>가열하면 분자 속 산소를 모두 내놓고 염화칼륨만 남는다.<br>2KClO<sub>3</sub> → 2KCl + 3O<sub>2</sub><br>이때 생기는 기체는 <b>산소</b>이다. 이 산소가 연소를 도우므로 가연물과 섞이면 충격이나 마찰만으로도 폭발할 수 있다."
+      },
+      {
+        mainQuestion: "문제 38. [출제 25-2]<br>트라이나이트로페놀(피크르산)에 대하여 답하시오.<br>① 구조식(시성식): ( ① )<br>② 품명: ( ② )<br>③ 지정수량(제1종): ( ③ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "formula", answers: ["C6H2(OH)(NO2)3", "C6H2OH(NO2)3"] },
+          { label: "②", type: "short", answers: ["나이트로화합물", "니트로화합물"] },
+          { label: "③", type: "short", answers: ["10kg", "10"] }
+        ],
+        explanation: "[해설]<br>트라이나이트로페놀은 페놀(C<sub>6</sub>H<sub>5</sub>OH)의 벤젠 고리에서 수소 3개가 나이트로기(-NO<sub>2</sub>)로 치환된 물질이다.<br>C<sub>6</sub>H<sub>2</sub>(OH)(NO<sub>2</sub>)<sub>3</sub><br>나이트로기가 탄소에 직접 결합했으므로 품명은 제5류 <b>나이트로화합물</b>이다. 제1종으로 판정되면 지정수량은 <b>10kg</b>이다.<br>혼동 주의: 나이트로셀룰로오스처럼 -O-NO<sub>2</sub> 결합을 가진 물질은 <b>질산에스테르류</b>로 품명이 다르다."
+      },
+      {
+        mainQuestion: "문제 39. [출제 25-2]<br>다음 위험물의 화학식과 지정수량을 쓰시오.<br>① 과염소산: ( ① ), ( ② )<br>② 염화아세틸: ( ③ ), ( ④ )<br>③ 수소화칼슘: ( ⑤ ), ( ⑥ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "formula", answers: ["HClO4"] },
+          { label: "②", type: "short", answers: ["300kg", "300"] },
+          { label: "③", type: "formula", answers: ["CH3COCl"] },
+          { label: "④", type: "short", answers: ["200L", "200"] },
+          { label: "⑤", type: "formula", answers: ["CaH2"] },
+          { label: "⑥", type: "short", answers: ["300kg", "300"] }
+        ],
+        explanation: "[해설]<br>세 물질은 <b>위험물안전관리법 시행령 별표 1</b>에서 유별이 모두 달라 지정수량도 서로 다르다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>과염소산(HClO<sub>4</sub>)은 제6류 산화성 액체로 지정수량이 <b>300kg</b>이다.</li><li>염화아세틸(CH<sub>3</sub>COCl)은 제4류 제1석유류 비수용성이라 지정수량이 <b>200L</b>이다.</li><li>수소화칼슘(CaH<sub>2</sub>)은 물과 반응해 수소를 내는 제3류 금속의 수소화물로 지정수량이 <b>300kg</b>이다.</li></ul>혼동 주의: 지정수량을 부피(L)로 정하는 것은 제4류뿐이고, 나머지 유별은 질량(kg)으로 정한다."
+      },
+      {
+        mainQuestion: "문제 40. [출제 25-2]<br>다음 중 수용성인 것만 골라 지정수량 배수의 총합을 구하시오.<br>① 아세톤 1,200L ② 폼산메틸 1,200L ③ 피리딘 2,000L ④ 에틸알코올 1,600L ⑤ 휘발유 1,800L<br>→ 수용성 대상: ( ① ), ( ② ), ( ③ ) / 배수 총합 = ( ④ )배",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["아세톤"] },
+          { label: "②", type: "short", answers: ["폼산메틸"] },
+          { label: "③", type: "short", answers: ["피리딘"] },
+          { label: "④", type: "short", answers: ["11", "11배"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>의 수용성·비수용성 구분은 제1~3석유류에만 있고, 알코올류는 따로 떨어진 품명(400L)이다.<br>아세톤·폼산메틸·피리딘은 모두 <b>제1석유류 수용성</b>이라 지정수량이 400L이다. 휘발유는 제1석유류 비수용성이고 에틸알코올은 알코올류이므로 대상에서 빠진다.<br>배수 = 저장량 ÷ 지정수량<br>1,200/400 + 1,200/400 + 2,000/400<br>= 3 + 3 + 5 = <b>11배</b>"
+      },
+      {
+        mainQuestion: "문제 41. [출제 25-2]<br>제3류 위험물의 빈칸을 채우시오.<br>① 칼륨 지정수량: ( ① )kg<br>② 나트륨 지정수량: ( ② )kg<br>③ 알킬알루미늄 지정수량: ( ③ )kg<br>④ 지정수량 10kg인 품명(알킬알루미늄 외): ( ④ )<br>⑤ 지정수량 20kg인 품명: ( ⑤ )<br>⑥ 알칼리금속(칼륨·나트륨 제외)·알칼리토금속 지정수량: ( ⑥ )kg<br>⑦ 유기금속화합물(알킬알루미늄·알킬리튬 제외) 지정수량: ( ⑦ )kg",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["10"] },
+          { label: "②", type: "short", answers: ["10"] },
+          { label: "③", type: "short", answers: ["10"] },
+          { label: "④", type: "short", answers: ["알킬리튬"] },
+          { label: "⑤", type: "short", answers: ["황린"] },
+          { label: "⑥", type: "short", answers: ["50"] },
+          { label: "⑦", type: "short", answers: ["50"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 제3류(자연발화성·금수성 물질)는 반응성이 클수록 지정수량이 작다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>칼륨·나트륨·알킬알루미늄·알킬리튬 — 물·공기와 가장 격렬하게 반응해서 <b>10kg</b>이다.</li><li>황린 — 공기 중에서 저절로 불이 붙지만 물속에 저장할 수 있어 <b>20kg</b>이다.</li><li>칼륨·나트륨을 뺀 알칼리금속·알칼리토금속, 알킬알루미늄·알킬리튬을 뺀 유기금속화합물 — 모두 <b>50kg</b>이다.</li></ul>외우는 요령: \"칼·나·알킬알·알킬리 10, 황린 20, 나머지 금속·유기금속 50\"으로 묶고, 금속의 수소화물·인화물은 300kg으로 따로 외운다."
+      },
+      {
+        mainQuestion: "문제 42. [출제 25-1]<br>다음 위험물의 명칭과 지정수량을 쓰시오.<br>① CH<sub>3</sub>COCH<sub>3</sub>: ( ① ), ( ② )<br>② C<sub>6</sub>H<sub>5</sub>NO<sub>2</sub>: ( ③ ), ( ④ )<br>③ C<sub>6</sub>H<sub>5</sub>Cl: ( ⑤ ), ( ⑥ )<br>④ CH<sub>2</sub>=CHCOOH: ( ⑦ ), ( ⑧ )<br>⑤ C<sub>6</sub>H<sub>12</sub>: ( ⑨ ), ( ⑩ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["아세톤"] },
+          { label: "②", type: "short", answers: ["400L", "400"] },
+          { label: "③", type: "short", answers: ["나이트로벤젠", "니트로벤젠"] },
+          { label: "④", type: "short", answers: ["2000L", "2,000L", "2000", "2,000"] },
+          { label: "⑤", type: "short", answers: ["클로로벤젠"] },
+          { label: "⑥", type: "short", answers: ["1000L", "1,000L", "1000", "1,000"] },
+          { label: "⑦", type: "short", answers: ["아크릴산"] },
+          { label: "⑧", type: "short", answers: ["2000L", "2,000L", "2000", "2,000"] },
+          { label: "⑨", type: "short", answers: ["사이클로헥세인", "시클로헥산"] },
+          { label: "⑩", type: "short", answers: ["200L", "200"] }
+        ],
+        explanation: "[해설]<br>다섯 물질은 모두 제4류 위험물이며, <b>인화점에 따른 석유류 구분</b>과 <b>수용성 여부</b>로 지정수량이 정해진다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>CH<sub>3</sub>COCH<sub>3</sub>는 아세톤이며 제1석유류 수용성이라 400L이다.</li><li>C<sub>6</sub>H<sub>5</sub>NO<sub>2</sub>는 나이트로벤젠이며 제3석유류 비수용성이라 2,000L이다.</li><li>C<sub>6</sub>H<sub>5</sub>Cl은 클로로벤젠이며 제2석유류 비수용성이라 1,000L이다.</li><li>CH<sub>2</sub>=CHCOOH는 아크릴산이며 제2석유류 수용성이라 2,000L이다.</li><li>C<sub>6</sub>H<sub>12</sub>는 사이클로헥세인이며 제1석유류 비수용성이라 200L이다.</li></ul>혼동 주의: 제2석유류 수용성과 제3석유류 비수용성은 지정수량이 똑같이 <b>2,000L</b>이다."
+      },
+      {
+        mainQuestion: "문제 43. [출제 25-1]<br>표의 빈칸에 알맞은 명칭이나 지정수량(kg)을 쓰시오.<br>① ( ① ) 100kg<br>② 황화인 ( ② )kg<br>③ 인화성고체 ( ③ )kg<br>④ 적린 ( ④ )kg<br>⑤ 금속분 500kg<br>⑥ ( ⑤ ) 500kg",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["황"] },
+          { label: "②", type: "short", answers: ["100"] },
+          { label: "③", type: "short", answers: ["1000", "1,000"] },
+          { label: "④", type: "short", answers: ["100"] },
+          { label: "⑤", type: "short", answers: ["마그네슘", "철분"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 제2류(가연성 고체)의 지정수량은 100kg, 500kg, <b>1,000kg</b>의 세 단계다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>황화인·적린·황 — 불이 쉽게 붙어 <b>100kg</b>이다.</li><li>철분·금속분·마그네슘 — 분말 금속류라 <b>500kg</b>이며, 금속분 말고 500kg인 품명이 마그네슘이다.</li><li>인화성고체 — 고형알코올처럼 인화점이 40℃ 미만인 고체로 1,000kg이다.</li></ul>혼동 주의: 인화성고체는 제2류에서 지정수량이 가장 크다. 제4류 인화성 액체(L 단위)와 헷갈리지 않는다."
+      },
+      {
+        mainQuestion: "문제 44. [출제 24-3]<br>[보기]의 위험물을 제5류 위험물 품명에 따라 구분하시오. (없으면 해당없음)<br>[보기] 나이트로에탄, 나이트로메탄, 다이나이트로벤젠, 벤조일 퍼옥사이드, 나이트로글리콜, 나이트로글리세린, 나이트로셀룰로오스<br>① 유기과산화물: ( ① )<br>② 질산에스테르류: ( ② )<br>③ 나이트로화합물: ( ③ )<br>④ 아조화합물: ( ④ )<br>⑤ 하이드라진유도체: ( ⑤ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["벤조일퍼옥사이드", "벤조일 퍼옥사이드"] },
+          { label: "②", type: "short", answers: ["나이트로글리콜, 나이트로글리세린, 나이트로셀룰로오스", "나이트로글리콜,나이트로글리세린,나이트로셀룰로오스", "나이트로셀룰로오스, 나이트로글리세린, 나이트로글리콜", "니트로글리콜, 니트로글리세린, 니트로셀룰로오스"] },
+          { label: "③", type: "short", answers: ["나이트로에탄, 나이트로메탄, 다이나이트로벤젠", "나이트로에탄,나이트로메탄,다이나이트로벤젠", "니트로에탄, 니트로메탄, 디니트로벤젠", "다이나이트로벤젠, 나이트로메탄, 나이트로에탄"] },
+          { label: "④", type: "short", answers: ["해당없음", "없음"] },
+          { label: "⑤", type: "short", answers: ["해당없음", "없음"] }
+        ],
+        explanation: "[해설]<br>제5류 위험물의 품명은 이름이 아니라 분자 속 <b>결합 구조</b>로 가른다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>유기과산화물 — 벤조일퍼옥사이드는 과산화 결합(-O-O-)을 가진다.</li><li>질산에스테르류 — 나이트로글리콜·나이트로글리세린·나이트로셀룰로오스는 이름과 달리 -O-NO<sub>2</sub> 결합을 가진다.</li><li>나이트로화합물 — 나이트로에탄·나이트로메탄·다이나이트로벤젠은 탄소에 -NO<sub>2</sub>가 직접 붙어 있다.</li></ul>보기에는 -N=N- 결합을 가진 아조화합물도, 하이드라진 유도체도 없으므로 두 품명은 <b>해당없음</b>이다."
+      },
+      {
+        mainQuestion: "문제 45. [출제 24-3/20-3]<br>제6류 위험물이 위험물로 분류되기 위한 농도 또는 비중 조건을 쓰시오.<br>① 과산화수소: 농도 ( ① ) 이상<br>② 과염소산: ( ② )<br>③ 질산: 비중 ( ③ ) 이상",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["36wt%", "36", "36중량%", "36%"] },
+          { label: "②", type: "short", answers: ["없음", "해당없음", "기준없음"] },
+          { label: "③", type: "short", answers: ["1.49"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>은 제6류(산화성 액체) 가운데 과산화수소와 질산에만 위험물이 되는 기준을 따로 둔다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>과산화수소 — 농도 <b>36중량%</b> 이상인 것만 위험물이다.</li><li>과염소산 — 별도 기준이 없어 농도와 관계없이 위험물이다.</li><li>질산 — 비중 <b>1.49</b> 이상인 것만 위험물이다.</li></ul>혼동 주의: 과산화수소는 농도(중량%), 질산은 비중으로 판단해 기준이 서로 다르다."
+      },
+      {
+        mainQuestion: "문제 46. [출제 24-2]<br>정전기가 발생할 우려가 있는 설비에서 정전기를 유효하게 제거하는 방법 3가지를 쓰시오.<br>① ( ① )<br>② 공기 중의 상대습도 ( ② ) 이상<br>③ ( ③ )",
+        score: 5,
+        isUnordered: true,
+        subs: [
+          { label: "①", type: "short", answers: ["공기 이온화", "공기이온화"] },
+          { label: "②", type: "short", answers: ["70%", "70"] },
+          { label: "③", type: "short", answers: ["접지"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>의 제조소 기준에서는 정전기를 유효하게 제거하는 방법으로 다음 세 가지를 든다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>공기 이온화 — 이온을 공급해 쌓인 전하를 중화한다.</li><li>상대습도 <b>70% 이상</b> 유지 — 물체 표면에 수분막이 생겨 전하가 새어 나간다.</li><li>접지 — 설비에 쌓인 전하를 대지로 흘려보낸다.</li></ul>외우는 요령: 접지·습도·이온화 세 가지를 습도 수치 70%와 함께 외운다."
+      },
+      {
+        mainQuestion: "문제 47. [출제 24-2]<br>제1류 위험물의 특징으로 옳은 것을 모두 고르시오.<br>① 전부 탄소 성분이 있다<br>② 전부 산소를 포함하고 있다<br>③ 전부 가연성이다<br>④ 전부 물과 반응한다<br>⑤ 전부 고체이다<br>",
+        score: 5,
+        subs: [
+          { label: "정답", type: "short", answers: ["2,5", "2, 5", "②,⑤", "②, ⑤", "25", "②⑤", "2,5번", "②,⑤번"] }
+        ],
+        explanation: "[해설]<br>제1류 위험물은 법령상 '<b>산화성 고체</b>'로 정의되므로 성상이 전부 고체여서 ⑤가 옳고, 스스로 타지 않고 다른 물질의 연소를 돕는 조연성(지연성) 물질이므로 ③ '전부 가연성이다'는 틀리다.<br>염소산염류·질산염류·과망간산염류 등 품명이 모두 <b>산소를 함유한 산화제</b>이므로 ② '전부 산소를 포함하고 있다'도 옳다.<br>반면 탄소는 무기과산화물처럼 없는 물질이 많아 ①이 틀리고, 물과의 반응도 무기과산화물은 격렬히 반응하지만 질산염류처럼 단순히 녹기만 하는 것도 있어 ④ 역시 틀리다."
+      },
+      {
+        mainQuestion: "문제 48. [출제 24-2]<br>운반 기준에서 지정수량 이상일 때 혼재할 수 없는 위험물을 모두 쓰시오.<br>(답안 위험물 제외작성)<br>① 제1류 위험물: ( ① )<br>② 제3류 위험물: ( ② )<br>③ 제6류 위험물: ( ③ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["제2류, 제3류, 제4류, 제5류", "제2류,제3류,제4류,제5류", "2,3,4,5류", "2류, 3류, 4류, 5류"] },
+          { label: "②", type: "short", answers: ["제1류, 제2류, 제5류, 제6류", "제1류,제2류,제5류,제6류", "1,2,5,6류", "1류, 2류, 5류, 6류"] },
+          { label: "③", type: "short", answers: ["제2류, 제3류, 제4류, 제5류", "제2류,제3류,제4류,제5류", "2,3,4,5류", "2류, 3류, 4류, 5류"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 19</b>의 혼재 기준에서 서로 섞어 실을 수 있는 조합은 1류와 6류, 2류와 4류, 2류와 5류, 3류와 4류, 4류와 5류뿐이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>제1류 — 제6류와만 혼재할 수 있으므로 제2·3·4·5류와는 혼재할 수 없다.</li><li>제3류 — 제4류와만 혼재할 수 있으므로 제1·2·5·6류와는 혼재할 수 없다.</li><li>제6류 — 제1류와만 혼재할 수 있으므로 제2·3·4·5류와는 혼재할 수 없다.</li></ul>혼동 주의: 이 혼재 기준은 지정수량의 <b>1/10 이하</b>로 운반할 때는 적용하지 않는다."
+      },
+      {
+        mainQuestion: "문제 49. [출제 24-1]<br>[보기] 중 지정수량의 단위가 L인 것을 골라, 지정수량이 큰 것부터 작은 순서대로 나열하시오.<br>[보기] 디니트로아닐린, 히드라진, 피리딘, 피크르산, 글리세린, 클로로벤젠<br>( ① ) → ( ② ) → ( ③ ) → ( ④ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["글리세린"] },
+          { label: "②", type: "short", answers: ["히드라진"] },
+          { label: "③", type: "short", answers: ["클로로벤젠"] },
+          { label: "④", type: "short", answers: ["피리딘"] }
+        ],
+        explanation: "[해설]<br>지정수량 단위가 L인 것은 액체인 <b>제4류 위험물</b>뿐이므로, 제5류 고체인 디니트로아닐린과 피크르산(단위 kg)은 먼저 뺀다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>글리세린 — 제3석유류 수용성, <b>4,000L</b>.</li><li>히드라진 — 제2석유류 수용성, 2,000L.</li><li>클로로벤젠 — 제2석유류 비수용성, 1,000L.</li><li>피리딘 — 제1석유류 수용성, <b>400L</b>.</li></ul>혼동 주의: 같은 석유류라도 수용성의 지정수량이 비수용성의 2배이므로 히드라진이 클로로벤젠보다 앞선다."
+      },
+      {
+        mainQuestion: "문제 50. [출제 24-1]<br>다음 표의 빈칸을 채우시오.<br>① 명칭 ( ① ) / 화학식 C<sub>6</sub>H<sub>3</sub>(NO<sub>2</sub>)<sub>2</sub>CH<sub>3</sub> / 지정수량 ( ② )kg<br>② 명칭 과망간산암모늄 / 화학식 ( ③ ) / 지정수량 1000kg<br>③ 명칭 인화아연 / 화학식 ( ④ ) / 지정수량 ( ⑤ )kg",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["디니트로톨루엔", "다이나이트로톨루엔"] },
+          { label: "②", type: "short", answers: ["10(제1종)/100(제2종)", "10/100", "10, 100"] },
+          { label: "③", type: "formula", answers: ["NH4MnO4"] },
+          { label: "④", type: "formula", answers: ["Zn3P2"] },
+          { label: "⑤", type: "short", answers: ["300"] }
+        ],
+        explanation: "[해설]<br>세 물질의 품명과 지정수량은 <b>위험물안전관리법 시행령 별표 1</b>에서 나온다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>디니트로톨루엔 — 톨루엔에 니트로기 2개가 붙은 제5류 니트로화합물이며, 현행 지정수량은 <b>제1종 10kg·제2종 100kg</b>이다.</li><li>과망간산암모늄 — 암모늄이온(NH<sub>4</sub><sup>+</sup>)과 과망간산이온(MnO<sub>4</sub><sup>-</sup>)이 1:1로 결합한 NH<sub>4</sub>MnO<sub>4</sub>이고, 제1류 과망간산염류다.</li><li>인화아연 — Zn(+2)과 P(-3)의 전하를 맞추면 Zn<sub>3</sub>P<sub>2</sub>가 되며, 제3류 금속의 인화물로 지정수량은 <b>300kg</b>이다.</li></ul>혼동 주의: 제5류는 2024년 개정으로 품명별 수치 대신 제1종·제2종 구분을 쓴다. 개정 전 니트로화합물의 지정수량은 200kg이었다."
+      },
+      {
+        mainQuestion: "문제 51. [출제 23-2]<br>톨루엔 1,000L, 스틸렌 1,000L, 아닐린 4,000L, 실린더유 6,000L, 올리브유 20,000L의 지정수량 배수 총합을 구하시오.<br>배수 총합 = ( ① )배",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["11", "11배"] }
+        ],
+        explanation: "[해설]<br>다섯 가지 위험물 각각의 <b>저장량 ÷ 지정수량</b>을 구해 모두 더하면 총 배수가 나온다는 것이 핵심이다.<br>1000/200 + 1000/1000 + 4000/2000 + 6000/6000 + 20000/10000 = 5 + 1 + 2 + 1 + 2 = 11<br>지정수량 배수의 합이 1 이상이면 <b>지정수량 이상 저장·취급</b>으로 보아 제조소등 설치허가 대상이 된다."
+      },
+      {
+        mainQuestion: "문제 52. [출제 23-2]<br>클로로벤젠에 대하여 쓰시오.<br>① 화학식 ( ① )<br>② 품명 ( ② )<br>③ 지정수량 ( ③ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "formula", answers: ["C6H5Cl"] },
+          { label: "②", type: "short", answers: ["제2석유류", "2석유류"] },
+          { label: "③", type: "short", answers: ["1000L", "1,000L", "1000", "1,000"] }
+        ],
+        explanation: "[해설]<br>클로로벤젠은 벤젠 고리의 수소 하나가 염소로 바뀐 물질로, 화학식은 C<sub>6</sub>H<sub>5</sub>Cl이다.<br>인화점이 약 29℃로 <b>21℃ 이상 70℃ 미만</b>에 들어 <b>제4류 제2석유류</b>에 해당한다. 물에 녹지 않는 비수용성이므로 지정수량은 <b>1000L</b>이다.<br>혼동 주의: 벤젠·톨루엔은 인화점이 21℃ 미만인 제1석유류다. 같은 제2석유류라도 아세트산 같은 수용성은 2000L이다."
+      },
+      {
+        mainQuestion: "문제 53. [출제 23-1]<br>제1류 위험물 과망간산칼륨에 대하여 빈칸을 채우시오.<br>① 지정수량 ( ① )<br>② 묽은 황산 반응·열분해 시 공통으로 생성되는 기체 ( ② )<br>③ 위험등급 ( ③ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["1,000kg", "1000kg", "1000", "1,000"] },
+          { label: "②", type: "formula", answers: ["산소(O2)", "산소", "O2"] },
+          { label: "③", type: "short", answers: ["III등급", "3등급", "III", "3"] }
+        ],
+        explanation: "[해설]<br>과망간산칼륨(KMnO<sub>4</sub>)은 제1류 위험물 중 <b>과망간산염류</b>로 분류된다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>지정수량 — 과망간산염류·중크롬산염류는 <b>1,000kg</b>이다.</li><li>생성 기체 — 강한 산화제라 묽은 황산과 반응하거나 열분해할 때 모두 <b>산소(O<sub>2</sub>)</b>를 내놓는다.</li><li>위험등급 — 지정수량 1,000kg 품목은 <b>III등급</b>이다.</li></ul>열분해: 2KMnO<sub>4</sub> → K<sub>2</sub>MnO<sub>4</sub> + MnO<sub>2</sub> + O<sub>2</sub><br>묽은 황산: 4KMnO<sub>4</sub> + 6H<sub>2</sub>SO<sub>4</sub> → 2K<sub>2</sub>SO<sub>4</sub> + 4MnSO<sub>4</sub> + 6H<sub>2</sub>O + 5O<sub>2</sub><br>혼동 주의: 제1류 지정수량은 50kg(I등급)·300kg(II등급)·1,000kg(III등급)의 세 단계다."
+      },
+      {
+        mainQuestion: "문제 54. [출제 22-4]<br>제2석유류에 대한 설명으로 옳은 것을 [보기]에서 모두 고르시오.<br>① 등유, 경유<br>② 중유, 클레오소트유<br>③ 1기압에서 인화점이 70℃ 이상 200℃ 미만인 것<br>④ 1기압에서 인화점이 200℃ 이상 250℃ 미만인 것<br>⑤ 도료류 등에서 가연성 액체량 40중량% 이하이면서 인화점 40℃ 이상인 동시에 연소점 60℃ 이상인 것은 제외<br>",
+        score: 5,
+        subs: [
+          { label: "정답", type: "short", answers: ["1,5", "1, 5", "①,⑤", "①, ⑤", "15", "①⑤", "1,5번", "①,⑤번"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>은 제2석유류를 등유·경유, 그 밖에 1기압에서 인화점이 <b>21℃ 이상 70℃ 미만</b>인 것으로 정한다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>등유·경유 — 제2석유류의 대표 품목으로 법령에 명시돼 있어 옳다.</li><li>도료류 제외 규정 — 가연성 액체량 40중량% 이하이면서 인화점 40℃ 이상, 연소점 60℃ 이상인 것은 제2석유류에서 빼므로 옳다.</li></ul>나머지는 다른 석유류의 정의다. 중유·클레오소트유와 인화점 70℃ 이상 200℃ 미만은 <b>제3석유류</b>이고, 200℃ 이상 250℃ 미만은 제4석유류다."
+      },
+      {
+        mainQuestion: "문제 55. [출제 22-4]<br>[보기](분자량 78, 휘발성 액체, 수소첨가반응으로 시클로헥산 생성)의 위험물에 대하여 빈칸을 채우시오.<br>① 화학식 ( ① )<br>② 위험등급 ( ② )<br>③ 위험물안전카드 휴대 여부 ( ③ )<br>④ 장거리 운송 시 2명 이상 운전자 해당 여부 ( ④ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "formula", answers: ["C6H6"] },
+          { label: "②", type: "short", answers: ["II등급", "2등급", "II", "2"] },
+          { label: "③", type: "short", answers: ["휴대하여야 한다", "휴대해야 한다", "휴대한다", "O", "해당됨"] },
+          { label: "④", type: "short", answers: ["해당없음", "없음", "X", "해당 안됨"] }
+        ],
+        explanation: "[해설]<br>분자량 78이고 수소를 첨가하면 시클로헥산이 되는 휘발성 액체는 <b>벤젠(C<sub>6</sub>H<sub>6</sub>)</b>이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>위험등급 — 제4류 제1석유류(비수용성)이므로 <b>II등급</b>이다.</li><li>위험물안전카드 — 제4류는 <b>특수인화물·제1석유류</b>를 운송할 때 운송자가 카드를 휴대해야 하므로 벤젠은 휴대 대상이다.</li><li>2명 이상 운전자 — 장거리 운송이라도 제4류 중 특수인화물이 아닌 것은 예외라 해당 없다.</li></ul>혼동 주의: 안전카드는 제1석유류까지 포함하지만, 2명 운전 예외에서 빠지는(즉 2명이 필요한) 제4류는 특수인화물뿐이다."
+      }
+    ];
+
+// 특정 문제 해설 열기/닫기 토글 함수
+    function toggleExplanation(qIndex) {
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (!expEl) return;
+      
+      if (expEl.style.display === 'none' || expEl.style.display === '') {
+        expEl.style.display = 'block';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 닫기';
+      } else {
+        expEl.style.display = 'none';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 열기';
+      }
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      let html = '';
+
+      quizData.forEach((q, qIndex) => {
+        gradingState[qIndex] = { subs: [], earnedScore: 0, isGraded: false };
+        
+        html += `<div class="question-card clearfix" id="qCard-${qIndex}">`;
+        html += `<div class="main-q-title">${q.mainQuestion} <span class="q-score-badge">배점: ${q.score}점</span></div>`;
+        
+        q.subs.forEach((sub, sIndex) => {
+          gradingState[qIndex].subs[sIndex] = { status: 0 }; 
+          
+          html += `<div class="sub-q-container">`;
+          html += `<div class="sub-q-label">${sub.label}</div>`;
+          
+          if (sub.image) {
+            html += `<div style="margin-bottom: 15px; text-align: center;">
+                       <img src="${sub.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px;" alt="문제 이미지">
+                     </div>`;
+          }
+
+          if (sub.type === 'calc') {
+            html += `<span class="calc-label">▶ 계산 과정 (채점 제외)</span>`;
+            html += `<textarea id="calc-${qIndex}-${sIndex}" class="textarea-formula" placeholder="필요시 계산식을 자유롭게 적어보세요."></textarea>`;
+            html += `<span class="calc-label">▶ 최종 정답 (채점 대상)</span>`;
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-calc" autocomplete="off" placeholder="최종 정답 입력">`;
+          } else if (sub.type === 'descriptive') {
+            html += `<textarea id="ans-${qIndex}-${sIndex}" class="textarea-formula" placeholder="※ 연습장에 직접 풀거나 구조식을 그린 후, [✔️ 정답 확인 및 채점] 버튼을 눌러 스스로 비교해 보세요."></textarea>`;
+          } else {
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-standard" autocomplete="off" placeholder="${sub.type === 'unordered_comma' ? '쉼표(,)로 구분하여 입력' : '정답 입력'}">`;
+          }
+          
+          html += `<div id="fb-${qIndex}-${sIndex}" class="feedback-box"></div>`;
+          html += `</div>`;
+        });
+        
+        // 새로 추가된 액션 버튼 (해설 열기 / 채점하기 분리)
+        html += `<div style="text-align: right; margin-top: 15px; margin-bottom: 10px; clear: both;">`;
+        // 처음에는 display: none 처리하여 시험 모드에서 숨김
+        html += `  <button id="btn-toggle-exp-${qIndex}" class="btn-grade-single" style="float: none; background-color: #8d6e63; margin-right: 8px; display: none;" onclick="toggleExplanation(${qIndex})">📖 해설 열기</button>`;
+        html += `  <button id="btn-grade-single-${qIndex}" class="btn-grade-single" style="float: none;" onclick="gradeSingleQuestion(${qIndex})">✔️ 정답 확인 및 채점</button>`;
+        html += `</div>`;
+        
+        if(q.explanation) {
+            html += `<div style="clear:both;"></div>`;
+            // 해설창은 초기에 숨김(display:none) 처리
+            html += `<div id="exp-${qIndex}" class="feedback-box" style="background-color:#f8f9fa; border:1px solid #dee2e6; color:#495057; font-weight:normal; margin-top:10px; display:none;">💡 <strong>문제 핵심 해설:</strong><br>${q.explanation}</div>`;
+        }
+        html += `</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    // 모드 변경 함수
+    function setMode(mode) {
+      const labelBasic = document.getElementById('label-basic');
+      const labelStudy = document.getElementById('label-study');
+      
+      if (mode === 'study') {
+        if(labelStudy.classList.contains('active')) return; 
+        
+        labelBasic.classList.remove('active');
+        labelStudy.classList.add('active');
+        
+        // 해설 모드: 힌트는 없애고, 해설창을 모두 펼쳐줌
+        quizData.forEach((q, qIndex) => {
+          const expEl = document.getElementById(`exp-${qIndex}`);
+          const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+          if (expEl) {
+            expEl.style.display = 'block';
+            if(toggleBtn) {
+              toggleBtn.style.display = 'inline-block'; // 해설 모드일 때 버튼 보이기
+              toggleBtn.innerHTML = '📖 해설 닫기';
+            }
+          }
+        });
+        
+      } else if (mode === 'basic') {
+        if(confirm("기본 모드로 전환하면 현재 입력된 내용이 초기화됩니다. 전환하시겠습니까?")) {
+          location.reload();
+        }
+      }
+    }
+
+    function isEquationCorrect(userInput, ansList) {
+      let u = userInput.replace(/\s+/g, '').replace(/=/g, '->');
+      let uParts = u.split('->');
+      if(uParts.length !== 2) return false;
+      let uLeft = uParts[0].split('+').sort().join('+');
+      let uRight = uParts[1].split('+').sort().join('+');
+      
+      for(let i=0; i<ansList.length; i++) {
+        let a = ansList[i].replace(/\s+/g, '').replace(/=/g, '->');
+        let aParts = a.split('->');
+        if(aParts.length !== 2) continue;
+        let aLeft = aParts[0].split('+').sort().join('+');
+        let aRight = aParts[1].split('+').sort().join('+');
+        if (uLeft === aLeft && uRight === aRight) return true;
+      }
+      return false;
+    }
+
+    function evaluateSub(qIndex, sIndex) {
+      const sub = quizData[qIndex].subs[sIndex];
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      if (inputEl.disabled) return; 
+
+      let userVal = inputEl.value;
+      let isCorrect = false;
+
+      if (userVal.trim() === "") {
+         isCorrect = false;
+      } else if (sub.type === 'short' || sub.type === 'calc') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '').toLowerCase() === uClean);
+      } else if (sub.type === 'formula') {
+        let uClean = userVal.replace(/\s+/g, '');
+        // formula 타입일 경우 대소문자 구분 (toLowerCase 사용 안함)
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '') === uClean);
+      } else if (sub.type === 'order') {
+        let uClean = userVal.replace(/[^0-9]/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/[^0-9]/g, '') === uClean);
+      } else if (sub.type === 'unordered_comma') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => {
+            let aClean = a.replace(/\s+/g, '').toLowerCase();
+            let uArr = uClean.split(',').filter(Boolean).sort();
+            let aArr = aClean.split(',').filter(Boolean).sort();
+            return uArr.length === aArr.length && uArr.every((val, index) => val === aArr[index]);
+        });
+      } else if (sub.type === 'equation') {
+        isCorrect = isEquationCorrect(userVal, sub.answers);
+      } else if (sub.type === 'descriptive') {
+        if (sub.keywords) {
+          let hasAllKeys = sub.keywords.every(kw => userVal.includes(kw));
+          isCorrect = hasAllKeys;
+        } else {
+          isCorrect = false; 
+        }
+      }
+
+      gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+      
+      inputEl.disabled = true;
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (calcEl) calcEl.disabled = true;
+
+      updateFeedbackUI(qIndex, sIndex);
+    }
+
+    function updateFeedbackUI(qIndex, sIndex) {
+      const q = quizData[qIndex];
+      const sub = q.subs[sIndex];
+      const state = gradingState[qIndex].subs[sIndex];
+      const fbDiv = document.getElementById(`fb-${qIndex}-${sIndex}`);
+      
+      let html = "";
+      if (state.status === 1) {
+        fbDiv.className = "feedback-box is-correct";
+        html += `✅ 정답입니다!`;
+      } else if (state.status === 0.5) {
+        fbDiv.className = "feedback-box is-partial";
+        html += `⚠ 부분 점수 (0.5개 인정)`;
+      } else {
+        fbDiv.className = "feedback-box is-incorrect";
+        
+        if (q.isUnordered || sub.type === 'unordered_comma') {
+          let allAnswers = q.subs.map(s => s.answers[0]).join(", ");
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        } else {
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        }
+      }
+
+      // 정답용 이미지
+      if (sub.answerImage) {
+        html += `<div style="margin-top: 15px; text-align: center;">
+                   <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px;" alt="정답 해설 이미지">
+                   <div style="font-size:0.85em; color:#1976d2; margin-top:5px;">[정답 참고 이미지]</div>
+                 </div>`;
+      }
+
+      if (sub.type === 'descriptive') {
+        html += `<div class="override-btns">
+                  <span style="font-size:0.85em; color:#666; font-weight:normal; margin-right:8px;">▶ 서술/그림 자율 채점:</span><br><br>
+                  <button class="btn-override btn-correct" onclick="overrideScore(${qIndex}, ${sIndex}, 1)">정답 인정</button>
+                  <button class="btn-override btn-partial" onclick="overrideScore(${qIndex}, ${sIndex}, 0.5)">부분 점수</button>
+                  <button class="btn-override btn-incorrect" onclick="overrideScore(${qIndex}, ${sIndex}, 0)">오답 처리</button>
+                 </div>`;
+      }
+
+      fbDiv.innerHTML = html;
+      fbDiv.style.display = "block";
+    }
+
+    function updateCardScore(qIndex) {
+      const q = quizData[qIndex];
+      let correctSubs = 0;
+      q.subs.forEach((sub, sIndex) => {
+        correctSubs += gradingState[qIndex].subs[sIndex].status;
+      });
+      gradingState[qIndex].earnedScore = (correctSubs / q.subs.length) * q.score;
+      
+      const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
+      if(cardTitle) {
+        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+        cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
+        if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
+        else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
+        else cardTitle.style.backgroundColor = "#ffebee";
+      }
+    }
+
+    function gradeSingleQuestion(qIndex) {
+      const q = quizData[qIndex];
+
+      if (q.isUnordered) {
+        // 순서 무관 문제 처리 시 'formula' 타입 여부에 따라 대소문자 변환 결정
+        let answerPool = q.subs.map(sub => {
+           return sub.answers.map(a => sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase());
+        });
+
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          if (!inputEl || inputEl.disabled) return;
+
+          let userVal = inputEl.value;
+          let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
+          let isCorrect = false;
+
+          if (uClean !== "") {
+            for (let i = 0; i < answerPool.length; i++) {
+              if (answerPool[i].includes(uClean)) {
+                isCorrect = true;
+                answerPool.splice(i, 1);
+                break;
+              }
+            }
+          }
+
+          gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+          inputEl.disabled = true;
+          updateFeedbackUI(qIndex, sIndex);
+        });
+      } else {
+        q.subs.forEach((sub, sIndex) => {
+          evaluateSub(qIndex, sIndex);
+        });
+      }
+
+      updateCardScore(qIndex);
+      gradingState[qIndex].isGraded = true;
+
+      // 채점 시 자동으로 해설 오픈 및 버튼 텍스트 변경
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (expEl) {
+          expEl.style.display = 'block';
+          if(toggleBtn) {
+            toggleBtn.style.display = 'inline-block';
+            toggleBtn.innerHTML = '📖 해설 닫기';
+          }
+      }
+      
+      // 채점 완료 후 채점 버튼 숨기기
+      const btnEl = document.getElementById(`btn-grade-single-${qIndex}`);
+      if (btnEl) btnEl.style.display = 'none';
+      
+      if (isTestSubmitted) calculateFinalTotal();
+    }
+
+    function gradeAll() {
+      isTestSubmitted = true;
+      quizData.forEach((q, qIndex) => {
+        if (!gradingState[qIndex].isGraded) {
+          gradeSingleQuestion(qIndex);
+        }
+      });
+      document.getElementById('submit-btn').style.display = 'none';
+      calculateFinalTotal();
+    }
+
+    function overrideScore(qIndex, sIndex, newStatus) {
+      gradingState[qIndex].subs[sIndex].status = newStatus;
+      updateFeedbackUI(qIndex, sIndex);
+      updateCardScore(qIndex);
+      if (isTestSubmitted) calculateFinalTotal(); 
+    }
+
+    function calculateFinalTotal() {
+      let totalEarned = 0;
+      let totalMax = 0;
+
+      quizData.forEach((q, qIndex) => {
+        totalMax += q.score;
+        totalEarned += gradingState[qIndex].earnedScore;
+      });
+
+      const resDiv = document.getElementById('final-result');
+      resDiv.style.display = "block";
+      
+      totalEarned = Math.round(totalEarned * 10) / 10;
+      let percent = Math.round((totalEarned / totalMax) * 100);
+      let passMsg = percent >= 60 
+        ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
+        : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
+
+      resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
+    }
+
+    renderQuiz();
+    // ================== 우측 문항 내비게이션 모듈 시작 ==================
+function initNavPanel() {
+  // 1. HTML 패널 동적 생성
+  const navHtml = `
+    <div id="q-nav-panel">
+      <div class="q-nav-header">📌 문항 이동</div>
+      <div class="q-nav-grid" id="q-nav-grid"></div>
+      <div class="q-nav-legend">
+        <div><span class="box" style="background:#fff; border:1px solid #dee2e6;"></span>미작성</div>
+        <div><span class="box" style="background:#e3f2fd; border:1px solid #90caf9;"></span>답안 입력됨</div>
+        <div><span class="box" style="background:#e8f5e9; border:1px solid #81c784;"></span>정답 / 채점완료</div>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', navHtml);
+
+  // 2. 문항 개수에 맞춰 버튼 생성
+  const navGrid = document.getElementById('q-nav-grid');
+  let gridHtml = '';
+  quizData.forEach((q, qIndex) => {
+    gridHtml += `<button class="q-nav-btn" id="nav-btn-${qIndex}" onclick="scrollToQuestion(${qIndex})">${qIndex + 1}</button>`;
+  });
+  navGrid.innerHTML = gridHtml;
+
+  // 3. 사용자가 답을 입력할 때마다 실시간 색상 업데이트 (이벤트 위임)
+  document.getElementById('quiz-container').addEventListener('input', updateNavStatus);
+
+  // 4. 기존 채점 기능에 내비게이션 업데이트 연동 (기존 코드 안전 후킹)
+  if (typeof gradeSingleQuestion === 'function') {
+    const originalGradeSingle = gradeSingleQuestion;
+    gradeSingleQuestion = function(qIndex) {
+      originalGradeSingle(qIndex);
+      updateNavStatus();
+    };
+  }
+
+  if (typeof overrideScore === 'function') {
+    const originalOverrideScore = overrideScore;
+    overrideScore = function(qIndex, sIndex, newStatus) {
+      originalOverrideScore(qIndex, sIndex, newStatus);
+      updateNavStatus();
+    };
+  }
+
+  if (typeof gradeAll === 'function') {
+    const originalGradeAll = gradeAll;
+    gradeAll = function() {
+      originalGradeAll();
+      updateNavStatus();
+    };
+  }
+
+  // 초기 상태 렌더링
+  updateNavStatus();
+}
+
+// 클릭 시 해당 문제로 부드럽게 스크롤
+function scrollToQuestion(qIndex) {
+  const target = document.getElementById(`qCard-${qIndex}`);
+  if(target) {
+    const topPos = target.getBoundingClientRect().top + window.pageYOffset - 20;
+    window.scrollTo({ top: topPos, behavior: 'smooth' });
+  }
+}
+
+// 답안 입력 및 채점 상태에 따라 버튼 색상 변경
+function updateNavStatus() {
+  quizData.forEach((q, qIndex) => {
+    const navBtn = document.getElementById(`nav-btn-${qIndex}`);
+    if(!navBtn) return;
+
+    // 1) 채점이 완료된 경우 (정답/부분점수/오답 색상)
+    if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
+      let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+      navBtn.className = 'q-nav-btn'; // 클래스 초기화
+      if (qEarnedScore === q.score) navBtn.classList.add('correct');
+      else if (qEarnedScore > 0) navBtn.classList.add('partial');
+      else navBtn.classList.add('incorrect');
+      return;
+    }
+
+    // 2) 채점 전인 경우 입력창(input, textarea)에 텍스트가 있는지 확인
+    let hasAnswer = false;
+    q.subs.forEach((sub, sIndex) => {
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
+      if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
+    });
+
+    if (hasAnswer) {
+      navBtn.classList.add('answered'); // 파란색(입력됨)
+    } else {
+      navBtn.classList.remove('answered'); // 흰색(미작성)
+    }
+  });
+}
+
+// 모든 요소가 로드된 후 내비게이션 패널 실행
+setTimeout(initNavPanel, 100);
+// ================== 우측 문항 내비게이션 모듈 끝 ==================
+  </script>
+
+  <!-- ================== 플로팅 연습장 모듈 시작 ================== -->
+<style>
+  /* 연습장 열기/닫기 버튼 */
+  #sp-toggle-btn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+    background-color: #ff9800; color: white; border: none; border-radius: 50px;
+    padding: 15px 20px; font-size: 16px; font-weight: bold; cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background-color 0.2s;
+  }
+  #sp-toggle-btn:hover { background-color: #f57c00; }
+  
+  /* 연습장 패널 (크기 80% 확대) */
+  #sp-panel {
+    position: fixed; bottom: 80px; right: 20px; z-index: 9998;
+    width: 95vw; max-width: 720px; height: 630px; /* 기존 400x350에서 80% 확대 */
+    background-color: #fff; border: 2px solid #ccc; border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    display: none; flex-direction: column; overflow: hidden;
+  }
+  
+  /* 연습장 상단 툴바 */
+  #sp-header {
+    background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .sp-title { font-weight: bold; color: #333; font-size: 14px; }
+  .sp-tools button {
+    background-color: #fff; border: 1px solid #ccc; border-radius: 4px;
+    padding: 6px 10px; cursor: pointer; font-size: 13px; margin-left: 4px;
+  }
+  .sp-tools button.active { 
+    background-color: #e3f2fd; border-color: #1976d2; font-weight: bold; color: #1976d2; 
+  }
+  
+  /* 캔버스 (그림 그리는 곳) */
+  #sp-canvas { 
+    flex-grow: 1; cursor: crosshair; background-color: #fff; touch-action: none; 
+  }
+</style>
+
+<!-- 연습장 UI -->
+<button id="sp-toggle-btn" onclick="toggleScratchpad()">📝 연습장</button>
+<div id="sp-panel">
+  <div id="sp-header">
+    <span class="sp-title">연습장 (구조식/계산식)</span>
+    <div class="sp-tools">
+      <button id="sp-pen" class="active" onclick="setSpTool('pen')">✏️ 펜</button>
+      <button id="sp-eraser" onclick="setSpTool('eraser')">🧽 지우개</button>
+      <button onclick="clearSpCanvas()">🗑️ 비우기</button>
+    </div>
+  </div>
+  <canvas id="sp-canvas"></canvas>
+</div>
+
+<!-- 연습장 스크립트 -->
+<script>
+  let spCanvas, spCtx;
+  let spIsDrawing = false;
+  let spCurrentTool = 'pen';
+
+  function toggleScratchpad() {
+    const panel = document.getElementById('sp-panel');
+    const btn = document.getElementById('sp-toggle-btn');
+    if (panel.style.display === 'flex') {
+      panel.style.display = 'none';
+      btn.innerText = "📝 연습장";
+      btn.style.backgroundColor = "#ff9800";
+    } else {
+      panel.style.display = 'flex';
+      btn.innerText = "❌ 닫기";
+      btn.style.backgroundColor = "#757575";
+      if (!spCanvas) initScratchpad();
+    }
+  }
+
+  function initScratchpad() {
+    spCanvas = document.getElementById('sp-canvas');
+    spCtx = spCanvas.getContext('2d');
+    
+    // 캔버스 크기 맞추기 (디스플레이 해상도 고려)
+    function resizeCanvas() {
+      const rect = spCanvas.parentElement.getBoundingClientRect();
+      const headerHeight = document.getElementById('sp-header').offsetHeight;
+      spCanvas.width = rect.width;
+      spCanvas.height = rect.height - headerHeight;
+    }
+    resizeCanvas();
+    
+    // 마우스 이벤트 (PC용)
+    spCanvas.addEventListener('mousedown', startSpDraw);
+    spCanvas.addEventListener('mousemove', drawSp);
+    spCanvas.addEventListener('mouseup', stopSpDraw);
+    spCanvas.addEventListener('mouseout', stopSpDraw);
+    
+    // 터치 이벤트 (스마트폰, 태블릿용 - 스크롤 방지 포함)
+    spCanvas.addEventListener('touchstart', startSpDraw, { passive: false });
+    spCanvas.addEventListener('touchmove', drawSp, { passive: false });
+    spCanvas.addEventListener('touchend', stopSpDraw);
+  }
+
+  function getSpCoordinates(e) {
+    const rect = spCanvas.getBoundingClientRect();
+    if (e.touches && e.touches.length > 0) {
+      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+    }
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+
+  function startSpDraw(e) {
+    e.preventDefault(); // 화면 스크롤 방지
+    spIsDrawing = true;
+    const pos = getSpCoordinates(e);
+    spCtx.beginPath();
+    spCtx.moveTo(pos.x, pos.y);
+  }
+
+  function drawSp(e) {
+    if (!spIsDrawing) return;
+    e.preventDefault(); // 터치 드래그 시 화면 스크롤 방지
+    const pos = getSpCoordinates(e);
+    
+    spCtx.lineTo(pos.x, pos.y);
+    if (spCurrentTool === 'eraser') {
+      spCtx.strokeStyle = '#fff'; // 지우개는 흰색으로 덮어씌움
+      spCtx.lineWidth = 20;       // 지우개는 두껍게
+    } else {
+      spCtx.strokeStyle = '#333'; // 펜은 진한 회색
+      spCtx.lineWidth = 2;        // 펜은 얇게
+    }
+    spCtx.lineCap = 'round';
+    spCtx.lineJoin = 'round';
+    spCtx.stroke();
+  }
+
+  function stopSpDraw() {
+    spIsDrawing = false;
+    spCtx.closePath();
+  }
+
+  function setSpTool(tool) {
+    spCurrentTool = tool;
+    document.getElementById('sp-pen').classList.remove('active');
+    document.getElementById('sp-eraser').classList.remove('active');
+    document.getElementById('sp-' + tool).classList.add('active');
+  }
+
+  function clearSpCanvas() {
+    spCtx.clearRect(0, 0, spCanvas.width, spCanvas.height);
+  }
+</script>
+<!-- ================== 플로팅 연습장 모듈 끝 ================== -->
+</body>
+</html>

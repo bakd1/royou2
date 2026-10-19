@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>위험물산업기사 실기- 필수 화학반응식</title>
+  <style>
+    body { font-family: 'Malgun Gothic', sans-serif; margin: 30px; max-width: 900px; background-color: #f4f6f9; color: #333; }
+    h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+    .instruction { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 0.95em; }
+    
+    /* 모드 선택 토글 스타일 */
+    .mode-selection { text-align: center; margin-bottom: 30px; }
+    .mode-selection label {
+      display: inline-block; margin: 0 10px; padding: 10px 20px;
+      font-size: 1.05em; font-weight: bold; border-radius: 8px; cursor: pointer;
+      border: 2px solid #ced4da; transition: all 0.2s; background-color: #fff; color: #666;
+    }
+    .mode-selection label.active { border-color: #1976d2; background-color: #e3f2fd; color: #1976d2; }
+
+    .question-card { background-color: #fff; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .main-q-title { font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #1976d2; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; line-height: 1.4; }
+    
+    .sub-q-container { margin-top: 15px; padding-left: 10px; }
+    .sub-q-label { font-weight: bold; margin-bottom: 8px; font-size: 1.05em; line-height: 1.4; }
+    
+    .input-standard, .input-calc { 
+      width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; transition: border-color 0.2s;
+    }
+    .input-standard:focus, .input-calc:focus, .textarea-formula:focus { outline: none; border-color: #1976d2; box-shadow: 0 0 0 3px rgba(25,118,210,0.15); }
+    
+    .textarea-formula {
+      width: 100%; padding: 12px; font-size: 15px; border: 1px dashed #adb5bd; border-radius: 6px; box-sizing: border-box; margin-bottom: 5px; resize: vertical; min-height: 80px; background-color: #f8f9fa; line-height: 1.4;
+    }
+    .calc-label { font-size: 0.85em; color: #6c757d; font-weight: bold; margin-bottom: 3px; display: block; }
+    
+    .feedback-box { margin-top: 5px; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 0.95em; display: none; line-height: 1.5; }
+    .is-correct { background-color: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; }
+    .is-incorrect { background-color: #ffebee; border: 1px solid #ffcdd2; color: #c62828; }
+    .is-partial { background-color: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; }
+    
+    .override-btns { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc; }
+    .btn-override { padding: 6px 12px; font-size: 0.85em; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px; color: #fff; transition: opacity 0.2s; }
+    .btn-override:hover { opacity: 0.8; }
+    .btn-correct { background-color: #4caf50; }
+    .btn-partial { background-color: #ff9800; }
+    .btn-incorrect { background-color: #f44336; }
+    
+    .btn-grade-single { margin-top: 15px; padding: 10px 20px; font-size: 0.95em; background-color: #607d8b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; float: right; transition: background-color 0.2s; }
+    .btn-grade-single:hover { background-color: #455a64; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+
+    .submit-section { text-align: center; margin-top: 40px; margin-bottom: 50px; }
+    .btn-submit { padding: 15px 40px; font-size: 1.2em; background-color: #1976d2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(25,118,210,0.3); }
+    .btn-submit:hover { background-color: #1565c0; }
+    .btn-submit:disabled { background-color: #9e9e9e; cursor: not-allowed; box-shadow: none; }
+    
+    #final-result { margin-top: 25px; font-size: 1.4em; font-weight: bold; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; display: none; line-height: 1.5; }
+    .q-score-badge { float: right; font-size: 0.8em; background-color: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 20px; margin-left: 10px; }
+  /* ================== 우측 문항 내비게이션 패널 스타일 ================== */
+#q-nav-panel {
+  position: fixed;
+  top: 50px;
+  right: 20px;
+  width: 170px;
+  background-color: #fff;
+  border: 2px solid #ced4da;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 120px); /* 화면 높이에 맞게 스크롤 자동 생성 */
+}
+
+.q-nav-header {
+  background-color: #f8f9fa;
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.95em;
+  border-bottom: 1px solid #ced4da;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: #1976d2;
+}
+
+.q-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.q-nav-btn {
+  padding: 8px 0;
+  font-size: 0.9em;
+  font-weight: bold;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.q-nav-btn:hover { background-color: #e9ecef; color: #495057; }
+
+/* 상태별 버튼 색상 */
+.q-nav-btn.answered { background-color: #e3f2fd; border-color: #90caf9; color: #1976d2; } /* 답안 작성 중 */
+.q-nav-btn.correct { background-color: #e8f5e9; border-color: #81c784; color: #2e7d32; }  /* 정답 */
+.q-nav-btn.partial { background-color: #fff3e0; border-color: #ffb74d; color: #e65100; }  /* 부분 점수 */
+.q-nav-btn.incorrect { background-color: #ffebee; border-color: #e57373; color: #c62828; } /* 오답 */
+
+.q-nav-legend {
+  font-size: 0.75em;
+  padding: 10px;
+  border-top: 1px solid #ced4da;
+  background-color: #f8f9fa;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.q-nav-legend .box {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* 해상도가 낮을 경우 본문을 가리지 않게 숨김 처리 */
+@media (max-width: 1150px) {
+  #q-nav-panel { display: none; }
+}
+  </style>
+</head>
+<body>
+
+  <h1>📝 필수 화학반응식</h1>
+  <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.</p>
+  
+<div class="mode-selection" id="mode-selection">
+    <label class="active" id="label-basic" onclick="setMode('basic')">
+      📝 시험 모드 (실전 테스트)
+    </label>
+    <label id="label-study" onclick="setMode('study')">
+      📖 해설 모드 (해설 펼쳐보기)
+    </label>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <div class="submit-section">
+    <button id="submit-btn" class="btn-submit" onclick="gradeAll()">전체 제출 및 채점하기</button>
+    <div id="final-result"></div>
+  </div>
+
+  <script>
+    let gradingState = [];
+    let isTestSubmitted = false;
+// 반응식 암기장 데이터 (총 87문제, 총점 100점)
+    const quizData = [
+      {
+        mainQuestion: "1. 염소산칼륨 분해반응식 (400℃)",
+        score: 1, // 난이도에 따른 배점 조정
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2KClO3 -> KClO4 + KCl + O2"] }],
+        explanation: "[해설]<br>염소산칼륨(KClO<sub>3</sub>)을 400℃로 가열하면 과염소산칼륨(KClO<sub>4</sub>), 염화칼륨(KCl), 산소(O<sub>2</sub>)로 분해된다."
+      },
+      {
+        mainQuestion: "2. 염소산칼륨 분해반응식 (540℃~560℃)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2KClO3 -> 2KCl + 3O2"] }],
+        explanation: "[해설]<br>염소산칼륨을 540℃~560℃로 완전 열분해하면 염화칼륨과 산소가 생성된다."
+      },
+      {
+        mainQuestion: "3. 염소산칼륨 + 황산",
+        score: 2, // 다소 복잡한 반응식 (2점)
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["6KClO3 + 3H2SO4 -> 2HClO4 + 3K2SO4 + 4ClO2 + 2H2O"] }],
+        explanation: "[해설]<br>염소산칼륨과 황산이 반응하여 과염소산, 황산칼륨, 이산화염소(유독가스), 물을 생성한다."
+      },
+      {
+        mainQuestion: "4. 아염소산나트륨 + 알루미늄",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["3NaClO2 + 4Al -> 2Al2O3 + 3NaCl"] }],
+        explanation: "[해설]<br>아염소산나트륨과 알루미늄이 혼촉하면 산화알루미늄과 염화나트륨이 생성된다."
+      },
+      {
+        mainQuestion: "5. 과산화칼륨 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2K2O2 + 2H2O -> 4KOH + O2"] }],
+        explanation: "[해설]<br>무기과산화물인 과산화칼륨이 물과 격렬히 반응하여 수산화칼륨과 산소 기체를 발생시킨다."
+      },
+      {
+        mainQuestion: "6. 질산칼륨 열분해 반응식 (400℃)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2KNO3 -> 2KNO2 + O2"] }],
+        explanation: "[해설]<br>질산칼륨을 가열하면 아질산칼륨과 산소로 분해된다."
+      },
+      {
+        mainQuestion: "7. 질산암모늄 분해반응식 (폭발, 분해반응)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2NH4NO3 -> 2N2 + 4H2O + O2"] }],
+        explanation: "[해설]<br>질산암모늄이 고온이나 충격에 의해 폭발적으로 분해하면 질소, 수증기, 산소 기체를 내뿜는다."
+      },
+      {
+        mainQuestion: "8. 과망간산칼륨 분해반응식 (240℃)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2KMnO4 -> K2MnO4 + MnO2 + O2"] }],
+        explanation: "[해설]<br>과망간산칼륨이 240℃에서 열분해하면 망간산칼륨, 이산화망간, 산소가 생성된다."
+      },
+      {
+        mainQuestion: "9. 과망간산칼륨 + 묽은 황산",
+        score: 2, // 다소 복잡한 반응식 (2점)
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4KMnO4 + 6H2SO4 -> 2K2SO4 + 4MnSO4 + 6H2O + 5O2"] }],
+        explanation: "[해설]<br>과망간산칼륨이 묽은 황산과 반응하여 황산칼륨, 황산망간, 물, 산소를 생성한다."
+      },
+      {
+        mainQuestion: "10. 과망간산칼륨 + 진한 황산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2KMnO4 + H2SO4 -> K2SO4 + 2HMnO4"] }],
+        explanation: "[해설]<br>진한 황산과 반응하면 폭발성이 강한 과산화망간수소(HMnO<sub>4</sub>)가 생성된다."
+      },
+      {
+        mainQuestion: "11. 과망간산칼륨 + 염산",
+        score: 2, // 다소 복잡한 반응식 (2점)
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2KMnO4 + 16HCl -> 2KCl + 2MnCl2 + 8H2O + 5Cl2"] }],
+        explanation: "[해설]<br>과망간산칼륨이 염산을 산화시켜 유독한 염소(Cl<sub>2</sub>) 기체를 낸다."
+      },
+      {
+        mainQuestion: "12. 과염소산칼륨 분해반응식 (610℃)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["KClO4 -> KCl + 2O2"] }],
+        explanation: "[해설]<br>과염소산칼륨이 열분해하여 염화칼륨과 산소가 생성된다."
+      },
+      {
+        mainQuestion: "13. 과염소산나트륨 + 염화칼륨",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["NaClO4 + KCl -> KClO4 + NaCl"] }],
+        explanation: "[해설]<br>과염소산나트륨과 염화칼륨이 반응하여 용해도가 낮은 과염소산칼륨(KClO<sub>4</sub>)이 석출된다."
+      },
+      {
+        mainQuestion: "14. 과산화나트륨 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2Na2O2 + 2H2O -> 4NaOH + O2"] }],
+        explanation: "[해설]<br>무기과산화물인 과산화나트륨이 물과 반응하여 수산화나트륨과 산소가 생성된다. (주수소화 금지)"
+      },
+      {
+        mainQuestion: "15. 과산화나트륨 + 이산화탄소",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2Na2O2 + 2CO2 -> 2Na2CO3 + O2"] }],
+        explanation: "[해설]<br>이산화탄소와 반응하여 탄산나트륨과 산소가 생성되므로 이산화탄소 소화기 사용이 금지된다."
+      },
+      {
+        mainQuestion: "16. 과산화나트륨 + 초산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Na2O2 + 2CH3COOH -> 2CH3COONa + H2O2"] }],
+        explanation: "[해설]<br>과산화나트륨이 산(초산)과 반응하면 과산화수소(H<sub>2</sub>O<sub>2</sub>)가 발생한다."
+      },
+      {
+        mainQuestion: "17. 과산화바륨 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2BaO2 + 2H2O -> 2Ba(OH)2 + O2"] }],
+        explanation: "[해설]<br>과산화바륨이 물과 반응하여 수산화바륨과 산소를 낸다."
+      },
+      {
+        mainQuestion: "18. 과산화바륨 + 염산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["BaO2 + 2HCl -> BaCl2 + H2O2"] }],
+        explanation: "[해설]<br>과산화바륨이 염산과 반응하여 염화바륨과 과산화수소가 발생한다."
+      },
+      {
+        mainQuestion: "19. 과산화바륨 + 황산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["BaO2 + H2SO4 -> BaSO4 + H2O2"] }],
+        explanation: "[해설]<br>과산화바륨이 황산과 반응하여 황산바륨과 과산화수소가 발생한다."
+      },
+      {
+        mainQuestion: "20. 삼산화크롬 분해반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4CrO3 -> 2Cr2O3 + 3O2"] }],
+        explanation: "[해설]<br>삼산화크롬이 열분해하여 산화크롬(Cr<sub>2</sub>O<sub>3</sub>)과 산소가 생성된다."
+      },
+      {
+        mainQuestion: "21. 삼산화크롬 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["CrO3 + H2O -> H2CrO4"] }],
+        explanation: "[해설]<br>삼산화크롬이 물에 녹아 크롬산(H<sub>2</sub>CrO<sub>4</sub>)을 생성한다."
+      },
+      {
+        mainQuestion: "22. 질산은 + 염산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["AgNO3 + HCl -> HNO3 + AgCl"] }],
+        explanation: "[해설]<br>질산은이 염산과 만나 흰색 침전물인 염화은(AgCl)과 질산이 생성된다."
+      },
+      {
+        mainQuestion: "23. 질산암모늄 + 경유 [안포폭약]",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["3NH4NO3 + CH2 -> 3N2 + 7H2O + CO2"] }],
+        explanation: "[해설]<br>안포폭약(ANFO) 폭발 시 산화제인 질산암모늄이 가연물인 경유(CH<sub>2</sub>)와 반응하여 질소, 물, 이산화탄소가 발생한다."
+      },
+      {
+        mainQuestion: "24. 중크롬산칼륨 열 분해식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4K2Cr2O7 -> 2Cr2O3 + 4K2CrO4 + 3O2"] }],
+        explanation: "[해설]<br>중크롬산칼륨이 열분해하면 산화크롬(Cr<sub>2</sub>O<sub>3</sub>), 크롬산칼륨(K<sub>2</sub>CrO<sub>4</sub>), 산소(O<sub>2</sub>)로 분해된다."
+      },
+
+      // ----------------------------------------------------
+      // [ 제2류 위험물 ]
+      // ----------------------------------------------------
+      {
+        mainQuestion: "25. 삼황화린 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["P4S3 + 8O2 -> 2P2O5 + 3SO2"] }],
+        explanation: "[해설]<br>제2류 위험물인 삼황화린(P<sub>4</sub>S<sub>3</sub>)이 연소하면 오산화린(P<sub>2</sub>O<sub>5</sub>)과 이산화황(SO<sub>2</sub>)이 생성된다."
+      },
+      {
+        mainQuestion: "26. 오황화린 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["P2S5 + 8H2O -> 5H2S + 2H3PO4"] }],
+        explanation: "[해설]<br>오황화린(P<sub>2</sub>S<sub>5</sub>)이 물과 반응하면 유독한 황화수소(H<sub>2</sub>S) 가스와 올소인산(H<sub>3</sub>PO<sub>4</sub>)이 생성된다."
+      },
+      {
+        mainQuestion: "27. 적린 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4P + 5O2 -> 2P2O5"] }],
+        explanation: "[해설]<br>적린(P)이 연소하면 백색 연기인 오산화린(P<sub>2</sub>O<sub>5</sub>)이 생성된다."
+      },
+      {
+        mainQuestion: "28. 황 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["S + O2 -> SO2"] }],
+        explanation: "[해설]<br>유황(S)이 연소하면 유독한 아황산가스(이산화황, SO<sub>2</sub>)가 발생한다."
+      },
+      {
+        mainQuestion: "29. 철 + 염산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Fe + 2HCl -> FeCl2 + H2"] }],
+        explanation: "[해설]<br>철분(Fe)이 염산(HCl)과 반응하면 염화제일철(FeCl<sub>2</sub>)과 가연성 기체인 수소(H<sub>2</sub>)가 발생한다."
+      },
+      {
+        mainQuestion: "30. 알루미늄 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2Al + 6H2O -> 2Al(OH)3 + 3H2"] }],
+        explanation: "[해설]<br>알루미늄분(Al)이 물과 반응하면 수산화알루미늄과 수소(H<sub>2</sub>)가 발생하므로 주수소화는 엄금한다."
+      },
+      {
+        mainQuestion: "31. 알루미늄 + 산소 (연소반응식)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4Al + 3O2 -> 2Al2O3"] }],
+        explanation: "[해설]<br>알루미늄이 공기 중에서 연소하면 산화알루미늄(Al<sub>2</sub>O<sub>3</sub>)이 생성된다."
+      },
+      {
+        mainQuestion: "32. 마그네슘 + 이산화탄소",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2Mg + CO2 -> 2MgO + C"] }],
+        explanation: "[해설]<br>마그네슘 화재 시 이산화탄소(CO<sub>2</sub>)를 방사하면 산화마그네슘과 폭발성이 있는 탄소(C)가 유리되므로 CO<sub>2</sub> 소화기 사용은 금지된다."
+      },
+      {
+        mainQuestion: "33. 마그네슘 + 염산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Mg + 2HCl -> MgCl2 + H2"] }],
+        explanation: "[해설]<br>마그네슘(Mg)이 염산과 반응하면 염화마그네슘(MgCl<sub>2</sub>)과 수소(H<sub>2</sub>)가 발생한다."
+      },
+      {
+        mainQuestion: "34. 마그네슘 + 물 (온수)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Mg + 2H2O -> Mg(OH)2 + H2"] }],
+        explanation: "[해설]<br>마그네슘이 뜨거운 물과 반응하면 수산화마그네슘과 가연성인 수소 가스가 발생한다."
+      },
+      {
+        mainQuestion: "35. 마그네슘 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2Mg + O2 -> 2MgO"] }],
+        explanation: "[해설]<br>마그네슘이 연소하면 밝은 빛을 내며 산화마그네슘(MgO)이 생성된다."
+      },
+      {
+        mainQuestion: "36. 마그네슘 + 황산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Mg + H2SO4 -> MgSO4 + H2"] }],
+        explanation: "[해설]<br>마그네슘이 황산과 반응하면 황산마그네슘(MgSO<sub>4</sub>)과 수소가 발생한다."
+      },
+      {
+        mainQuestion: "37. 아연 + 염산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Zn + 2HCl -> ZnCl2 + H2"] }],
+        explanation: "[해설]<br>아연(Zn)이 염산과 반응하면 염화아연과 수소가 발생한다."
+      },
+      {
+        mainQuestion: "38. 아연 + 황산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Zn + H2SO4 -> ZnSO4 + H2"] }],
+        explanation: "[해설]<br>아연이 황산과 반응하면 황산아연과 수소가 발생한다."
+      },
+
+      // ----------------------------------------------------
+      // [ 제3류 위험물 ]
+      // ----------------------------------------------------
+      {
+        mainQuestion: "39. 칼륨 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2K + 2H2O -> 2KOH + H2"] }],
+        explanation: "[해설]<br>칼륨(K)이 물과 반응하여 수산화칼륨(KOH)과 수소 가스를 발생시킨다."
+      },
+      {
+        mainQuestion: "40. 칼륨 + 이산화탄소",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4K + 3CO2 -> 2K2CO3 + C"] }],
+        explanation: "[해설]<br>칼륨이 이산화탄소와 반응하면 탄산칼륨과 탄소가 생성된다."
+      },
+      {
+        mainQuestion: "41. 칼륨 + 에틸알코올",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2K + 2C2H5OH -> 2C2H5OK + H2"] }],
+        explanation: "[해설]<br>칼륨이 에틸알코올(C<sub>2</sub>H<sub>5</sub>OH)과 반응하면 칼륨에틸레이트(C<sub>2</sub>H<sub>5</sub>OK)와 수소가 발생한다."
+      },
+      {
+        mainQuestion: "42. 나트륨 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4Na + O2 -> 2Na2O"] }],
+        explanation: "[해설]<br>나트륨(Na)이 산소와 반응하여 산화나트륨(Na<sub>2</sub>O)이 생성된다."
+      },
+      {
+        mainQuestion: "43. 나트륨 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2Na + 2H2O -> 2NaOH + H2"] }],
+        explanation: "[해설]<br>나트륨이 물과 반응하여 수산화나트륨(NaOH)과 수소를 발생시킨다."
+      },
+      {
+        mainQuestion: "44. 나트륨 + 이산화탄소",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4Na + 3CO2 -> 2Na2CO3 + C"] }],
+        explanation: "[해설]<br>나트륨이 이산화탄소와 반응하면 탄산나트륨과 탄소가 유리된다."
+      },
+      {
+        mainQuestion: "45. 나트륨 + 에틸알코올",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2Na + 2C2H5OH -> 2C2H5ONa + H2"] }],
+        explanation: "[해설]<br>나트륨이 에틸알코올과 반응하면 나트륨에틸레이트(C<sub>2</sub>H<sub>5</sub>ONa)와 수소가 발생한다."
+      },
+      {
+        mainQuestion: "46. 트리메틸알루미늄 (TMA) 연소반응식",
+        score: 2, // 다소 복잡한 반응식 (2점)
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2(CH3)3Al + 12O2 -> Al2O3 + 9H2O + 6CO2"] }],
+        explanation: "[해설]<br>자연발화성인 트리메틸알루미늄이 산소와 반응하여 산화알루미늄, 물, 이산화탄소가 생성된다."
+      },
+      {
+        mainQuestion: "47. 트리메틸알루미늄 (TMA) + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["(CH3)3Al + 3H2O -> Al(OH)3 + 3CH4"] }],
+        explanation: "[해설]<br>트리메틸알루미늄이 물과 격렬히 반응하여 수산화알루미늄과 가연성 가스인 메탄(CH<sub>4</sub>)이 발생한다."
+      },
+      {
+        mainQuestion: "48. 트리에틸알루미늄 (TEA) 연소반응식",
+        score: 2, // 다소 복잡한 반응식 (2점)
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2(C2H5)3Al + 21O2 -> Al2O3 + 15H2O + 12CO2"] }],
+        explanation: "[해설]<br>트리에틸알루미늄이 연소하면 산화알루미늄, 물, 이산화탄소가 생성된다."
+      },
+      {
+        mainQuestion: "49. 트리에틸알루미늄 (TEA) + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["(C2H5)3Al + 3H2O -> Al(OH)3 + 3C2H6"] }],
+        explanation: "[해설]<br>트리에틸알루미늄이 물과 반응하면 수산화알루미늄과 가연성 가스인 에탄(C<sub>2</sub>H<sub>6</sub>)이 발생한다."
+      },
+      {
+        mainQuestion: "50. 트리에틸알루미늄 (TEA) + 메틸알코올",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["(C2H5)3Al + 3CH3OH -> Al(CH3O)3 + 3C2H6"] }],
+        explanation: "[해설]<br>트리에틸알루미늄이 메틸알코올과 반응하면 트리메톡시알루미늄과 에탄 기체가 발생한다."
+      },
+      {
+        mainQuestion: "51. 메틸리튬 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["CH3Li + H2O -> LiOH + CH4"] }],
+        explanation: "[해설]<br>메틸리튬(CH<sub>3</sub>Li)이 물과 반응하면 수산화리튬(LiOH)과 메탄(CH<sub>4</sub>)이 발생한다."
+      },
+      {
+        mainQuestion: "52. 황린 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["P4 + 5O2 -> 2P2O5"] }],
+        explanation: "[해설]<br>황린(P<sub>4</sub>)이 공기 중에서 자연발화하여 흰색 연기인 오산화린(P<sub>2</sub>O<sub>5</sub>)을 생성한다."
+      },
+      {
+        mainQuestion: "53. 칼슘 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Ca + 2H2O -> Ca(OH)2 + H2"] }],
+        explanation: "[해설]<br>알칼리토금속인 칼슘(Ca)이 물과 반응하여 수산화칼슘과 수소를 발생시킨다."
+      },
+      {
+        mainQuestion: "54. 수소화칼륨 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["KH + H2O -> KOH + H2"] }],
+        explanation: "[해설]<br>수소화칼륨(KH)이 물과 반응하여 수산화칼륨과 수소 가스를 발생시킨다."
+      },
+      {
+        mainQuestion: "55. 인화칼슘 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Ca3P2 + 6H2O -> 3Ca(OH)2 + 2PH3"] }],
+        explanation: "[해설]<br>인화칼슘(Ca<sub>3</sub>P<sub>2</sub>)이 물과 반응하여 수산화칼슘과 맹독성의 포스핀(PH<sub>3</sub>) 가스를 발생시킨다."
+      },
+      {
+        mainQuestion: "56. 인화알루미늄 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["AlP + 3H2O -> Al(OH)3 + PH3"] }],
+        explanation: "[해설]<br>인화알루미늄(AlP)이 물과 반응하여 수산화알루미늄과 포스핀 가스를 발생시킨다."
+      },
+      {
+        mainQuestion: "57. 탄화알루미늄 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Al4C3 + 12H2O -> 4Al(OH)3 + 3CH4"] }],
+        explanation: "[해설]<br>탄화알루미늄(Al<sub>4</sub>C<sub>3</sub>)이 물과 반응하여 수산화알루미늄과 메탄(CH<sub>4</sub>) 가스를 낸다."
+      },
+      {
+        mainQuestion: "58. 탄화칼슘 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["CaC2 + 2H2O -> Ca(OH)2 + C2H2"] }],
+        explanation: "[해설]<br>탄화칼슘(CaC<sub>2</sub>)이 물과 반응하여 수산화칼슘과 가연성인 아세틸렌(C<sub>2</sub>H<sub>2</sub>) 가스를 발생시킨다."
+      },
+
+      // ----------------------------------------------------
+      // [ 제4류 위험물 ]
+      // ----------------------------------------------------
+      {
+        mainQuestion: "59. 이황화탄소 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["CS2 + 3O2 -> CO2 + 2SO2"] }],
+        explanation: "[해설]<br>특수인화물인 이황화탄소(CS<sub>2</sub>)가 연소하면 이산화탄소와 유독한 이산화황(SO<sub>2</sub>) 가스를 낸다."
+      },
+      {
+        mainQuestion: "60. 이황화탄소 + 물",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["CS2 + 2H2O -> CO2 + 2H2S"] }],
+        explanation: "[해설]<br>이황화탄소가 수증기와 반응하여 이산화탄소와 황화수소(H<sub>2</sub>S)를 생성한다."
+      },
+      {
+        mainQuestion: "61. 메틸알코올 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2CH3OH + 3O2 -> 2CO2 + 4H2O"] }],
+        explanation: "[해설]<br>메틸알코올이 연소하면 이산화탄소와 물이 생성된다."
+      },
+      {
+        mainQuestion: "62. 에틸알코올 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["C2H5OH + 3O2 -> 2CO2 + 3H2O"] }],
+        explanation: "[해설]<br>에틸알코올이 연소하면 이산화탄소와 물이 생성된다."
+      },
+      {
+        mainQuestion: "63. 아세트알데히드 산화반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2CH3CHO + O2 -> 2CH3COOH"] }],
+        explanation: "[해설]<br>아세트알데히드(CH<sub>3</sub>CHO)가 산화하면 초산(아세트산, CH<sub>3</sub>COOH)이 된다."
+      },
+      {
+        mainQuestion: "64. 아세톤 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["CH3COCH3 + 4O2 -> 3CO2 + 3H2O"] }],
+        explanation: "[해설]<br>아세톤(CH<sub>3</sub>COCH<sub>3</sub>)이 완전 연소하면 이산화탄소와 물이 생성된다."
+      },
+      {
+        mainQuestion: "65. 초산(아세트산) 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["CH3COOH + 2O2 -> 2CO2 + 2H2O"] }],
+        explanation: "[해설]<br>초산(CH<sub>3</sub>COOH)이 완전 연소하면 이산화탄소와 물이 생성된다."
+      },
+      {
+        mainQuestion: "66. 니트로벤젠 제조 (니트로화)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력 (황산 촉매 생략 또는 양변 포함 모두 정답 인정)", type: "equation", answers: ["C6H6 + HNO3 -> C6H5NO2 + H2O", "C6H6 + HNO3 + H2SO4 -> C6H5NO2 + H2O + H2SO4"] }],
+        explanation: "[해설]<br>벤젠(C<sub>6</sub>H<sub>6</sub>)에 질산(HNO<sub>3</sub>)과 황산을 혼합(혼산)하여 니트로화 시키면 니트로벤젠(C<sub>6</sub>H<sub>5</sub>NO<sub>2</sub>)과 물이 생성된다."
+      },
+      {
+        mainQuestion: "67. 디에틸에테르 제조",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력 (황산 촉매 생략 또는 양변 포함 모두 정답 인정)", type: "equation", answers: ["2C2H5OH -> C2H5OC2H5 + H2O", "2C2H5OH + H2SO4 -> C2H5OC2H5 + H2O + H2SO4"] }],
+        explanation: "[해설]<br>에틸알코올 2분자를 황산 촉매로 탈수 축합시키면 디에틸에테르(C<sub>2</sub>H<sub>5</sub>OC<sub>2</sub>H<sub>5</sub>)가 생성된다."
+      },
+      {
+        mainQuestion: "68. 초산에틸 제조",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력 (황산 촉매 생략 또는 양변 포함 모두 정답 인정)", type: "equation", answers: ["CH3COOH + C2H5OH -> CH3COOC2H5 + H2O", "CH3COOH + C2H5OH + H2SO4 -> CH3COOC2H5 + H2O + H2SO4"] }],
+        explanation: "[해설]<br>초산(아세트산)과 에틸알코올을 황산 촉매하에서 에스테르화 반응시키면 초산에틸(CH<sub>3</sub>COOC<sub>2</sub>H<sub>5</sub>)이 생성된다."
+      },
+      {
+        mainQuestion: "69. 메탄 연소식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["CH4 + 2O2 -> CO2 + 2H2O"] }],
+        explanation: "[해설]<br>메탄(CH<sub>4</sub>)이 완전 연소하면 이산화탄소와 물이 생성된다."
+      },
+      {
+        mainQuestion: "70. 에틸렌 산화식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력 (촉매 포함)", type: "equation", answers: ["C2H4 + PdCl2 + H2O -> CH3CHO + Pd + 2HCl"] }],
+        explanation: "[해설]<br>에틸렌(C<sub>2</sub>H<sub>4</sub>)을 염화팔라듐(PdCl<sub>2</sub>) 촉매하에 물과 반응시켜 산화시키면 아세트알데히드(CH<sub>3</sub>CHO)가 생성된다."
+      },
+
+      // ----------------------------------------------------
+      // [ 제5류 위험물 ]
+      // ----------------------------------------------------
+      {
+        mainQuestion: "71. 니트로글리세린 분해반응식",
+        score: 2, // 다소 복잡한 반응식 (2점)
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4C3H5(ONO2)3 -> 12CO2 + 10H2O + 6N2 + O2"] }],
+        explanation: "[해설]<br>니트로글리세린이 폭발(열분해)하면 이산화탄소, 수증기, 질소, 산소가 발생한다."
+      },
+      {
+        mainQuestion: "72. 니트로글리세린 제조",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력 (황산 촉매 생략 또는 양변 포함 모두 정답 인정)", type: "equation", answers: ["C3H5(OH)3 + 3HNO3 -> C3H5(ONO2)3 + 3H2O", "C3H5(OH)3 + 3HNO3 + H2SO4 -> C3H5(ONO2)3 + 3H2O + H2SO4"] }],
+        explanation: "[해설]<br>글리세린(C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub>)에 질산과 황산을 가해 니트로화 반응을 일으키면 니트로글리세린과 물이 생성된다."
+      },
+      {
+        mainQuestion: "73. 트리니트로톨루엔 (TNT) 제조",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력 (황산 촉매 생략 또는 양변 포함 모두 정답 인정)", type: "equation", answers: ["C6H5CH3 + 3HNO3 -> C6H2CH3(NO2)3 + 3H2O", "C6H5CH3 + 3HNO3 + H2SO4 -> C6H2CH3(NO2)3 + 3H2O + H2SO4"] }],
+        explanation: "[해설]<br>톨루엔(C<sub>6</sub>H<sub>5</sub>CH<sub>3</sub>)을 혼산(질산+황산)으로 니트로화하면 트리니트로톨루엔과 물이 생성된다."
+      },
+      {
+        mainQuestion: "74. 트리니트로톨루엔 분해반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2C6H2CH3(NO2)3 -> 2C + 3N2 + 5H2 + 12CO"] }],
+        explanation: "[해설]<br>트리니트로톨루엔이 폭발적으로 분해하면 탄소, 질소, 수소, 일산화탄소가 발생한다."
+      },
+
+      // ----------------------------------------------------
+      // [ 제6류 위험물 ]
+      // ----------------------------------------------------
+      {
+        mainQuestion: "75. 과산화수소 분해반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2H2O2 -> 2H2O + O2"] }],
+        explanation: "[해설]<br>제6류 위험물인 과산화수소(H<sub>2</sub>O<sub>2</sub>)가 분해되면 물과 산소가 생성된다."
+      },
+      {
+        mainQuestion: "76. 이산화망간 + 과산화수소",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력 (이산화망간 촉매 생략 또는 양변 포함 모두 정답 인정)", type: "equation", answers: ["2H2O2 -> 2H2O + O2", "MnO2 + 2H2O2 -> MnO2 + 2H2O + O2", "2H2O2 + MnO2 -> 2H2O + O2 + MnO2"] }],
+        explanation: "[해설]<br>이산화망간(MnO<sub>2</sub>)은 정촉매로 작용하여 과산화수소의 분해를 촉진하며, 반응 후에도 그대로 남아 있는다."
+      },
+      {
+        mainQuestion: "77. 과산화수소 + 히드라진",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2H2O2 + N2H4 -> 4H2O + N2"] }],
+        explanation: "[해설]<br>과산화수소와 제4류 위험물인 히드라진(N<sub>2</sub>H<sub>4</sub>)이 혼촉하면 격렬히 반응하여 물과 질소를 발생시키며 폭발한다."
+      },
+      {
+        mainQuestion: "78. 질산 분해반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["4HNO3 -> 2H2O + 4NO2 + O2"] }],
+        explanation: "[해설]<br>질산(HNO<sub>3</sub>)이 햇빛(자외선)에 의해 분해되면 물, 유독성 적갈색 기체인 이산화질소(NO<sub>2</sub>), 산소가 발생한다."
+      },
+      {
+        mainQuestion: "79. 과염소산 분해식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["HClO4 -> HCl + 2O2"] }],
+        explanation: "[해설]<br>과염소산(HClO<sub>4</sub>)이 분해되면 염산(HCl)과 산소가 생성된다."
+      },
+
+      // ----------------------------------------------------
+      // [ 기 타 ]
+      // ----------------------------------------------------
+      {
+        mainQuestion: "80. 구리 + 진한질산",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["Cu + 4HNO3 -> Cu(NO3)2 + 2NO2 + 2H2O"] }],
+        explanation: "[해설]<br>구리(Cu)와 진한 질산이 반응하면 질산구리와 함께 적갈색 유독기체인 이산화질소(NO<sub>2</sub>), 물이 생성된다."
+      },
+      {
+        mainQuestion: "81. 아세틸렌 연소반응식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2C2H2 + 5O2 -> 4CO2 + 2H2O"] }],
+        explanation: "[해설]<br>아세틸렌(C<sub>2</sub>H<sub>2</sub>) 가스가 완전 연소하면 이산화탄소와 물이 생성된다."
+      },
+      {
+        mainQuestion: "82. 아세틸렌 + 구리",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["C2H2 + 2Cu -> Cu2C2 + H2"] }],
+        explanation: "[해설]<br>아세틸렌과 구리가 반응하면 마찰에 매우 민감하여 폭발하기 쉬운 구리아세틸리드(Cu<sub>2</sub>C<sub>2</sub>)와 수소가 생성된다."
+      },
+      {
+        mainQuestion: "83. 탄산마그네슘 분해식",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["MgCO3 -> MgO + CO2"] }],
+        explanation: "[해설]<br>탄산마그네슘(MgCO<sub>3</sub>)이 분해되어 산화마그네슘과 이산화탄소가 발생한다."
+      },
+      {
+        mainQuestion: "84. 산, 알칼리 소화기",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["H2SO4 + 2NaHCO3 -> Na2SO4 + 2H2O + 2CO2"] }],
+        explanation: "[해설]<br>황산과 탄산수소나트륨이 반응하여 황산나트륨, 물, 그리고 소화 작용을 하는 이산화탄소를 생성한다."
+      },
+      {
+        mainQuestion: "85. 강화액 소화기",
+        score: 1,
+        subs: [
+          { 
+            label: "반응식 전체 입력 (양변의 물 포함 또는 정미반응식)", 
+            type: "equation", 
+            answers: ["H2SO4 + K2CO3 + H2O -> K2SO4 + 2H2O + CO2", "H2SO4 + K2CO3 -> K2SO4 + H2O + CO2"] 
+          }
+        ],
+        explanation: "[해설]<br>강화액 소화기 내부의 황산과 탄산칼륨이 반응하여 황산칼륨, 물, 그리고 이산화탄소를 생성한다."
+      },
+      {
+        mainQuestion: "86. 포소화약제",
+        score: 2, // 다소 복잡한 반응식 (2점)
+        subs: [
+          { 
+            label: "반응식 전체 입력 (* 결합수 표시 시 띄어쓰기 없이 붙여서 작성, 예: Al2(SO4)3*18H2O)", 
+            type: "equation", 
+            answers: [
+              "6NaHCO3 + Al2(SO4)3*18H2O -> 3Na2SO4 + 2Al(OH)3 + 6CO2 + 18H2O", 
+              "6NaHCO3 + Al2(SO4)3.18H2O -> 3Na2SO4 + 2Al(OH)3 + 6CO2 + 18H2O"
+            ] 
+          }
+        ],
+        explanation: "[해설]<br>탄산수소나트륨과 황산알루미늄이 반응하여 황산나트륨, 수산화알루미늄, 이산화탄소, 물을 발생시키는 화학포 소화약제의 원리다. 생성된 CO<sub>2</sub>가 거품을 일으키고, 수산화알루미늄이 거품을 안정시킨다."
+      },
+      {
+        mainQuestion: "87-1. 제1종 분말소화약제 열분해 반응식 (1차: 270℃)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2NaHCO3 -> Na2CO3 + CO2 + H2O"] }],
+        explanation: "[해설]<br>제1종 분말(탄산수소나트륨, NaHCO<sub>3</sub>)이 270℃에서 열분해하여 탄산나트륨, 이산화탄소, 수증기를 발생시킨다."
+      },
+      {
+        mainQuestion: "87-2. 제1종 분말소화약제 열분해 반응식 (2차: 850℃)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2NaHCO3 -> Na2O + 2CO2 + H2O"] }],
+        explanation: "[해설]<br>850℃ 이상 고온에서는 산화나트륨(Na<sub>2</sub>O)과 함께 CO<sub>2</sub>가 2몰 발생한다."
+      },
+      {
+        mainQuestion: "87-3. 제2종 분말소화약제 열분해 반응식 (1차: 190℃)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2KHCO3 -> K2CO3 + CO2 + H2O"] }],
+        explanation: "[해설]<br>제2종 분말(탄산수소칼륨, KHCO<sub>3</sub>)이 190℃에서 열분해하여 탄산칼륨, 이산화탄소, 수증기를 발생시킨다."
+      },
+      {
+        mainQuestion: "87-4. 제3종 분말소화약제 열분해 반응식 (190℃)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["NH4H2PO4 -> H3PO4 + NH3"] }],
+        explanation: "[해설]<br>제3종 분말(제1인산암모늄)이 190℃에서 분해하여 올소인산(H<sub>3</sub>PO<sub>4</sub>)과 암모니아를 발생시킨다."
+      },
+      {
+        mainQuestion: "87-5. 제3종 분말소화약제 열분해 반응식 (215℃)",
+        score: 1,
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["NH4H2PO4 -> HPO3 + NH3 + H2O"] }],
+        explanation: "[해설]<br>215℃로 가열하면 올소인산에서 물이 빠져나가 메타인산(HPO<sub>3</sub>)과 암모니아, 물이 된다. 이 메타인산이 방염막을 형성하여 A급 화재에 적응성을 가진다."
+      },
+      {
+        mainQuestion: "87-6. 제4종 분말소화약제 열분해 반응식",
+        score: 2, // 다소 복잡한 반응식 (2점)
+        subs: [{ label: "반응식 전체 입력", type: "equation", answers: ["2KHCO3 + (NH2)2CO -> K2CO3 + 2NH3 + 2CO2"] }],
+        explanation: "[해설]<br>탄산수소칼륨과 요소가 결합된 제4종 분말이 열분해하여 탄산칼륨, 암모니아, 이산화탄소를 발생시킨다."
+      }
+     ];
+
+// 특정 문제 해설 열기/닫기 토글 함수
+    function toggleExplanation(qIndex) {
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (!expEl) return;
+      
+      if (expEl.style.display === 'none' || expEl.style.display === '') {
+        expEl.style.display = 'block';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 닫기';
+      } else {
+        expEl.style.display = 'none';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 열기';
+      }
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      let html = '';
+
+      quizData.forEach((q, qIndex) => {
+        gradingState[qIndex] = { subs: [], earnedScore: 0, isGraded: false };
+        
+        html += `<div class="question-card clearfix" id="qCard-${qIndex}">`;
+        html += `<div class="main-q-title">${q.mainQuestion} <span class="q-score-badge">배점: ${q.score}점</span></div>`;
+        
+        q.subs.forEach((sub, sIndex) => {
+          gradingState[qIndex].subs[sIndex] = { status: 0 }; 
+          
+          html += `<div class="sub-q-container">`;
+          html += `<div class="sub-q-label">${sub.label}</div>`;
+          
+          if (sub.image) {
+            html += `<div style="margin-bottom: 15px; text-align: center;">
+                       <img src="${sub.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px;" alt="문제 이미지">
+                     </div>`;
+          }
+
+          if (sub.type === 'calc') {
+            html += `<span class="calc-label">▶ 계산 과정 (채점 제외)</span>`;
+            html += `<textarea id="calc-${qIndex}-${sIndex}" class="textarea-formula" placeholder="필요시 계산식을 자유롭게 적어보세요."></textarea>`;
+            html += `<span class="calc-label">▶ 최종 정답 (채점 대상)</span>`;
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-calc" autocomplete="off" placeholder="최종 정답 입력">`;
+          } else if (sub.type === 'descriptive') {
+            html += `<textarea id="ans-${qIndex}-${sIndex}" class="textarea-formula" placeholder="※ 연습장에 직접 풀거나 구조식을 그린 후, [✔️ 정답 확인 및 채점] 버튼을 눌러 스스로 비교해 보세요."></textarea>`;
+          } else {
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-standard" autocomplete="off" placeholder="${sub.type === 'unordered_comma' ? '쉼표(,)로 구분하여 입력' : '정답 입력'}">`;
+          }
+          
+          html += `<div id="fb-${qIndex}-${sIndex}" class="feedback-box"></div>`;
+          html += `</div>`;
+        });
+        
+        // 새로 추가된 액션 버튼 (해설 열기 / 채점하기 분리)
+        html += `<div style="text-align: right; margin-top: 15px; margin-bottom: 10px; clear: both;">`;
+        // 처음에는 display: none 처리하여 시험 모드에서 숨김
+        html += `  <button id="btn-toggle-exp-${qIndex}" class="btn-grade-single" style="float: none; background-color: #8d6e63; margin-right: 8px; display: none;" onclick="toggleExplanation(${qIndex})">📖 해설 열기</button>`;
+        html += `  <button id="btn-grade-single-${qIndex}" class="btn-grade-single" style="float: none;" onclick="gradeSingleQuestion(${qIndex})">✔️ 정답 확인 및 채점</button>`;
+        html += `</div>`;
+        
+        if(q.explanation) {
+            html += `<div style="clear:both;"></div>`;
+            // 해설창은 초기에 숨김(display:none) 처리
+            html += `<div id="exp-${qIndex}" class="feedback-box" style="background-color:#f8f9fa; border:1px solid #dee2e6; color:#495057; font-weight:normal; margin-top:10px; display:none;">💡 <strong>문제 핵심 해설:</strong><br>${q.explanation}</div>`;
+        }
+        html += `</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    // 모드 변경 함수
+    function setMode(mode) {
+      const labelBasic = document.getElementById('label-basic');
+      const labelStudy = document.getElementById('label-study');
+      
+      if (mode === 'study') {
+        if(labelStudy.classList.contains('active')) return; 
+        
+        labelBasic.classList.remove('active');
+        labelStudy.classList.add('active');
+        
+        // 해설 모드: 힌트는 없애고, 해설창을 모두 펼쳐줌
+        quizData.forEach((q, qIndex) => {
+          const expEl = document.getElementById(`exp-${qIndex}`);
+          const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+          if (expEl) {
+            expEl.style.display = 'block';
+            if(toggleBtn) {
+              toggleBtn.style.display = 'inline-block'; // 해설 모드일 때 버튼 보이기
+              toggleBtn.innerHTML = '📖 해설 닫기';
+            }
+          }
+        });
+        
+      } else if (mode === 'basic') {
+        if(confirm("기본 모드로 전환하면 현재 입력된 내용이 초기화됩니다. 전환하시겠습니까?")) {
+          location.reload();
+        }
+      }
+    }
+
+    function isEquationCorrect(userInput, ansList) {
+      let u = userInput.replace(/\s+/g, '').replace(/=/g, '->');
+      let uParts = u.split('->');
+      if(uParts.length !== 2) return false;
+      let uLeft = uParts[0].split('+').sort().join('+');
+      let uRight = uParts[1].split('+').sort().join('+');
+      
+      for(let i=0; i<ansList.length; i++) {
+        let a = ansList[i].replace(/\s+/g, '').replace(/=/g, '->');
+        let aParts = a.split('->');
+        if(aParts.length !== 2) continue;
+        let aLeft = aParts[0].split('+').sort().join('+');
+        let aRight = aParts[1].split('+').sort().join('+');
+        if (uLeft === aLeft && uRight === aRight) return true;
+      }
+      return false;
+    }
+
+    function evaluateSub(qIndex, sIndex) {
+      const sub = quizData[qIndex].subs[sIndex];
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      if (inputEl.disabled) return; 
+
+      let userVal = inputEl.value;
+      let isCorrect = false;
+
+      if (userVal.trim() === "") {
+         isCorrect = false;
+      } else if (sub.type === 'short' || sub.type === 'calc') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '').toLowerCase() === uClean);
+      } else if (sub.type === 'formula') {
+        let uClean = userVal.replace(/\s+/g, '');
+        // formula 타입일 경우 대소문자 구분 (toLowerCase 사용 안함)
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '') === uClean);
+      } else if (sub.type === 'order') {
+        let uClean = userVal.replace(/[^0-9]/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/[^0-9]/g, '') === uClean);
+      } else if (sub.type === 'unordered_comma') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => {
+            let aClean = a.replace(/\s+/g, '').toLowerCase();
+            let uArr = uClean.split(',').filter(Boolean).sort();
+            let aArr = aClean.split(',').filter(Boolean).sort();
+            return uArr.length === aArr.length && uArr.every((val, index) => val === aArr[index]);
+        });
+      } else if (sub.type === 'equation') {
+        isCorrect = isEquationCorrect(userVal, sub.answers);
+      } else if (sub.type === 'descriptive') {
+        if (sub.keywords) {
+          let hasAllKeys = sub.keywords.every(kw => userVal.includes(kw));
+          isCorrect = hasAllKeys;
+        } else {
+          isCorrect = false; 
+        }
+      }
+
+      gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+      
+      inputEl.disabled = true;
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (calcEl) calcEl.disabled = true;
+
+      updateFeedbackUI(qIndex, sIndex);
+    }
+
+    function updateFeedbackUI(qIndex, sIndex) {
+      const q = quizData[qIndex];
+      const sub = q.subs[sIndex];
+      const state = gradingState[qIndex].subs[sIndex];
+      const fbDiv = document.getElementById(`fb-${qIndex}-${sIndex}`);
+      
+      let html = "";
+      if (state.status === 1) {
+        fbDiv.className = "feedback-box is-correct";
+        html += `✅ 정답입니다!`;
+      } else if (state.status === 0.5) {
+        fbDiv.className = "feedback-box is-partial";
+        html += `⚠ 부분 점수 (0.5개 인정)`;
+      } else {
+        fbDiv.className = "feedback-box is-incorrect";
+        
+        if (q.isUnordered || sub.type === 'unordered_comma') {
+          let allAnswers = q.subs.map(s => s.answers[0]).join(", ");
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        } else {
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        }
+      }
+
+      // 정답용 이미지
+      if (sub.answerImage) {
+        html += `<div style="margin-top: 15px; text-align: center;">
+                   <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px;" alt="정답 해설 이미지">
+                   <div style="font-size:0.85em; color:#1976d2; margin-top:5px;">[정답 참고 이미지]</div>
+                 </div>`;
+      }
+
+      if (sub.type === 'descriptive') {
+        html += `<div class="override-btns">
+                  <span style="font-size:0.85em; color:#666; font-weight:normal; margin-right:8px;">▶ 서술/그림 자율 채점:</span><br><br>
+                  <button class="btn-override btn-correct" onclick="overrideScore(${qIndex}, ${sIndex}, 1)">정답 인정</button>
+                  <button class="btn-override btn-partial" onclick="overrideScore(${qIndex}, ${sIndex}, 0.5)">부분 점수</button>
+                  <button class="btn-override btn-incorrect" onclick="overrideScore(${qIndex}, ${sIndex}, 0)">오답 처리</button>
+                 </div>`;
+      }
+
+      fbDiv.innerHTML = html;
+      fbDiv.style.display = "block";
+    }
+
+    function updateCardScore(qIndex) {
+      const q = quizData[qIndex];
+      let correctSubs = 0;
+      q.subs.forEach((sub, sIndex) => {
+        correctSubs += gradingState[qIndex].subs[sIndex].status;
+      });
+      gradingState[qIndex].earnedScore = (correctSubs / q.subs.length) * q.score;
+      
+      const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
+      if(cardTitle) {
+        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+        cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
+        if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
+        else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
+        else cardTitle.style.backgroundColor = "#ffebee";
+      }
+    }
+
+    function gradeSingleQuestion(qIndex) {
+      const q = quizData[qIndex];
+
+      if (q.isUnordered) {
+        // 순서 무관 문제 처리 시 'formula' 타입 여부에 따라 대소문자 변환 결정
+        let answerPool = q.subs.map(sub => {
+           return sub.answers.map(a => sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase());
+        });
+
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          if (!inputEl || inputEl.disabled) return;
+
+          let userVal = inputEl.value;
+          let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
+          let isCorrect = false;
+
+          if (uClean !== "") {
+            for (let i = 0; i < answerPool.length; i++) {
+              if (answerPool[i].includes(uClean)) {
+                isCorrect = true;
+                answerPool.splice(i, 1);
+                break;
+              }
+            }
+          }
+
+          gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+          inputEl.disabled = true;
+          updateFeedbackUI(qIndex, sIndex);
+        });
+      } else {
+        q.subs.forEach((sub, sIndex) => {
+          evaluateSub(qIndex, sIndex);
+        });
+      }
+
+      updateCardScore(qIndex);
+      gradingState[qIndex].isGraded = true;
+
+      // 채점 시 자동으로 해설 오픈 및 버튼 텍스트 변경
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (expEl) {
+          expEl.style.display = 'block';
+          if(toggleBtn) {
+            toggleBtn.style.display = 'inline-block';
+            toggleBtn.innerHTML = '📖 해설 닫기';
+          }
+      }
+      
+      // 채점 완료 후 채점 버튼 숨기기
+      const btnEl = document.getElementById(`btn-grade-single-${qIndex}`);
+      if (btnEl) btnEl.style.display = 'none';
+      
+      if (isTestSubmitted) calculateFinalTotal();
+    }
+
+    function gradeAll() {
+      isTestSubmitted = true;
+      quizData.forEach((q, qIndex) => {
+        if (!gradingState[qIndex].isGraded) {
+          gradeSingleQuestion(qIndex);
+        }
+      });
+      document.getElementById('submit-btn').style.display = 'none';
+      calculateFinalTotal();
+    }
+
+    function overrideScore(qIndex, sIndex, newStatus) {
+      gradingState[qIndex].subs[sIndex].status = newStatus;
+      updateFeedbackUI(qIndex, sIndex);
+      updateCardScore(qIndex);
+      if (isTestSubmitted) calculateFinalTotal(); 
+    }
+
+    function calculateFinalTotal() {
+      let totalEarned = 0;
+      let totalMax = 0;
+
+      quizData.forEach((q, qIndex) => {
+        totalMax += q.score;
+        totalEarned += gradingState[qIndex].earnedScore;
+      });
+
+      const resDiv = document.getElementById('final-result');
+      resDiv.style.display = "block";
+      
+      totalEarned = Math.round(totalEarned * 10) / 10;
+      let percent = Math.round((totalEarned / totalMax) * 100);
+      let passMsg = percent >= 60 
+        ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
+        : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
+
+      resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
+    }
+
+    renderQuiz();
+    // ================== 우측 문항 내비게이션 모듈 시작 ==================
+function initNavPanel() {
+  // 1. HTML 패널 동적 생성
+  const navHtml = `
+    <div id="q-nav-panel">
+      <div class="q-nav-header">📌 문항 이동</div>
+      <div class="q-nav-grid" id="q-nav-grid"></div>
+      <div class="q-nav-legend">
+        <div><span class="box" style="background:#fff; border:1px solid #dee2e6;"></span>미작성</div>
+        <div><span class="box" style="background:#e3f2fd; border:1px solid #90caf9;"></span>답안 입력됨</div>
+        <div><span class="box" style="background:#e8f5e9; border:1px solid #81c784;"></span>정답 / 채점완료</div>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', navHtml);
+
+  // 2. 문항 개수에 맞춰 버튼 생성
+  const navGrid = document.getElementById('q-nav-grid');
+  let gridHtml = '';
+  quizData.forEach((q, qIndex) => {
+    gridHtml += `<button class="q-nav-btn" id="nav-btn-${qIndex}" onclick="scrollToQuestion(${qIndex})">${qIndex + 1}</button>`;
+  });
+  navGrid.innerHTML = gridHtml;
+
+  // 3. 사용자가 답을 입력할 때마다 실시간 색상 업데이트 (이벤트 위임)
+  document.getElementById('quiz-container').addEventListener('input', updateNavStatus);
+
+  // 4. 기존 채점 기능에 내비게이션 업데이트 연동 (기존 코드 안전 후킹)
+  if (typeof gradeSingleQuestion === 'function') {
+    const originalGradeSingle = gradeSingleQuestion;
+    gradeSingleQuestion = function(qIndex) {
+      originalGradeSingle(qIndex);
+      updateNavStatus();
+    };
+  }
+
+  if (typeof overrideScore === 'function') {
+    const originalOverrideScore = overrideScore;
+    overrideScore = function(qIndex, sIndex, newStatus) {
+      originalOverrideScore(qIndex, sIndex, newStatus);
+      updateNavStatus();
+    };
+  }
+
+  if (typeof gradeAll === 'function') {
+    const originalGradeAll = gradeAll;
+    gradeAll = function() {
+      originalGradeAll();
+      updateNavStatus();
+    };
+  }
+
+  // 초기 상태 렌더링
+  updateNavStatus();
+}
+
+// 클릭 시 해당 문제로 부드럽게 스크롤
+function scrollToQuestion(qIndex) {
+  const target = document.getElementById(`qCard-${qIndex}`);
+  if(target) {
+    const topPos = target.getBoundingClientRect().top + window.pageYOffset - 20;
+    window.scrollTo({ top: topPos, behavior: 'smooth' });
+  }
+}
+
+// 답안 입력 및 채점 상태에 따라 버튼 색상 변경
+function updateNavStatus() {
+  quizData.forEach((q, qIndex) => {
+    const navBtn = document.getElementById(`nav-btn-${qIndex}`);
+    if(!navBtn) return;
+
+    // 1) 채점이 완료된 경우 (정답/부분점수/오답 색상)
+    if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
+      let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+      navBtn.className = 'q-nav-btn'; // 클래스 초기화
+      if (qEarnedScore === q.score) navBtn.classList.add('correct');
+      else if (qEarnedScore > 0) navBtn.classList.add('partial');
+      else navBtn.classList.add('incorrect');
+      return;
+    }
+
+    // 2) 채점 전인 경우 입력창(input, textarea)에 텍스트가 있는지 확인
+    let hasAnswer = false;
+    q.subs.forEach((sub, sIndex) => {
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
+      if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
+    });
+
+    if (hasAnswer) {
+      navBtn.classList.add('answered'); // 파란색(입력됨)
+    } else {
+      navBtn.classList.remove('answered'); // 흰색(미작성)
+    }
+  });
+}
+
+// 모든 요소가 로드된 후 내비게이션 패널 실행
+setTimeout(initNavPanel, 100);
+// ================== 우측 문항 내비게이션 모듈 끝 ==================
+  </script>
+  <!-- ================== 플로팅 연습장 모듈 시작 ================== -->
+<style>
+  /* 연습장 열기/닫기 버튼 */
+  #sp-toggle-btn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+    background-color: #ff9800; color: white; border: none; border-radius: 50px;
+    padding: 15px 20px; font-size: 16px; font-weight: bold; cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background-color 0.2s;
+  }
+  #sp-toggle-btn:hover { background-color: #f57c00; }
+  
+  /* 연습장 패널 (크기 80% 확대) */
+  #sp-panel {
+    position: fixed; bottom: 80px; right: 20px; z-index: 9998;
+    width: 95vw; max-width: 720px; height: 630px; /* 기존 400x350에서 80% 확대 */
+    background-color: #fff; border: 2px solid #ccc; border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    display: none; flex-direction: column; overflow: hidden;
+  }
+  
+  /* 연습장 상단 툴바 */
+  #sp-header {
+    background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .sp-title { font-weight: bold; color: #333; font-size: 14px; }
+  .sp-tools button {
+    background-color: #fff; border: 1px solid #ccc; border-radius: 4px;
+    padding: 6px 10px; cursor: pointer; font-size: 13px; margin-left: 4px;
+  }
+  .sp-tools button.active { 
+    background-color: #e3f2fd; border-color: #1976d2; font-weight: bold; color: #1976d2; 
+  }
+  
+  /* 캔버스 (그림 그리는 곳) */
+  #sp-canvas { 
+    flex-grow: 1; cursor: crosshair; background-color: #fff; touch-action: none; 
+  }
+</style>
+
+<!-- 연습장 UI -->
+<button id="sp-toggle-btn" onclick="toggleScratchpad()">📝 연습장</button>
+<div id="sp-panel">
+  <div id="sp-header">
+    <span class="sp-title">연습장 (구조식/계산식)</span>
+    <div class="sp-tools">
+      <button id="sp-pen" class="active" onclick="setSpTool('pen')">✏️ 펜</button>
+      <button id="sp-eraser" onclick="setSpTool('eraser')">🧽 지우개</button>
+      <button onclick="clearSpCanvas()">🗑️ 비우기</button>
+    </div>
+  </div>
+  <canvas id="sp-canvas"></canvas>
+</div>
+
+<!-- 연습장 스크립트 -->
+<script>
+  let spCanvas, spCtx;
+  let spIsDrawing = false;
+  let spCurrentTool = 'pen';
+
+  function toggleScratchpad() {
+    const panel = document.getElementById('sp-panel');
+    const btn = document.getElementById('sp-toggle-btn');
+    if (panel.style.display === 'flex') {
+      panel.style.display = 'none';
+      btn.innerText = "📝 연습장";
+      btn.style.backgroundColor = "#ff9800";
+    } else {
+      panel.style.display = 'flex';
+      btn.innerText = "❌ 닫기";
+      btn.style.backgroundColor = "#757575";
+      if (!spCanvas) initScratchpad();
+    }
+  }
+
+  function initScratchpad() {
+    spCanvas = document.getElementById('sp-canvas');
+    spCtx = spCanvas.getContext('2d');
+    
+    // 캔버스 크기 맞추기 (디스플레이 해상도 고려)
+    function resizeCanvas() {
+      const rect = spCanvas.parentElement.getBoundingClientRect();
+      const headerHeight = document.getElementById('sp-header').offsetHeight;
+      spCanvas.width = rect.width;
+      spCanvas.height = rect.height - headerHeight;
+    }
+    resizeCanvas();
+    
+    // 마우스 이벤트 (PC용)
+    spCanvas.addEventListener('mousedown', startSpDraw);
+    spCanvas.addEventListener('mousemove', drawSp);
+    spCanvas.addEventListener('mouseup', stopSpDraw);
+    spCanvas.addEventListener('mouseout', stopSpDraw);
+    
+    // 터치 이벤트 (스마트폰, 태블릿용 - 스크롤 방지 포함)
+    spCanvas.addEventListener('touchstart', startSpDraw, { passive: false });
+    spCanvas.addEventListener('touchmove', drawSp, { passive: false });
+    spCanvas.addEventListener('touchend', stopSpDraw);
+  }
+
+  function getSpCoordinates(e) {
+    const rect = spCanvas.getBoundingClientRect();
+    if (e.touches && e.touches.length > 0) {
+      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+    }
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+
+  function startSpDraw(e) {
+    e.preventDefault(); // 화면 스크롤 방지
+    spIsDrawing = true;
+    const pos = getSpCoordinates(e);
+    spCtx.beginPath();
+    spCtx.moveTo(pos.x, pos.y);
+  }
+
+  function drawSp(e) {
+    if (!spIsDrawing) return;
+    e.preventDefault(); // 터치 드래그 시 화면 스크롤 방지
+    const pos = getSpCoordinates(e);
+    
+    spCtx.lineTo(pos.x, pos.y);
+    if (spCurrentTool === 'eraser') {
+      spCtx.strokeStyle = '#fff'; // 지우개는 흰색으로 덮어씌움
+      spCtx.lineWidth = 20;       // 지우개는 두껍게
+    } else {
+      spCtx.strokeStyle = '#333'; // 펜은 진한 회색
+      spCtx.lineWidth = 2;        // 펜은 얇게
+    }
+    spCtx.lineCap = 'round';
+    spCtx.lineJoin = 'round';
+    spCtx.stroke();
+  }
+
+  function stopSpDraw() {
+    spIsDrawing = false;
+    spCtx.closePath();
+  }
+
+  function setSpTool(tool) {
+    spCurrentTool = tool;
+    document.getElementById('sp-pen').classList.remove('active');
+    document.getElementById('sp-eraser').classList.remove('active');
+    document.getElementById('sp-' + tool).classList.add('active');
+  }
+
+  function clearSpCanvas() {
+    spCtx.clearRect(0, 0, spCanvas.width, spCanvas.height);
+  }
+</script>
+<!-- ================== 플로팅 연습장 모듈 끝 ================== -->
+</body>
+</html>

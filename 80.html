@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>위험물산업기사 1~6류 화학식 및 지정수량 모의고사</title>
+  <style>
+    body { font-family: 'Malgun Gothic', sans-serif; margin: 30px; max-width: 900px; background-color: #f4f6f9; color: #333; }
+    h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+    .instruction { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 0.95em; }
+    
+    .question-card { background-color: #fff; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .main-q-title { font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #1976d2; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; line-height: 1.4; }
+    
+    .sub-q-container { margin-top: 15px; padding-left: 10px; }
+    .sub-q-label { font-weight: bold; margin-bottom: 8px; font-size: 1.05em; line-height: 1.4; }
+    
+    .input-standard, .input-calc { 
+      width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; transition: border-color 0.2s;
+    }
+    .input-standard:focus, .input-calc:focus, .textarea-formula:focus { outline: none; border-color: #1976d2; box-shadow: 0 0 0 3px rgba(25,118,210,0.15); }
+    
+    .textarea-formula {
+      width: 100%; padding: 12px; font-size: 15px; border: 1px dashed #adb5bd; border-radius: 6px; box-sizing: border-box; margin-bottom: 5px; resize: vertical; min-height: 80px; background-color: #f8f9fa; line-height: 1.4;
+    }
+    .calc-label { font-size: 0.85em; color: #6c757d; font-weight: bold; margin-bottom: 3px; display: block; }
+    
+    .feedback-box { margin-top: 5px; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 0.95em; display: none; line-height: 1.5; }
+    .is-correct { background-color: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; }
+    .is-incorrect { background-color: #ffebee; border: 1px solid #ffcdd2; color: #c62828; }
+    .is-partial { background-color: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; }
+    
+    .override-btns { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc; }
+    .btn-override { padding: 6px 12px; font-size: 0.85em; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px; color: #fff; transition: opacity 0.2s; }
+    .btn-override:hover { opacity: 0.8; }
+    .btn-correct { background-color: #4caf50; }
+    .btn-partial { background-color: #ff9800; }
+    .btn-incorrect { background-color: #f44336; }
+    
+    .btn-grade-single { margin-top: 15px; padding: 10px 20px; font-size: 0.95em; background-color: #607d8b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; float: right; transition: background-color 0.2s; }
+    .btn-grade-single:hover { background-color: #455a64; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+
+    .submit-section { text-align: center; margin-top: 40px; margin-bottom: 50px; }
+    .btn-submit { padding: 15px 40px; font-size: 1.2em; background-color: #1976d2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(25,118,210,0.3); }
+    .btn-submit:hover { background-color: #1565c0; }
+    .btn-submit:disabled { background-color: #9e9e9e; cursor: not-allowed; box-shadow: none; }
+    
+    #final-result { margin-top: 25px; font-size: 1.4em; font-weight: bold; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; display: none; line-height: 1.5; }
+    .q-score-badge { float: right; font-size: 0.8em; background-color: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 20px; margin-left: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>📝 위험물산업기사 1~6류 화학식 및 지정수량 암기</h1>
+  <p class="instruction">각 위험물의 화학식 및 지정수량을 기입하세요.<br><strong>💡 팁: 정답을 입력하고 '엔터(Enter)' 키를 누르면 즉시 개별 채점이 진행됩니다.</strong></p>
+  
+  <div id="quiz-container"></div>
+
+  <div class="submit-section">
+    <button id="submit-btn" class="btn-submit" onclick="gradeAll()">전체 제출 및 남은 문제 채점하기</button>
+    <div id="final-result"></div>
+  </div>
+
+  <script>
+    let gradingState = [];
+    let isTestSubmitted = false;
+
+    // 위험물 1~6류 화학식 및 지정수량 데이터
+    const quizData = [
+      {
+        mainQuestion: "대분류: 제1류 위험물",
+        score: 25,
+        subs: [
+          { label: "1) 아염소산나트륨", type: "formula", answers: ["NaClO2"] },
+          { label: "2) 아염소산칼륨", type: "formula", answers: ["KClO2"] },
+          { label: "3) 염소산나트륨", type: "formula", answers: ["NaClO3"] },
+          { label: "4) 염소산칼륨", type: "formula", answers: ["KClO3"] },
+          { label: "5) 염소산암모늄", type: "formula", answers: ["NH4ClO3"] },
+          { label: "6) 과염소산칼륨", type: "formula", answers: ["KClO4"] },
+          { label: "7) 과염소산나트륨", type: "formula", answers: ["NaClO4"] },
+          { label: "8) 과염소산암모늄", type: "formula", answers: ["NH4ClO4"] },
+          { label: "9) 과산화나트륨", type: "formula", answers: ["Na2O2"] },
+          { label: "10) 과산화칼륨", type: "formula", answers: ["K2O2"] },
+          { label: "11) 과산화마그네슘", type: "formula", answers: ["MgO2"] },
+          { label: "12) 과산화바륨", type: "formula", answers: ["BaO2", "BrO2"] },
+          { label: "13) 브롬산칼륨", type: "formula", answers: ["KBrO3"] },
+          { label: "14) 브롬산나트륨", type: "formula", answers: ["NaBrO3"] },
+          { label: "15) 브롬산아연", type: "formula", answers: ["Zn(BrO3)2"] },
+          { label: "16) 질산칼륨", type: "formula", answers: ["KNO3"] },
+          { label: "17) 질산나트륨", type: "formula", answers: ["NaNO3"] },
+          { label: "18) 질산암모늄", type: "formula", answers: ["NH4NO3"] },
+          { label: "19) 질산은", type: "formula", answers: ["AgNO3"] },
+          { label: "20) 요오드산칼륨", type: "formula", answers: ["KIO3"] },
+          { label: "21) 요오드산칼슘", type: "formula", answers: ["Ca(IO3)2"] },
+          { label: "22) 요오드산암모늄", type: "formula", answers: ["NH4IO3"] },
+          { label: "23) 삼산화크롬", type: "formula", answers: ["CrO3"] },
+          { label: "24) 과망간산칼륨", type: "formula", answers: ["KMnO4"] },
+          { label: "25) 과망간산나트륨", type: "formula", answers: ["NaMnO4"] },
+          { label: "26) 과망간산암모늄", type: "formula", answers: ["NH4MnO4"] },
+          { label: "27) 중크롬산칼륨", type: "formula", answers: ["K2Cr2O7"] },
+          { label: "28) 중크롬산나트륨", type: "formula", answers: ["Na2Cr2O7"] }
+        ],
+        explanation: "[해설] 제1류 위험물 (산화성 고체) 28문항에 대한 정답입니다."
+      },
+      {
+        mainQuestion: "대분류: 제2류 위험물",
+        score: 10,
+        subs: [
+          { label: "1) 삼황화린", type: "formula", answers: ["P4S3"] },
+          { label: "2) 오황화린", type: "formula", answers: ["P2S5"] },
+          { label: "3) 적린", type: "formula", answers: ["P", "P4S7"] }, 
+          { label: "4) 황", type: "formula", answers: ["S", "P"] }, 
+          { label: "5) 철분", type: "formula", answers: ["Fe"] },
+          { label: "6) 마그네슘분", type: "formula", answers: ["Mg"] },
+          { label: "7) 알루미늄분", type: "formula", answers: ["Al"] },
+          { label: "8) 아연분", type: "formula", answers: ["Zn"] }
+        ],
+        explanation: "[해설] 제2류 위험물 (가연성 고체) 8문항에 대한 정답입니다."
+      },
+      {
+        mainQuestion: "대분류: 제3류 위험물",
+        score: 15,
+        subs: [
+          { label: "1) 트리메틸알루미늄", type: "formula", answers: ["(CH3)3Al"] },
+          { label: "2) 트리에틸알루미늄", type: "formula", answers: ["(C2H5)3Al", "(C2H5)Al"] }, 
+          { label: "3) 칼륨", type: "formula", answers: ["K"] },
+          { label: "4) 메틸리튬", type: "formula", answers: ["CH3Li"] },
+          { label: "5) 에틸리튬", type: "formula", answers: ["C2H5Li"] },
+          { label: "6) 부틸리튬", type: "formula", answers: ["C4H9Li"] },
+          { label: "7) 나트륨", type: "formula", answers: ["Na"] },
+          { label: "8) 황린", type: "formula", answers: ["P4"] },
+          { label: "9) 오산화인", type: "formula", answers: ["P2O5"] },
+          { label: "10) 리튬", type: "formula", answers: ["Li"] },
+          { label: "11) 칼슘", type: "formula", answers: ["Ca"] },
+          { label: "12) 수소화리튬", type: "formula", answers: ["LiH"] },
+          { label: "13) 수소화나트륨", type: "formula", answers: ["NaH"] },
+          { label: "14) 수소화칼슘", type: "formula", answers: ["CaH2"] },
+          { label: "15) 인화칼슘", type: "formula", answers: ["Ca3P2"] },
+          { label: "16) 인화알루미늄", type: "formula", answers: ["AlP"] },
+          { label: "17) 탄화칼슘", type: "formula", answers: ["CaC2"] },
+          { label: "18) 탄화알루미늄", type: "formula", answers: ["Al4C3"] },
+          { label: "19) 탄화망간", type: "formula", answers: ["Mn3C"] }
+        ],
+        explanation: "[해설] 제3류 위험물 (자연발화성 및 금수성 물질) 19문항에 대한 정답입니다."
+      },
+      {
+        mainQuestion: "대분류: 제4류 위험물",
+        score: 20,
+        subs: [
+          { label: "1) 이황화탄소", type: "formula", answers: ["CS2"] },
+          { label: "2) 디에틸에테르", type: "formula", answers: ["C2H5OC2H5"] },
+          { label: "3) 아세트알데히드", type: "formula", answers: ["CH3CHO"] },
+          { label: "4) 산화프로필렌", type: "formula", answers: ["CH3CHCH2O", "CH3CH(O)CH2"] },
+          { label: "5) 휘발유", type: "formula", answers: ["C5H12-C9H20", "C5H12~C9H20"] },
+          { label: "6) 벤젠", type: "formula", answers: ["C6H6"] },
+          { label: "7) 톨루엔", type: "formula", answers: ["C6H5CH3"] },
+          { label: "8) 메틸에틸케톤", type: "formula", answers: ["CH3COC2H5"] },
+          { label: "9) 초산메틸", type: "formula", answers: ["CH3COOCH3"] },
+          { label: "10) 아세톤", type: "formula", answers: ["CH3COCH3"] },
+          { label: "11) 피리딘", type: "formula", answers: ["C5H5N"] },
+          { label: "12) 의산메틸", type: "formula", answers: ["HCOOCH3"] },
+          { label: "13) 의산에틸", type: "formula", answers: ["HCOOC2H5"] },
+          { label: "14) 시안화수소", type: "formula", answers: ["HCN"] },
+          { label: "15) 메틸알코올", type: "formula", answers: ["CH3OH"] },
+          { label: "16) 에틸알코올", type: "formula", answers: ["C2H5OH"] },
+          { label: "17) 프로필알코올", type: "formula", answers: ["C3H7OH"] },
+          { label: "18) 크실렌", type: "formula", answers: ["C6H4(CH3)2"] },
+          { label: "19) 스티렌", type: "formula", answers: ["C6H5CHCH2"] },
+          { label: "20) 클로로벤젠", type: "formula", answers: ["C6H5Cl"] },
+          { label: "21) 자뇌유", type: "formula", answers: ["C10H16O"] },
+          { label: "22) 프롬산(의산)", type: "formula", answers: ["HCOOH"] },
+          { label: "23) 아세트산", type: "formula", answers: ["CH3COOH"] },
+          { label: "24) 히드라진", type: "formula", answers: ["N2H4"] },
+          { label: "25) 아닐린", type: "formula", answers: ["C6H5NH2"] },
+          { label: "26) 니트로벤젠", type: "formula", answers: ["C6H5NO2"] },
+          { label: "27) 에틸렌글리콜", type: "formula", answers: ["C2H4(OH)2"] }, 
+          { label: "28) 글리세린", type: "formula", answers: ["C3H5(OH)3"] }
+        ],
+        explanation: "[해설] 제4류 위험물 (인화성 액체) 28문항에 대한 정답입니다."
+      },
+      {
+        mainQuestion: "대분류: 제5류 위험물",
+        score: 10,
+        subs: [
+          { label: "1) 과산화벤조일", type: "formula", answers: ["(C6H5CO)2O2"] },
+          { label: "2) 메틸에틸케톤퍼옥사이드", type: "formula", answers: ["(CH3COC2H5)2O2"] },
+          { label: "3) 과산화초산", type: "formula", answers: ["CH3COOOH"] },
+          { label: "4) 아세틸퍼옥사이드", type: "formula", answers: ["(CH3CO)2O2"] },
+          { label: "5) 니트로셀룰로오스", type: "formula", answers: ["C6H7O2(ONO2)3"] },
+          { label: "6) 니트로글리세린", type: "formula", answers: ["C3H5(ONO2)3"] },
+          { label: "7) 질산에틸", type: "formula", answers: ["C2H5ONO2"] },
+          { label: "8) 질산메틸", type: "formula", answers: ["CH3ONO2"] },
+          { label: "9) 니트로글리콜", type: "formula", answers: ["C2H4(ONO2)2"] },
+          { label: "10) 트리니트로톨루엔", type: "formula", answers: ["C6H2CH3(NO2)3"] },
+          { label: "11) 피크린산(트리니트로페놀)", type: "formula", answers: ["C6H2OH(NO2)3"] }
+        ],
+        explanation: "[해설] 제5류 위험물 (자기반응성 물질) 11문항에 대한 정답입니다."
+      },
+      {
+        mainQuestion: "대분류: 제6류 위험물",
+        score: 5,
+        subs: [
+          { label: "1) 과염소산", type: "formula", answers: ["HClO4"] },
+          { label: "2) 과산화수소", type: "formula", answers: ["H2O2"] },
+          { label: "3) 질산", type: "formula", answers: ["HNO3"] }
+        ],
+        explanation: "[해설] 제6류 위험물 (산화성 액체) 3문항에 대한 정답입니다."
+      },
+      {
+        mainQuestion: "대분류: 주요 지정수량 (단위 생략 가능, 숫자만 기입)",
+        score: 15,
+        subs: [
+          { label: "1) [제1류] 아염소산염류, 염소산염류, 과염소산염류, 무기과산화물", type: "short", answers: ["50", "50kg", "50k"] },
+          { label: "2) [제1류] 브롬산염류, 질산염류, 요오드산염류", type: "short", answers: ["300", "300kg", "300k"] },
+          { label: "3) [제1류] 과망간산염류, 중크롬산염류", type: "short", answers: ["1000", "1000kg", "1000k"] },
+          { label: "4) [제2류] 황화린, 적린, 유황", type: "short", answers: ["100", "100kg", "100k"] },
+          { label: "5) [제2류] 철분, 금속분, 마그네슘", type: "short", answers: ["500", "500kg", "500k"] },
+          { label: "6) [제3류] 칼륨, 나트륨, 알킬알루미늄, 알킬리튬", type: "short", answers: ["10", "10kg", "10k"] },
+          { label: "7) [제3류] 황린", type: "short", answers: ["20", "20kg", "20k"] },
+          { label: "8) [제3류] 금속의 수소화물, 인화물, 탄화물", type: "short", answers: ["300", "300kg", "300k"] },
+          { label: "9) [제4류] 특수인화물", type: "short", answers: ["50", "50l", "50L", "50리터"] },
+          { label: "10) [제4류] 제1석유류 (비수용성)", type: "short", answers: ["200", "200l", "200L", "200리터"] },
+          { label: "11) [제4류] 알코올류", type: "short", answers: ["400", "400l", "400L", "400리터"] },
+          { label: "12) [제4류] 제2석유류 (비수용성)", type: "short", answers: ["1000", "1000l", "1000L", "1000리터"] },
+          { label: "13) [제4류] 제3석유류 (비수용성)", type: "short", answers: ["2000", "2000l", "2000L", "2000리터"] },
+          { label: "14) [제4류] 제4석유류", type: "short", answers: ["6000", "6000l", "6000L", "6000리터"] },
+          { label: "15) [제4류] 동식물유류", type: "short", answers: ["10000", "10000l", "10000L", "10000리터", "1만", "10,000"] },
+          { label: "16) [제5류] 유기과산화물, 질산에스테르류", type: "short", answers: ["10", "10kg", "10k"] },
+          { label: "17) [제5류] 니트로화합물, 니트로소화합물", type: "short", answers: ["200", "200kg", "200k"] },
+          { label: "18) [제6류] 과염소산, 과산화수소, 질산", type: "short", answers: ["300", "300kg", "300k"] }
+        ],
+        explanation: "[해설] 각 류별 핵심 위험물의 지정수량입니다. 시험에 단골로 출제되므로 반드시 암기해야 합니다. (단위: 4류는 L, 나머지는 모두 kg)"
+      }
+    ];
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      let html = '';
+
+      quizData.forEach((q, qIndex) => {
+        gradingState[qIndex] = { subs: [], earnedScore: 0, isGraded: false };
+        
+        html += `<div class="question-card clearfix" id="qCard-${qIndex}">`;
+        html += `<div class="main-q-title">${q.mainQuestion} <span class="q-score-badge">배점: ${q.score}점</span></div>`;
+        
+        q.subs.forEach((sub, sIndex) => {
+          gradingState[qIndex].subs[sIndex] = { status: 0 }; 
+          
+          html += `<div class="sub-q-container">`;
+          html += `<div class="sub-q-label">${sub.label}</div>`;
+          
+          if (sub.image) {
+            html += `<div style="margin-bottom: 15px; text-align: center;">
+                       <img src="${sub.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px;" alt="문제 이미지">
+                     </div>`;
+          }
+        
+          if (sub.type === 'calc') {
+            html += `<span class="calc-label">▶ 계산 과정 (채점 제외)</span>`;
+            html += `<textarea id="calc-${qIndex}-${sIndex}" class="textarea-formula" placeholder="필요시 계산식을 자유롭게 적어보세요."></textarea>`;
+            html += `<span class="calc-label">▶ 최종 정답 (채점 대상)</span>`;
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-calc" autocomplete="off" placeholder="정답 입력 후 엔터(Enter)" onkeyup="if(event.key === 'Enter') checkSingleAnswer(${qIndex}, ${sIndex})">`;
+          } else if (sub.type === 'descriptive') {
+            html += `<textarea id="ans-${qIndex}-${sIndex}" class="textarea-formula" placeholder="※ 연습장에 직접 풀거나 구조식을 그린 후, [해설 확인] 버튼을 눌러 스스로 비교해 보세요."></textarea>`;
+          } else {
+            // 엔터키 이벤트를 추가한 인풋 창
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-standard" autocomplete="off" placeholder="정답 입력 후 엔터(Enter)" onkeyup="if(event.key === 'Enter') checkSingleAnswer(${qIndex}, ${sIndex})">`;
+          }
+
+          html += `<div id="fb-${qIndex}-${sIndex}" class="feedback-box"></div>`;
+          html += `</div>`;
+        });
+        
+        // 전체 해설 버튼 유지 (필요 시 사용)
+        html += `<button id="btn-grade-single-${qIndex}" class="btn-grade-single" onclick="gradeSingleQuestion(${qIndex})">분류 전체 정답 및 해설 확인</button>`;
+        
+        if(q.explanation) {
+            html += `<div style="clear:both;"></div>`;
+            html += `<div id="exp-${qIndex}" class="feedback-box" style="background-color:#f8f9fa; border:1px solid #dee2e6; color:#495057; font-weight:normal; margin-top:20px;">💡 <strong>문제 핵심 해설:</strong><br>${q.explanation}</div>`;
+        }
+        html += `</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    // [신규 추가 기능] 개별 문제 엔터키 채점 함수
+    function checkSingleAnswer(qIndex, sIndex) {
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      if (inputEl.value.trim() === "") return; // 빈칸인 경우 무시
+      
+      evaluateSub(qIndex, sIndex);
+      updateCardScore(qIndex);
+      
+      // 다음 입력창으로 포커스 자동 이동 (편의성 추가)
+      const nextSIndex = sIndex + 1;
+      const nextInput = document.getElementById(`ans-${qIndex}-${nextSIndex}`);
+      if(nextInput && !nextInput.disabled) {
+          nextInput.focus();
+      }
+    }
+
+    function isEquationCorrect(userInput, ansList) {
+      let u = userInput.replace(/\s+/g, '').replace(/=/g, '->');
+      let uParts = u.split('->');
+      if(uParts.length !== 2) return false;
+      let uLeft = uParts[0].split('+').sort().join('+');
+      let uRight = uParts[1].split('+').sort().join('+');
+      
+      for(let i=0; i<ansList.length; i++) {
+        let a = ansList[i].replace(/\s+/g, '').replace(/=/g, '->');
+        let aParts = a.split('->');
+        if(aParts.length !== 2) continue;
+        let aLeft = aParts[0].split('+').sort().join('+');
+        let aRight = aParts[1].split('+').sort().join('+');
+        if (uLeft === aLeft && uRight === aRight) return true;
+      }
+      return false;
+    }
+
+    function evaluateSub(qIndex, sIndex) {
+      const sub = quizData[qIndex].subs[sIndex];
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      if (inputEl.disabled) return; 
+
+      let userVal = inputEl.value;
+      let isCorrect = false;
+
+      if (userVal.trim() === "") {
+         isCorrect = false;
+      } else if (sub.type === 'short' || sub.type === 'calc') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '').toLowerCase() === uClean);
+      } else if (sub.type === 'formula') {
+        let uClean = userVal.replace(/\s+/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '') === uClean);
+      } else if (sub.type === 'order') {
+        let uClean = userVal.replace(/[^0-9]/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/[^0-9]/g, '') === uClean);
+      } else if (sub.type === 'equation') {
+        isCorrect = isEquationCorrect(userVal, sub.answers);
+      } else if (sub.type === 'descriptive') {
+        if (sub.keywords) {
+          let hasAllKeys = sub.keywords.every(kw => userVal.includes(kw));
+          isCorrect = hasAllKeys;
+        } else {
+          isCorrect = false; 
+        }
+      }
+
+      gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+      
+      inputEl.disabled = true;
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (calcEl) calcEl.disabled = true;
+
+      updateFeedbackUI(qIndex, sIndex);
+    }
+
+    function updateCardScore(qIndex) {
+      const q = quizData[qIndex];
+      let subCount = q.subs.length;
+      let earnedCount = 0;
+      
+      gradingState[qIndex].subs.forEach(subState => {
+        earnedCount += subState.status; 
+      });
+
+      let qEarnedScore = Math.round((earnedCount / subCount) * q.score);
+      gradingState[qIndex].earnedScore = qEarnedScore; 
+      
+      const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
+      if(cardTitle) {
+        cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
+        if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
+        else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
+        else cardTitle.style.backgroundColor = "#ffebee";
+      }
+    }
+
+    function gradeSingleQuestion(qIndex) {
+      const q = quizData[qIndex];
+      q.subs.forEach((sub, sIndex) => {
+        evaluateSub(qIndex, sIndex);
+      });
+      updateCardScore(qIndex);
+      gradingState[qIndex].isGraded = true;
+
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      if (expEl) expEl.style.display = 'block';
+      const btnEl = document.getElementById(`btn-grade-single-${qIndex}`);
+      if (btnEl) btnEl.style.display = 'none';
+      
+      if (isTestSubmitted) calculateFinalTotal();
+    }
+
+    function gradeAll() {
+      isTestSubmitted = true;
+      quizData.forEach((q, qIndex) => {
+        if (!gradingState[qIndex].isGraded) {
+          gradeSingleQuestion(qIndex);
+        }
+      });
+      document.getElementById('submit-btn').style.display = 'none';
+      calculateFinalTotal();
+    }
+
+    function updateFeedbackUI(qIndex, sIndex) {
+      const sub = quizData[qIndex].subs[sIndex];
+      const state = gradingState[qIndex].subs[sIndex];
+      const fbDiv = document.getElementById(`fb-${qIndex}-${sIndex}`);
+      
+      let html = "";
+      if (state.status === 1) {
+        fbDiv.className = "feedback-box is-correct";
+        html += `✅ 정답입니다!`;
+      } else if (state.status === 0.5) {
+        fbDiv.className = "feedback-box is-partial";
+        html += `⚠️ 부분 점수 (0.5개 인정)`;
+      } else {
+        fbDiv.className = "feedback-box is-incorrect";
+        html += `❌ 오답입니다. (정답: ${sub.answers[0]})`;
+      }
+
+      if (sub.answerImage) {
+        html += `<div style="margin-top: 15px; text-align: center;">
+                   <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px;" alt="정답 해설 이미지">
+                   <div style="font-size:0.85em; color:#1976d2; margin-top:5px;">[정답 참고 이미지]</div>
+                 </div>`;
+      }
+
+      if (sub.type === 'descriptive') {
+        html += `<div class="override-btns">
+                  <span style="font-size:0.85em; color:#666; font-weight:normal; margin-right:8px;">▶ 서술/그림 자율 채점:</span><br><br>
+                  <button class="btn-override btn-correct" onclick="overrideScore(${qIndex}, ${sIndex}, 1)">정답 인정</button>
+                  <button class="btn-override btn-partial" onclick="overrideScore(${qIndex}, ${sIndex}, 0.5)">부분 점수</button>
+                  <button class="btn-override btn-incorrect" onclick="overrideScore(${qIndex}, ${sIndex}, 0)">오답 처리</button>
+                 </div>`;
+      }
+
+      fbDiv.innerHTML = html;
+      fbDiv.style.display = "block";
+    }
+
+    function overrideScore(qIndex, sIndex, newStatus) {
+      gradingState[qIndex].subs[sIndex].status = newStatus;
+      updateFeedbackUI(qIndex, sIndex);
+      updateCardScore(qIndex);
+      if (isTestSubmitted) calculateFinalTotal(); 
+    }
+
+    function calculateFinalTotal() {
+      let totalEarned = 0;
+      let totalMax = 0;
+
+      quizData.forEach((q, qIndex) => {
+        totalMax += q.score;
+        totalEarned += gradingState[qIndex].earnedScore;
+      });
+
+      const resDiv = document.getElementById('final-result');
+      resDiv.style.display = "block";
+      
+      let percent = Math.round((totalEarned / totalMax) * 100);
+      let passMsg = percent >= 60 
+        ? `<div style="color:#2e7d32; margin-top:10px;">🎉 훌륭합니다! 화학식 및 지정수량 암기를 완벽하게 해내셨습니다.</div>`
+        : `<div style="color:#c62828; margin-top:10px;">😢 조금 더 분발하세요. 오답을 꼭 복습하시기 바랍니다.</div>`;
+
+      resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>

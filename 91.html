@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>위험물산업기사 실기 단원별 빈칸 암기장 - 2. 위험물 성상·물성·식별</title>
+  <style>
+    body { font-family: 'Malgun Gothic', sans-serif; margin: 30px; max-width: 900px; background-color: #f4f6f9; color: #333; }
+    h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+    .instruction { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 0.95em; }
+    
+    /* 모드 선택 토글 스타일 */
+    .mode-selection { text-align: center; margin-bottom: 30px; }
+    .mode-selection label {
+      display: inline-block; margin: 0 10px; padding: 10px 20px;
+      font-size: 1.05em; font-weight: bold; border-radius: 8px; cursor: pointer;
+      border: 2px solid #ced4da; transition: all 0.2s; background-color: #fff; color: #666;
+    }
+    .mode-selection label.active { border-color: #1976d2; background-color: #e3f2fd; color: #1976d2; }
+
+    .question-card { background-color: #fff; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .main-q-title { font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #1976d2; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; line-height: 1.4; }
+    
+    .sub-q-container { margin-top: 15px; padding-left: 10px; }
+    .sub-q-label { font-weight: bold; margin-bottom: 8px; font-size: 1.05em; line-height: 1.4; }
+    
+    .input-standard, .input-calc { 
+      width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; transition: border-color 0.2s;
+    }
+    .input-standard:focus, .input-calc:focus, .textarea-formula:focus { outline: none; border-color: #1976d2; box-shadow: 0 0 0 3px rgba(25,118,210,0.15); }
+    
+    .textarea-formula {
+      width: 100%; padding: 12px; font-size: 15px; border: 1px dashed #adb5bd; border-radius: 6px; box-sizing: border-box; margin-bottom: 5px; resize: vertical; min-height: 80px; background-color: #f8f9fa; line-height: 1.4;
+    }
+    .calc-label { font-size: 0.85em; color: #6c757d; font-weight: bold; margin-bottom: 3px; display: block; }
+    
+    .feedback-box { margin-top: 5px; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 0.95em; display: none; line-height: 1.5; }
+    .is-correct { background-color: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; }
+    .is-incorrect { background-color: #ffebee; border: 1px solid #ffcdd2; color: #c62828; }
+    .is-partial { background-color: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; }
+    
+    .override-btns { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc; }
+    .btn-override { padding: 6px 12px; font-size: 0.85em; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px; color: #fff; transition: opacity 0.2s; }
+    .btn-override:hover { opacity: 0.8; }
+    .btn-correct { background-color: #4caf50; }
+    .btn-partial { background-color: #ff9800; }
+    .btn-incorrect { background-color: #f44336; }
+    
+    .btn-grade-single { margin-top: 15px; padding: 10px 20px; font-size: 0.95em; background-color: #607d8b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background-color 0.2s; }
+    .btn-grade-single:hover { background-color: #455a64; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+
+    .submit-section { text-align: center; margin-top: 40px; margin-bottom: 50px; }
+    .btn-submit { padding: 15px 40px; font-size: 1.2em; background-color: #1976d2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(25,118,210,0.3); }
+    .btn-submit:hover { background-color: #1565c0; }
+    .btn-submit:disabled { background-color: #9e9e9e; cursor: not-allowed; box-shadow: none; }
+    
+    #final-result { margin-top: 25px; font-size: 1.4em; font-weight: bold; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; display: none; line-height: 1.5; }
+    .q-score-badge { float: right; font-size: 0.8em; background-color: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 20px; margin-left: 10px; }
+  /* ================== 우측 문항 내비게이션 패널 스타일 ================== */
+#q-nav-panel {
+  position: fixed;
+  top: 50px;
+  right: 20px;
+  width: 170px;
+  background-color: #fff;
+  border: 2px solid #ced4da;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 120px); /* 화면 높이에 맞게 스크롤 자동 생성 */
+}
+
+.q-nav-header {
+  background-color: #f8f9fa;
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.95em;
+  border-bottom: 1px solid #ced4da;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: #1976d2;
+}
+
+.q-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.q-nav-btn {
+  padding: 8px 0;
+  font-size: 0.9em;
+  font-weight: bold;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.q-nav-btn:hover { background-color: #e9ecef; color: #495057; }
+
+/* 상태별 버튼 색상 */
+.q-nav-btn.answered { background-color: #e3f2fd; border-color: #90caf9; color: #1976d2; } /* 답안 작성 중 */
+.q-nav-btn.correct { background-color: #e8f5e9; border-color: #81c784; color: #2e7d32; }  /* 정답 */
+.q-nav-btn.partial { background-color: #fff3e0; border-color: #ffb74d; color: #e65100; }  /* 부분 점수 */
+.q-nav-btn.incorrect { background-color: #ffebee; border-color: #e57373; color: #c62828; } /* 오답 */
+
+.q-nav-legend {
+  font-size: 0.75em;
+  padding: 10px;
+  border-top: 1px solid #ced4da;
+  background-color: #f8f9fa;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.q-nav-legend .box {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* 해상도가 낮을 경우 본문을 가리지 않게 숨김 처리 */
+@media (max-width: 1150px) {
+  #q-nav-panel { display: none; }
+}
+  </style>
+</head>
+<body>
+
+  <h1>📝 2. 위험물 성상·물성·식별</h1>
+  <p class="instruction">개별 문제의 [✔️ 정답 확인 및 채점] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.</p>
+  
+  <div class="mode-selection" id="mode-selection">
+    <label class="active" id="label-basic" onclick="setMode('basic')">
+      📝 시험 모드 (실전 테스트)
+    </label>
+    <label id="label-study" onclick="setMode('study')">
+      📖 해설 모드 (해설 펼쳐보기)
+    </label>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <div class="submit-section">
+    <button id="submit-btn" class="btn-submit" onclick="gradeAll()">전체 제출 및 채점하기</button>
+    <div id="final-result"></div>
+  </div>
+
+  <script>
+    let gradingState = [];
+    let isTestSubmitted = false;
+
+    // 문제 데이터 배열 (1~65번 전체, 배점 재조정 완료)
+    const quizData = [
+      {
+        mainQuestion: "문제 1. [출제 22-1]<br>다음 위험물의 증기비중을 구하시오. (공기 평균 분자량 28.84)",
+        score: 2,
+        subs: [
+          { label: "① 이황화탄소(CS<sub>2</sub>, 분자량 76): 76 / 28.84 = ( ① )", type: "calc", answers: ["2.64", "2.63", "2.62"] },
+          { label: "② 아세트알데하이드(CH<sub>3</sub>CHO, 분자량 44): 44 / 28.84 = ( ② )", type: "calc", answers: ["1.53", "1.52"] },
+          { label: "③ 벤젠(C<sub>6</sub>H<sub>6</sub>, 분자량 78): 78 / 28.84 = ( ③ )", type: "calc", answers: ["2.71", "2.7", "2.69"] }
+        ],
+        explanation: "[해설]<br>증기비중은 해당 물질의 <b>분자량을 공기의 평균분자량(28.84)으로 나눈 값</b>이므로 물질마다 분자량만 대입하면 된다.<br><ul><li>CS<sub>2</sub> : 76 / 28.84 = 2.64</li><li>CH<sub>3</sub>CHO : 44 / 28.84 = 1.53</li><li>C<sub>6</sub>H<sub>6</sub> : 78 / 28.84 = 2.7 (또는 2.71)</li></ul>증기비중이 1보다 크면 공기보다 무거워 낮은 곳에 체류하므로, 세 물질 모두 <b>바닥 쪽 환기</b>에 유의해야 하는 위험물임을 알 수 있다."
+      },
+      {
+        mainQuestion: "문제 2. [출제 22-1]<br>[보기] 메틸알코올, 아세트산, 글리세린, 나이트로벤젠, 포름산<br>위 [보기] 중 인화점이 21℃ 이상 70℃ 미만이면서 수용성인 위험물을 모두 고르면 ( ① )이다.",
+        score: 1,
+        subs: [
+          { label: "① (예: 정답, 정답)", type: "unordered_comma", answers: ["아세트산, 포름산", "포름산, 아세트산", "아세트산,포름산", "포름산,아세트산", "아세트산, 의산", "의산, 아세트산", "초산, 포름산", "초산, 의산"] }
+        ],
+        explanation: "[해설]<br>인화점 21℃ 이상 70℃ 미만은 <b>제2석유류</b>의 기준이므로, 제2석유류 중 수용성인 것을 고르면 된다.<br><ul><li>아세트산(초산) — 인화점 약 40℃, 물에 잘 녹는 제2석유류 수용성이다.</li><li>포름산(의산) — 인화점 약 69℃, 역시 제2석유류 수용성이다.</li></ul>메틸알코올은 인화점 약 11℃인 <b>알코올류</b>이고, 글리세린(수용성)과 나이트로벤젠(비수용성)은 인화점 70℃ 이상인 제3석유류라 제외된다."
+      },
+      {
+        mainQuestion: "문제 3. [출제 22-4/22-3/20-1]<br>크실렌 C<sub>6</sub>H<sub>4</sub>(CH<sub>3</sub>)<sub>2</sub>의 이성질체 3가지는 메틸기 2개의 치환 위치만 다르다.",
+        score: 1,
+        subs: [
+          { label: "① 메틸 2개가 1,2번(ortho) 위치인 이성질체의 명칭은 ( ① )이다.", type: "short", answers: ["o-크실렌", "오르토크실렌", "오르토-크실렌"] },
+          { label: "② 메틸 2개가 1,3번(meta) 위치인 이성질체의 명칭은 ( ② )이다.", type: "short", answers: ["m-크실렌", "메타크실렌", "메타-크실렌"] },
+          { label: "③ 메틸 2개가 1,4번(para) 위치인 이성질체의 명칭은 ( ③ )이다.", type: "short", answers: ["p-크실렌", "파라크실렌", "파라-크실렌"] }
+        ],
+        explanation: "[해설]<br>크실렌은 벤젠 고리에 메틸기 2개가 붙은 물질이다. 두 메틸기의 <b>상대적 위치</b>에 따라 이성질체가 3가지로 나뉜다.<br><ul><li>o-크실렌 — 두 메틸기가 바로 옆 자리에 붙은 <b>오르토(ortho)</b>형이다.</li><li>m-크실렌 — 두 메틸기가 한 칸 건너 붙은 <b>메타(meta)</b>형이다.</li><li>p-크실렌 — 두 메틸기가 고리 정반대 자리에 붙은 <b>파라(para)</b>형이다.</li></ul>외우는 요령: 가까운 자리부터 오·메·파 순서이며, 치환기가 2개인 벤젠 유도체에는 모두 같은 명명법을 쓴다."
+      },
+      {
+        mainQuestion: "문제 4. [출제 22-4/22-3]<br>다음 위험물을 인화점이 낮은 순서대로 나열하시오.<br>① 초산에틸 ② 이황화탄소 ③ 글리세린 ④ 클로로벤젠<br>( ① ) - ( ② ) - ( ③ ) - ( ④ )",
+        score: 1,
+        subs: [
+          { label: "정답을 나열하시오 (예: 1-2-3-4)", type: "order", answers: ["2-1-4-3", "2143", "2,1,4,3"] }
+        ],
+        explanation: "[해설]<br>인화점은 <b>특수인화물 < 제1석유류 < 제2석유류 < 제3석유류</b> 순으로 높아진다. 그래서 품명 분류만 알아도 순서가 정해진다.<br><ul><li>이황화탄소는 특수인화물로 약 -30℃이며 가장 낮다.</li><li>초산에틸은 제1석유류로 약 -4℃이다.</li><li>클로로벤젠은 제2석유류로 약 32℃이다.</li><li>글리세린은 제3석유류로 약 <b>160℃</b>이며 가장 높다.</li></ul>외우는 요령: 수치를 잊어도 석유류 등급 순서로 배열하면 답이 같다."
+      },
+      {
+        mainQuestion: "문제 5. [출제 22-4/22-3]<br>제5류 위험물로 담황색 결정, 분자량 227, 폭약 원료이며 물에 녹지 않고 알코올·벤젠·아세톤에 녹는 위험물에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 화학식은 ( ① )이다.", type: "formula", answers: ["C6H2CH3(NO2)3", "C6H2(NO2)3CH3"] },
+          { label: "② 지정수량은 ( ② )이다.", type: "short", answers: ["10kg(제1종)", "10kg", "10", "제1종-10kg", "제1종 10kg"] },
+          { label: "③ 제조과정: ( ③ )을 질산과 황산으로 반응시켜 제조한다.", type: "short", answers: ["톨루엔"] }
+        ],
+        explanation: "[해설]<br>담황색 결정, 분자량 227, 폭약 원료라는 단서는 <b>트리니트로톨루엔(TNT)</b>을 가리킨다.<br><ul><li>화학식 — 톨루엔 고리의 수소 3개가 니트로기로 바뀐 C<sub>6</sub>H<sub>2</sub>CH<sub>3</sub>(NO<sub>2</sub>)<sub>3</sub>이다.</li><li>지정수량 — 제5류 니트로화합물이므로 현행 <b>제1종 10kg·제2종 100kg</b>이다.<br>현재 TNT는 제1종으로 분류되어 지정수량은 10kg입니다.2024년 4월 개정(7월 시행)된 「위험물안전관리법 시행령」</li><li>제조 — <b>톨루엔</b>에 질산과 황산(탈수·촉매 역할)을 가해 니트로화한다.</li></ul>혼동 주의: 같은 니트로화합물인 트리니트로페놀(피크르산)은 톨루엔이 아니라 페놀을 니트로화해 만든다."
+      },
+      {
+        mainQuestion: "문제 6. [출제 22-4/22-3]<br>다음 위험물의 시성식을 각각 쓰시오.",
+        score: 2,
+        subs: [
+          { label: "① 아세톤(디메틸케톤): ( ① )", type: "formula", answers: ["CH3COCH3"] },
+          { label: "② 의산(포름산, 개미산): ( ② )", type: "formula", answers: ["HCOOH"] },
+          { label: "③ 트라이나이트로페놀: ( ③ )", type: "formula", answers: ["C6H2OH(NO2)3", "C6H2(OH)(NO2)3"] },
+          { label: "④ 초산에틸(아세트산에틸): ( ④ )", type: "formula", answers: ["CH3COOC2H5"] },
+          { label: "⑤ 아닐린: ( ⑤ )", type: "formula", answers: ["C6H5NH2"] }
+        ],
+        explanation: "[해설]<br>시성식은 분자식에서 <b>관능기</b>를 드러내 쓴 식이므로, 물질마다 어떤 작용기가 붙었는지부터 떠올린다.<br><ul><li>아세톤 — 케톤기(-CO-) 양쪽에 메틸기: CH<sub>3</sub>COCH<sub>3</sub>.</li><li>의산 — 가장 간단한 카복실산: HCOOH.</li><li>트라이나이트로페놀 — 페놀에 나이트로기 3개: C<sub>6</sub>H<sub>2</sub>OH(NO<sub>2</sub>)<sub>3</sub>.</li><li>초산에틸 — 아세트산과 에탄올의 에스터: CH<sub>3</sub>COOC<sub>2</sub>H<sub>5</sub>.</li><li>아닐린 — 벤젠고리에 아미노기: C<sub>6</sub>H<sub>5</sub>NH<sub>2</sub>.</li></ul>혼동 주의: 트라이나이트로페놀(피크르산)은 <b>하이드록시기(OH)</b>를 빠뜨려 트라이나이트로톨루엔과 섞어 쓰기 쉽다."
+      },
+      {
+        mainQuestion: "문제 7. [출제 22-3]<br>분자량 34, 표백·살균작용, 일정 농도 이상만 위험물로 보며 운반용기 외부에 '가연물 접촉주의'를 표시하는 위험물에 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 명칭: ( ① )", type: "short", answers: ["과산화수소"] },
+          { label: "② 시성식: ( ② )", type: "formula", answers: ["H2O2"] },
+          { label: "③ 분해반응식: 2H<sub>2</sub>O<sub>2</sub> → ( ③ ) + ( ④ )<br>▶ ③", type: "formula", answers: ["2H2O"] },
+          { label: "▶ ④", type: "formula", answers: ["O2"] },
+          { label: "⑤ 제조소 게시판 주의사항: ( ⑤ )", type: "short", answers: ["해당 없음", "없음", "해당없음"] }
+        ],
+        explanation: "[해설]<br>분자량 34에 표백·살균작용을 하고 일정 농도 이상만 위험물로 보는 물질은 <b>제6류 과산화수소(H<sub>2</sub>O<sub>2</sub>)</b>다. 농도가 <b>36중량% 이상</b>일 때만 위험물이다.<br>분해하면 물과 산소가 생기고, 이 산소가 주변 가연물의 연소를 돕는다.<br>2H<sub>2</sub>O<sub>2</sub> → 2H<sub>2</sub>O + O<sub>2</sub><br>제6류는 스스로 타지 않는 산화성 액체라 <b>제조소 게시판 주의사항이 없다</b>. 혼동 주의: '가연물 접촉주의'는 운반용기 외부 표시이고 제조소 게시판 표시가 아니다."
+      },
+      {
+        mainQuestion: "문제 8. [출제 22-3]<br>제2석유류에 대한 설명으로 옳은 것을 모두 골라 번호를 쓰시오.<br>① 등유, 경유 등이 해당된다.<br>② 중유, 클레오소트유가 해당된다.<br>③ 1기압에서 인화점이 70℃ 이상 200℃ 미만인 것을 말한다.<br>④ 1기압에서 인화점이 200℃ 이상 250℃ 미만인 것을 말한다.<br>⑤ 도료류 등에서 가연성 액체량이 40중량퍼센트 이하이면서 인화점이 40℃ 이상인 동시에 연소점이 60℃ 이상인 것은 제외한다.",
+        score: 1,
+        subs: [
+          { label: "정답: ( ① )", type: "short", answers: ["1,5", "1, 5", "①,⑤", "①, ⑤", "15", "①⑤"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>은 제2석유류를 등유, 경유 그 밖에 1기압에서 인화점이 <b>21℃ 이상 70℃ 미만</b>인 것으로 정한다.<br><ul><li>등유·경유 예시 — 정의에 직접 적힌 대표 품목이라 옳다.</li><li>도료류 제외 — 가연성 액체량 <b>40중량% 이하</b>, 인화점 40℃ 이상, 연소점 60℃ 이상인 것은 제외한다는 단서라 옳다.</li></ul>중유·클레오소트유와 인화점 70℃ 이상 200℃ 미만은 제3석유류, 인화점 200℃ 이상 250℃ 미만은 제4석유류의 설명이다."
+      },
+      {
+        mainQuestion: "문제 9. [출제 22-3/22-1]<br>분자량 78, 휘발성 액체로 독특한 냄새, 수소첨가반응 시 시클로헥산이 되는 위험물에 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 화학식: ( ① )", type: "formula", answers: ["C6H6"] },
+          { label: "② 위험등급: ( ② )", type: "short", answers: ["II 등급", "2등급", "II등급", "II", "2", "제II등급", "제2등급"] },
+          { label: "③ 운반 시 위험물안전카드 휴대 여부: ( ③ )", type: "short", answers: ["휴대해야 한다", "휴대해야 한다.", "O", "휴대한다", "휴대"] },
+          { label: "④ 장거리 운송 시 운전자 2명 이상 여부: ( ④ )", type: "short", answers: ["운전자를 2명으로 하지 않아도 된다", "운전자를 2명으로 하지 않아도 된다.", "해당 없음", "X", "1명"] }
+        ],
+        explanation: "[해설]<br>분자량 78이고 수소첨가 시 시클로헥산이 되는 물질은 <b>벤젠(C<sub>6</sub>H<sub>6</sub>)</b>이다. 제4류 제1석유류 비수용성이므로 <b>위험등급 II</b>다.<br><ul><li>위험물안전카드 — 제4류 중 <b>특수인화물과 제1석유류</b>를 운송할 때는 휴대해야 하므로 벤젠은 휴대 대상이다.</li><li>운전자 2명 — 장거리 운송 시 2명 이상을 두는 규정은 특수인화물을 제외한 제4류에는 적용되지 않아서, 벤젠은 1명이어도 된다.</li></ul>혼동 주의: 같은 제4류라도 디에틸에테르 같은 <b>특수인화물</b>은 장거리 운송 시 운전자가 2명 이상 필요하다."
+      },
+      {
+        mainQuestion: "문제 10. [출제 21-3]<br>[보기] 아세톤, 메틸에틸케톤, 메탄올, 다이에틸에터, 톨루엔",
+        score: 2,
+        subs: [
+          { label: "① 연소범위가 가장 넓은 물질: ( ① )", type: "short", answers: ["다이에틸에터", "디에틸에테르"] },
+          { label: "② ①의 연소범위: ( ② )", type: "short", answers: ["1.9~48%", "1.9 ~ 48%", "1.9-48%", "1.9~48"] },
+          { label: "③ ①의 위험도 계산: <i>H</i> = ( ③ )", type: "calc", answers: ["24.26"] }
+        ],
+        explanation: "[해설]<br>보기 중 연소범위가 가장 넓은 물질은 <b>다이에틸에터</b>이고, 연소범위는 <b>1.9~48%</b>이다.<br>위험도는 연소범위의 폭(상한 - 하한)을 하한값으로 나눈 값이다.<br>H = (U - L) ÷ L = (48 - 1.9) ÷ 1.9<br>H = <b>24.26</b><br>혼동 주의: 나머지 보기 물질(아세톤·메틸에틸케톤·메탄올·톨루엔)은 연소범위 폭이 이보다 훨씬 좁다."
+      },
+      {
+        mainQuestion: "문제 11. [출제 21-3]<br>제6류, 갈색병에 저장(직사일광·찬 곳), 단백질과 크산토프로테인 반응으로 노란색이 되는 위험물에 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 지정수량: ( ① )", type: "short", answers: ["300kg", "300"] },
+          { label: "② 위험등급: ( ② )", type: "short", answers: ["I등급", "1등급", "I", "1", "제I등급", "제1등급"] },
+          { label: "③ 위험물로 분류되는 조건: ( ③ )", type: "short", answers: ["비중 1.49 이상", "비중1.49이상", "비중이 1.49 이상"] },
+          { label: "④ 빛에 의한 분해반응식: 4HNO<sub>3</sub> → ( ④ ) + 2H<sub>2</sub>O + O<sub>2</sub>", type: "formula", answers: ["4NO2"] }
+        ],
+        explanation: "[해설]<br>갈색병에 보관하고 단백질을 노랗게 만드는 <b>크산토프로테인 반응</b>을 보이는 제6류 위험물은 <b>질산(HNO<sub>3</sub>)</b>이다.<br><ul><li>지정수량 — 제6류 산화성 액체는 모두 <b>300kg</b>이다.</li><li>위험등급 — 제6류는 전부 <b>I등급</b>이다.</li><li>분류 조건 — 질산은 <b>비중 1.49 이상</b>인 것만 위험물로 본다.</li><li>분해 생성물 — 빛을 받으면 적갈색 기체인 이산화질소(NO<sub>2</sub>)가 생긴다.</li></ul>분해반응식:<br>4HNO<sub>3</sub> → 4NO<sub>2</sub> + 2H<sub>2</sub>O + O<sub>2</sub><br>혼동 주의: 과산화수소는 농도 36wt% 이상이 위험물이고, 비중 기준은 질산에만 붙는다."
+      },
+      {
+        mainQuestion: "문제 12. [출제 21-3]<br>제1류 위험물의 성질로 옳은 것을 모두 골라 기호를 쓰시오.<br>① 무기화합물이다. ② 유기화합물이다. ③ 산화체이다. ④ 인화점이 0℃ 이하이다. ⑤ 고체이다.",
+        score: 1,
+        subs: [
+          { label: "정답: ( ① )", type: "short", answers: ["1,3,5", "1, 3, 5", "①,③,⑤", "①, ③, ⑤", "135", "①③⑤"] }
+        ],
+        explanation: "[해설]<br>제1류 위험물은 <b>산화성고체</b>이다. 자신은 타지 않고 산소를 내놓아 다른 물질이 타도록 돕는다.<br><ul><li>무기화합물 — 염소산염류·과염소산염류·질산염류처럼 대부분 금속의 무기염이다.</li><li>산화체 — 가열하거나 충격을 주면 분해되면서 산소를 내놓는 산화제다.</li><li>고체 — 분류 이름대로 상온에서 고체 상태다.</li></ul>혼동 주의: 유기화합물이면서 인화점이 낮은 것은 <b>제4류 인화성액체</b>의 특징이다."
+      },
+      {
+        mainQuestion: "문제 13. [출제 21-2]<br>[보기] 아세톤, 메틸에틸케톤, 아닐린, 클로로벤젠, 메탄올",
+        score: 2,
+        subs: [
+          { label: "① 인화점이 가장 낮은 위험물은 ( ① )이다.", type: "short", answers: ["아세톤"] },
+          { label: "② ①의 시성식은 ( ② )이다.", type: "formula", answers: ["CH3COCH3"] },
+          { label: "③ [보기] 중 제1석유류에 해당하는 것을 모두 고르면 ( ③ )이다.", type: "unordered_comma", answers: ["메틸에틸케톤, 아세톤", "아세톤, 메틸에틸케톤", "메틸에틸케톤,아세톤", "아세톤,메틸에틸케톤"] }
+        ],
+        explanation: "[해설]<br><b>제1석유류</b>는 1기압에서 인화점이 <b>21℃ 미만</b>인 액체이다.<br><ul><li>아세톤 — 인화점 약 -18℃로 보기 중 가장 낮고, 시성식은 CH<sub>3</sub>COCH<sub>3</sub>이다.</li><li>메틸에틸케톤 — 인화점 약 -9℃로 제1석유류에 속한다.</li></ul>클로로벤젠(약 32℃)은 제2석유류, 아닐린(약 70℃)은 제3석유류이다. 메탄올은 인화점이 약 11℃이지만 석유류가 아닌 <b>알코올류</b>로 따로 분류된다."
+      },
+      {
+        mainQuestion: "문제 14. [출제 24-1/21-2]<br>제4류 특수인화물 중 물속에 저장하는 위험물에 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 연소 시 생성되는 유독성 물질(화학식): ( ① )", type: "formula", answers: ["SO2"] },
+          { label: "② 증기비중: ( ② )", type: "calc", answers: ["2.64", "2.63", "2.62"] },
+          { label: "③ 옥외저장탱크 저장 시 철근콘크리트 수조의 두께: ( ③ ) 이상", type: "short", answers: ["0.2m", "0.2"] }
+        ],
+        explanation: "[해설]<br>제4류 특수인화물 중 물속에 저장하는 위험물은 <b>이황화탄소(CS<sub>2</sub>)</b>로, 가연성 증기 발생을 막기 위해 물속에 보관한다.<br>연소 시 CS<sub>2</sub> + 3O<sub>2</sub> → CO<sub>2</sub> + 2SO<sub>2</sub> 반응으로 유독한 <b>이산화황(SO<sub>2</sub>)</b>이 발생하며, 증기비중은 분자량 76을 공기 평균분자량 28.84로 나눈 <b>2.64</b>이다.<br>옥외저장탱크에 물속 저장 방식으로 저장할 경우 <b>철근콘크리트 수조 두께 0.2m 이상</b>을 확보해야 한다."
+      },
+      {
+        mainQuestion: "문제 15. [출제 21-2]<br>98wt% 질산용액(비중 1.51) 100mL를 68wt%(비중 1.41)로 만들려면 첨가할 물(g)을 구하시오. (물 밀도 1g/cm³)",
+        score: 2,
+        subs: [
+          { label: "① 계산식: 147.98 / (151 + <i>x</i>) = 0.68<br>② 첨가할 물 = ( ① )", type: "calc", answers: ["66.62", "66.62g"] }
+        ],
+        explanation: "[해설]<br>희석해도 <b>순수 질산의 질량은 변하지 않는다</b>는 물질수지로 푼다.<br>희석 전 용액 질량과 순수 질산량:<br>100mL × 1.51 = 151g<br>151g × 0.98 = 147.98g<br>희석 후 농도식:<br>147.98 / (151 + x) = 0.68<br>151 + x = 217.62<br>x = <b>66.62g</b><br>혼동 주의: 희석 후의 비중 1.41은 질량 기준 계산에 쓰이지 않는다."
+      },
+      {
+        mainQuestion: "문제 16. [출제 21-1]<br>질산암모늄(NH<sub>4</sub>NO<sub>3</sub>, 분자량 80)을 이루는 다음 원소가 차지하는 wt%를 구하시오.",
+        score: 2,
+        subs: [
+          { label: "① 질소: (14 × 2) / 80 × 100 = ( ① )", type: "calc", answers: ["35", "35wt%", "35%"] },
+          { label: "② 수소: (1 × 4) / 80 × 100 = ( ② )", type: "calc", answers: ["5", "5wt%", "5%"] }
+        ],
+        explanation: "[해설]<br>원소의 질량 백분율은 <b>원자량 × 원자 수 ÷ 분자량 × 100</b>으로 구한다.<br>NH<sub>4</sub>NO<sub>3</sub>에는 질소 원자가 2개 들어 있다.<br>(14 × 2) ÷ 80 × 100 = <b>35wt%</b><br>수소 원자는 4개 들어 있다.<br>(1 × 4) ÷ 80 × 100 = <b>5wt%</b><br>검산: 산소는 (16 × 3) ÷ 80 × 100 = 60wt%이고, 세 원소를 더하면 100%가 된다."
+      },
+      {
+        mainQuestion: "문제 17. [출제 21-1]<br>이소프로필알코올을 산화시켜 만들며, 제1석유류이고 아이오딘포름 반응을 하는 물질에 대하여 답하시오.",
+        score: 1,
+        subs: [
+          { label: "① 물질의 명칭은 ( ① )이다.", type: "short", answers: ["아세톤", "아세톤(CH3COCH3)"] },
+          { label: "② 아이오딘포름의 화학식은 ( ② )이다.", type: "formula", answers: ["CHI3"] },
+          { label: "③ 아이오딘포름의 색깔은 ( ③ )이다.", type: "short", answers: ["노란색", "황색"] }
+        ],
+        explanation: "[해설]<br>이소프로필알코올(2차 알코올)을 산화하면 케톤인 <b>아세톤(CH<sub>3</sub>COCH<sub>3</sub>)</b>이 되고, 이 물질은 인화점 약 -18℃인 제1석유류이다.<br>아세톤처럼 CH<sub>3</sub>CO- 구조를 가진 물질에 아이오딘과 수산화나트륨을 넣으면 <b>아이오딘포름(CHI<sub>3</sub>)</b>이 생긴다. 아이오딘포름은 특유의 냄새가 나는 <b>노란색</b> 침전으로, 이 침전이 생기면 양성으로 판정한다."
+      },
+      {
+        mainQuestion: "문제 18. [출제 21-1]<br>이황화탄소 5kg이 모두 증기로 변했을 때 1기압, 50℃에서 차지하는 부피(m³)를 구하시오.",
+        score: 2,
+        subs: [
+          { label: "① 계산식: <i>V</i> = <i>wRT</i> / <i>PM</i> = (5000 × 0.082 × 323) / (1 × 76) (단위 환산)<br>② 부피 = ( ① )", type: "calc", answers: ["1.74", "1.74m3", "1.74m³"] }
+        ],
+        explanation: "[해설]<br><b>이상기체상태방정식</b> PV = (w/M)RT를 부피 V에 대해 정리해 푼다. 이황화탄소(CS<sub>2</sub>)의 분자량은 76이다.<br>질량은 g으로, 온도는 K로 바꿔 넣는다(5kg = 5000g, 50℃ = 323K).<br>V = wRT ÷ PM<br>V = 5000 × 0.082 × 323 ÷ (1 × 76)<br>V = 1742.5L = <b>1.74m³</b><br>R = 0.082 atm·L/(mol·K)을 쓰면 답이 L 단위로 나온다. 1,000으로 나눠 m³로 바꾼다."
+      },
+      {
+        mainQuestion: "문제 19. [출제 20-3]<br>다음 중 수용성인 것을 모두 고르시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>a. 휘발유 b. 벤젠 c. 톨루엔 d. 클로로벤젠 e. 아세트알데하이드 f. 아세톤 g. 메틸알코올</span>",
+        score: 1,
+        subs: [
+          { label: "정답: ( ① )", type: "short", answers: ["e, f, g", "e,f,g", "e, f, g번", "e,f,g번"] }
+        ],
+        explanation: "[해설]<br>물에 녹으려면 물과 수소결합할 수 있는 <b>극성 작용기</b>가 있어야 한다.<br><ul><li>아세트알데하이드 — 알데하이드기(-CHO)가 있어 물과 잘 섞인다.</li><li>아세톤 — 카보닐기(C=O)의 극성 때문에 물과 어떤 비율로도 섞인다.</li><li>메틸알코올 — 하이드록시기(-OH)가 있고 탄소 수가 적어 잘 녹는다.</li></ul>휘발유·벤젠·톨루엔·클로로벤젠은 극성이 거의 없는 탄화수소 골격이라 <b>비수용성</b>이다. 제4류는 석유류의 지정수량을 수용성·비수용성으로 나누어 정하므로 함께 외워 둔다."
+      },
+      {
+        mainQuestion: "문제 20. [출제 20-3]<br>물과 반응하지 않고 공기 중에서 반응하여 흰 연기가 발생하는 제3류 위험물에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 명칭(화학식): ( ① )", type: "formula", answers: ["P4"] },
+          { label: "② 옥내저장소 바닥면적: ( ② ) 이하", type: "short", answers: ["1000m2", "1,000m2", "1000", "1,000", "1000m²", "1,000m²"] },
+          { label: "③ 수산화칼륨 등 강알칼리성 용액과 반응할 때 생성되는 맹독성 기체의 화학식: ( ③ )", type: "formula", answers: ["PH3"] }
+        ],
+        explanation: "[해설]<br>물과는 반응하지 않고 공기 중에서 저절로 불붙어 흰 연기(오산화인)를 내는 제3류 위험물은 <b>황린(P<sub>4</sub>)</b>이다. 공기와 닿지 않게 물속에 저장한다.<br><b>위험물안전관리법 시행규칙</b>에 따르면 황린·칼륨·나트륨·알킬알루미늄·알킬리튬 등을 저장하는 옥내저장소 창고는 바닥면적이 <b>1,000m²</b> 이하여야 한다.<br>황린이 수산화칼륨 같은 강알칼리 용액과 반응하면 맹독성 기체인 <b>포스핀(PH<sub>3</sub>)</b>이 생긴다.<br>P<sub>4</sub> + 3KOH + 3H<sub>2</sub>O → PH<sub>3</sub> + 3KH<sub>2</sub>PO<sub>2</sub><br>혼동 주의: 같은 제3류라도 위에 적은 품목이 아니면 바닥면적 기준은 2,000m² 이하다."
+      },
+      {
+        mainQuestion: "문제 21. [출제 20-2]<br>벤젠(C<sub>6</sub>H<sub>6</sub>, 분자량 78) 16g을 완전히 증발시켰을 때 1atm, 90℃(363K)에서 차지하는 부피(L)를 구하시오.<br><br>몰수 <i>n</i> = 16 / 78 = 0.2051 mol<br><br><i>V</i> = <i>nRT</i> / <i>P</i> = (0.2051 × 0.082 × 363) / 1 = ( ① )",
+        score: 2,
+        subs: [
+          { label: "①", type: "calc", answers: ["6.11", "6.11L"] }
+        ],
+        explanation: "[해설]<br>이상기체 상태방정식 <i>PV = nRT</i>로 부피를 구하려면 먼저 질량을 분자량으로 나눠 <b>몰수</b>를 확정해야 한다.<br>벤젠 16g을 분자량 78로 나누면<br><i>n</i> = 16 / 78 ≈ 0.2051 mol<br><i>R</i> = 0.082 atm·L/(mol·K), <i>T</i> = 363 K, <i>P</i> = 1 atm을 대입하면<br><i>V</i> = <i>nRT</i> / <i>P</i> = (0.2051 × 0.082 × 363) / 1 ≈ 6.11 L<br>온도는 반드시 <b>절대온도(K)</b>로 바꿔 대입해야 하며, 90℃를 그대로 넣으면 값이 크게 틀어진다."
+      },
+      {
+        mainQuestion: "문제 22. [출제 20-2]<br>제4류 위험물 중 분자량 27, 끓는점 26℃이고 맹독성을 띠는 물질에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 화학식: ( ① )", type: "formula", answers: ["HCN"] },
+          { label: "② 증기비중: 27 / 29 = ( ② )", type: "calc", answers: ["0.93"] }
+        ],
+        explanation: "[해설]<br>분자량 27, 끓는점 26℃, 맹독성이라는 세 단서가 동시에 가리키는 제4류 위험물은 <b>시안화수소(HCN)</b>다.<br>시안화수소는 인화점이 약 -18℃로 낮고 물에 잘 녹아 위험물안전관리법상 <b>제1석유류(수용성)</b>로 분류되며, 끓는점이 낮아 상온에서도 증기가 쉽게 발생해 화재와 중독 위험이 함께 따른다.<br>증기비중은 공기의 평균분자량 29에 대한 비이므로<br>27 / 29 ≈ 0.93<br>1보다 작아, 제4류 위험물로는 드물게 증기가 <b>공기보다 가볍다</b>."
+      },
+      {
+        mainQuestion: "문제 23. [출제 20-2]<br>제4류 위험물 중 비수용성인 것을 [보기]에서 모두 고르시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>a. 이황화탄소 b. 아세트알데하이드 c. 아세톤 d. 스틸렌 e. 클로로벤젠</span>",
+        score: 1,
+        subs: [
+          { label: "정답: ( ① )", type: "short", answers: ["a, d, e", "a,d,e", "a, d, e번", "a,d,e번"] }
+        ],
+        explanation: "[해설]<br>극성이 작아 물과 섞이지 않는 물질이 <b>비수용성</b>이다.<br><ul><li>이황화탄소 — 무극성이고 물보다 무거워, 가연성 증기를 막으려고 <b>물속(수조)</b>에 저장한다.</li><li>스틸렌 — 벤젠고리를 가진 방향족 탄화수소라 물에 녹지 않는다.</li><li>클로로벤젠 — 방향족 할로젠화합물로 물에 거의 녹지 않는다.</li></ul>아세트알데하이드와 아세톤은 극성인 <b>카보닐기</b>가 있어 수용성이므로 제외한다."
+      },
+      {
+        mainQuestion: "문제 24. [출제 23-2/20-2/20-1]<br>인화점 측정방법에 관한 내용이다. 빈칸에 알맞은 인화점 시험방법의 종류를 쓰시오.<br><br>( ① ) 인화점측정기 - 시료컵을 설정온도까지 가열·냉각하여 시험물품 2mL를 넣고 즉시 뚜껑 및 개폐기를 닫는다.<br>( ② ) 인화점측정기 - 시료컵에 시험물품 50cm³를 넣고 표면 기포를 제거한 후 뚜껑을 덮는다.<br>( ③ ) 인화점측정기 - 시료컵 표선까지 채우고 기포 제거 후 시험불꽃을 직경 4mm로 조정한다.",
+        score: 1,
+        subs: [
+          { label: "①", type: "short", answers: ["신속평형법"] },
+          { label: "②", type: "short", answers: ["태그밀폐식"] },
+          { label: "③", type: "short", answers: ["클리브랜드 개방컵", "클리블랜드 개방컵", "클리브랜드개방컵", "클리브랜드 개방컵식", "클리브랜드 개방컵 방식"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전에 관한 세부기준</b>에 나오는 인화점 측정방법은 시료를 얼마나 넣는지와 시료컵이 닫혀 있는지로 구별한다.<br><ul><li>신속평형법 — 설정온도로 맞춘 시료컵에 시료를 2mL만 넣고 곧바로 뚜껑과 개폐기를 닫는다.</li><li>태그밀폐식 — 시료 50cm³를 넣고 표면 기포를 없앤 뒤 뚜껑을 덮는 밀폐식이다.</li><li>클리브랜드 개방컵 — 뚜껑 없이 표선까지 채우고, 직경 4mm로 맞춘 시험불꽃을 액면 위로 지나가게 한다.</li></ul>외우는 요령: 2mL는 신속평형법, 50cm³는 <b>태그밀폐식</b>, 표선까지 채우는 개방컵은 <b>클리브랜드</b>다."
+      },
+      {
+        mainQuestion: "문제 25. [출제 22-2/20-1]<br>인화점 -37℃, 무색투명 액체, 분자량 58, 수용성, 구리·은·수은·마그네슘과 반응해 폭발성 아세틸리드를 생성하는 물질에 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 화학식: ( ① )", type: "formula", answers: ["CH3CHOCH2", "C3H6O", "CH3CHCH2O"] },
+          { label: "② 지정수량: ( ② )", type: "short", answers: ["50L", "50"] },
+          { label: "③ 탱크에 공기가 차 있을 때 조치: ( ③ )", type: "short", answers: ["불연성 가스(N2) 또는 수증기를 봉입하여 저장한다.", "불연성 가스나 수증기를 봉입해 공기를 몰아낸다", "불연성 가스(N2)나 수증기 봉입", "불연성 가스(N2) 또는 수증기 봉입", "불연성가스 봉입", "불연성 가스나 수증기 봉입", "불연성 가스 또는 수증기 봉입", "불연성가스 또는 수증기 봉입", "불연성가스나 수증기 봉입" ] }
+        ],
+        explanation: "[해설]<br>인화점 -37℃, 분자량 58, 수용성이고 구리·은·수은·마그네슘과 폭발성 아세틸라이드를 만드는 물질은 <b>산화프로필렌(CH<sub>3</sub>CHOCH<sub>2</sub>)</b>이다.<br>산화프로필렌은 인화점이 -20℃ 이하인 <b>특수인화물</b>이라 지정수량이 <b>50L</b>이다. 탱크 안에 공기가 차 있으면 증기가 공기와 폭발성 혼합기를 이루므로, <b>불연성 가스(N<sub>2</sub>)나 수증기를 봉입</b>해 공기를 몰아낸다.<br>혼동 주의: 같은 이유로 아세트알데하이드 저장·취급설비에도 구리·은·수은·마그네슘과 그 합금을 쓰지 않는다."
+      },
+      {
+        mainQuestion: "문제 26. [출제 20-4]<br>다이에틸에터, 이황화탄소, 산화프로필렌, 아세톤을 인화점이 낮은 것부터 순서대로 쓰시오.",
+        score: 1,
+        subs: [
+          { label: "① 가장 낮은 물질", type: "short", answers: ["다이에틸에터", "디에틸에테르"] },
+          { label: "②", type: "short", answers: ["산화프로필렌"] },
+          { label: "③", type: "short", answers: ["이황화탄소"] },
+          { label: "④ 가장 높은 물질", type: "short", answers: ["아세톤"] }
+        ],
+        explanation: "[해설]<br>넷 다 <b>제4류 위험물</b>이고, 품명과 인화점 수치를 알면 순서가 정해진다.<br><ul><li>다이에틸에터 — 특수인화물, 인화점 약 <b>-45℃</b>로 가장 낮다.</li><li>산화프로필렌 — 특수인화물, 인화점 약 -37℃.</li><li>이황화탄소 — 특수인화물, 인화점 약 -30℃.</li><li>아세톤 — 제1석유류, 인화점 약 <b>-18℃</b>로 넷 중 가장 높다.</li></ul>외우는 요령: 특수인화물 셋이 앞에 오고 제1석유류인 아세톤이 맨 뒤에 온다."
+      },
+      {
+        mainQuestion: "문제 27. [출제 20-5]<br>다음 위험물을 인화점이 낮은 것부터 높은 순으로 나열하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>a. 아세톤 b. 이황화탄소 c. 메틸알코올 d. 아닐린</span>",
+        score: 1,
+        subs: [
+          { label: "①", type: "short", answers: ["b", "이황화탄소", "b(이황화탄소)"] },
+          { label: "②", type: "short", answers: ["a", "아세톤", "a(아세톤)"] },
+          { label: "③", type: "short", answers: ["c", "메틸알코올", "c(메틸알코올)", "메탄올"] },
+          { label: "④", type: "short", answers: ["d", "아닐린", "d(아닐린)"] }
+        ],
+        explanation: "[해설]<br>인화점 순서는 <b>제4류 위험물 품명</b> 순서(특수인화물 → 제1석유류 → 알코올류 → 제3석유류)와 그대로 겹친다.<br><ul><li>이황화탄소 — 특수인화물로 인화점이 약 <b>-30℃</b>여서 넷 중 가장 낮다.</li><li>아세톤 — 제1석유류로 인화점이 약 -18℃이다.</li><li>메틸알코올 — 알코올류로 인화점이 약 11℃이다.</li><li>아닐린 — 제3석유류로 인화점이 약 <b>70℃</b>여서 넷 중 가장 높다.</li></ul>외우는 요령: 품명 서열만 알면 수치를 몰라도 순서를 댈 수 있다."
+      },
+      {
+        mainQuestion: "문제 28. [출제 20-5]<br>제4류 위험물 중 수용성인 위험물을 [보기]에서 모두 고르시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>a. 시안화수소 b. 아세톤 c. 클로로벤젠 d. 글리세린 e. 히드라진</span>",
+        score: 1,
+        subs: [
+          { label: "정답: ( ① )", type: "unordered_comma", answers: ["a, b, d, e", "a,b,d,e", "시안화수소, 아세톤, 글리세린, 히드라진", "시안화수소,아세톤,글리세린,히드라진"] }
+        ],
+        explanation: "[해설]<br>제4류 위험물은 품명을 <b>수용성·비수용성</b>으로 나눠 지정수량을 달리 정하므로, 물질마다 어느 쪽인지 외워 둬야 한다.<br><ul><li>시안화수소 — 제1석유류 수용성으로, 물과 잘 섞인다.</li><li>아세톤 — 제1석유류 수용성으로, 물과 어떤 비율로든 섞인다.</li><li>글리세린 — 제3석유류 수용성으로, 하이드록시기(-OH)가 3개다.</li><li>히드라진 — 제2석유류 수용성으로, 물과 수소결합을 이룬다.</li></ul>혼동 주의: 클로로벤젠은 <b>제2석유류 비수용성</b>이라 답에서 빠진다."
+      },
+      {
+        mainQuestion: "문제 29. [출제 23-1/19-1]<br>제5류 위험물 트라이나이트로톨루엔에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 구조식은 ( ① ) — 톨루엔 고리에 -CH<sub>3</sub> 1개(1번)와 -NO<sub>2</sub> 3개(2,4,6번)가 결합한 구조이다.", type: "formula", answers: ["C6H2(CH3)(NO2)3", "C6H2CH3(NO2)3"] },
+          { label: "② 제조반응식(촉매 H<sub>2</sub>SO<sub>4</sub>): C<sub>6</sub>H<sub>5</sub>CH<sub>3</sub> + ( ② )HNO<sub>3</sub> → ( ③ ) + 3H<sub>2</sub>O<br>▶ ②", type: "short", answers: ["3"] },
+          { label: "▶ ③", type: "formula", answers: ["C6H2(CH3)(NO2)3", "C6H2CH3(NO2)3"] }
+        ],
+        explanation: "[해설]<br>트라이나이트로톨루엔(TNT)은 <b>톨루엔</b>의 벤젠 고리에 메틸기(-CH<sub>3</sub>) 1개와 나이트로기(-NO<sub>2</sub>) 3개가 치환된 구조이며, 치환 위치(2,4,6번)가 이 화합물의 명칭과 폭발성을 결정한다.<br>제조는 톨루엔을 진한 황산 촉매 하에 <b>질산(HNO<sub>3</sub>)</b>으로 나이트로화하는 반응이며, 나이트로기 3개를 도입하려면 질산 3몰이 필요하고 부산물로 물이 생성된다.<br>C<sub>6</sub>H<sub>5</sub>CH<sub>3</sub> + 3HNO<sub>3</sub> → C<sub>6</sub>H<sub>2</sub>CH<sub>3</sub>(NO<sub>2</sub>)<sub>3</sub> + 3H<sub>2</sub>O<br>좌우 수소·질소·산소 원자 수를 맞추면 질산과 물의 계수가 모두 <b>3</b>으로 정해진다."
+      },
+      {
+        mainQuestion: "문제 30. [출제 19-1]<br>황화인 3가지의 화학식을 쓰시오.",
+        score: 1,
+        subs: [
+          { label: "① 삼황화인: ( ① )", type: "formula", answers: ["P4S3"] },
+          { label: "② 오황화인: ( ② )", type: "formula", answers: ["P2S5"] },
+          { label: "③ 칠황화인: ( ③ )", type: "formula", answers: ["P4S7"] }
+        ],
+        explanation: "[해설]<br>황화인은 <b>제2류 위험물</b>(가연성 고체)이고, 이름 앞의 숫자가 황(S) 원자 수를 뜻한다.<br><ul><li>삼황화인 — <b>P<sub>4</sub>S<sub>3</sub></b>, 인 4개에 황 3개가 붙는다.</li><li>오황화인 — <b>P<sub>2</sub>S<sub>5</sub></b>, 인 2개에 황 5개가 붙는다.</li><li>칠황화인 — <b>P<sub>4</sub>S<sub>7</sub></b>, 인 4개에 황 7개가 붙는다.</li></ul>혼동 주의: 오황화인만 인이 2개이고, 삼황화인과 칠황화인은 인이 4개다."
+      },
+      {
+        mainQuestion: "문제 31. [출제 19-2]<br>휘발성 무색투명한 액체로 증기는 마취성이 있고 물에 잘 녹으며 아이오딘포름 반응을 하고, 산화하면 아세트알데하이드가 되는 위험물에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 화학식: ( ① )", type: "formula", answers: ["C2H5OH", "CH3CH2OH"] },
+          { label: "② 지정수량: ( ② )", type: "short", answers: ["400L", "400"] },
+          { label: "③ 진한 황산과의 축합 반응 후 생성되는 제4류 위험물의 화학식: ( ③ )", type: "formula", answers: ["C2H5OC2H5"] }
+        ],
+        explanation: "[해설]<br>아이오딘포름 반응을 하고 산화하면 아세트알데하이드가 되는 알코올은 <b>에틸알코올(C<sub>2</sub>H<sub>5</sub>OH)</b>이다. 제4류 위험물 중 알코올류에 속하므로 지정수량은 <b>400L</b>이다.<br>진한 황산과 함께 두 분자가 탈수 축합하면 특수인화물인 <b>다이에틸에터</b>가 생긴다.<br>2C<sub>2</sub>H<sub>5</sub>OH → C<sub>2</sub>H<sub>5</sub>OC<sub>2</sub>H<sub>5</sub> + H<sub>2</sub>O<br>혼동 주의: 같은 진한 황산 반응이라도 약 140℃에서는 다이에틸에터가 생기고, 약 160~170℃에서는 에틸렌이 생긴다."
+      },
+      {
+        mainQuestion: "문제 32. [출제 23-4/19-3]<br>다음 위험물을 연소 형태에 따라 구분하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 나트륨 ② TNT ③ 에탄올 ④ 금속분 ⑤ 다이에틸에터 ⑥ 피크르산</span>",
+        score: 1,
+        subs: [
+          { label: "· 표면연소: ( ① )", type: "short", answers: ["1, 4", "1,4", "①,④", "①, ④"] },
+          { label: "· 증발연소: ( ② )", type: "short", answers: ["3, 5", "3,5", "③,⑤", "③, ⑤"] },
+          { label: "· 자기연소: ( ③ )", type: "short", answers: ["2, 6", "2,6", "②,⑥", "②, ⑥"] }
+        ],
+        explanation: "[해설]<br>연소 형태는 <b>무엇이 타느냐</b>에 따라 나뉜다. 고체 표면이 타면 표면연소, 증기가 타면 증발연소, 분자 속 산소로 타면 자기연소다.<br><ul><li>표면연소 — 나트륨과 금속분은 고체 표면이 산소와 직접 반응해 탄다.</li><li>증발연소 — 에탄올과 다이에틸에터는 액체가 증발해 생긴 증기가 탄다.</li><li>자기연소 — TNT와 피크르산은 <b>제5류 위험물</b>로, 분자 속 나이트로기의 산소로 탄다.</li></ul>외우는 요령: 제4류 인화성 액체는 대부분 증발연소이고, 제5류 자기반응성 물질은 자기연소다."
+      },
+      {
+        mainQuestion: "문제 33. [출제 19-3]<br>표준상태에서 톨루엔(C<sub>6</sub>H<sub>5</sub>CH<sub>3</sub>, 분자량 92)의 증기비중을 구하시오.",
+        score: 2,
+        subs: [
+          { label: "계산식: 92 / 28.84 = ( ① )", type: "calc", answers: ["3.19"] }
+        ],
+        explanation: "[해설]<br><b>증기비중</b>은 증기의 분자량을 공기의 평균분자량 <b>28.84</b>로 나눈 값이다.<br>증기비중 = 92 ÷ 28.84 ≈ <b>3.19</b><br>값이 1을 넘으므로 톨루엔 증기는 공기에 비해 무거워 바닥이나 피트에 고인다."
+      },
+      {
+        mainQuestion: "문제 34. [출제 23-4/19-3]<br>다음 위험물을 인화점이 낮은 것부터 순서대로 나열하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 초산에틸 ② 메틸알코올 ③ 나이트로벤젠 ④ 에틸렌글리콜</span>",
+        score: 1,
+        subs: [
+          { label: "정답 나열 (예: 1-2-3-4)", type: "order", answers: ["1-2-3-4", "1234", "1,2,3,4"] }
+        ],
+        explanation: "[해설]<br>제4류 위험물은 인화점 구간으로 품명이 갈리므로(제1석유류 21℃ 미만, 제3석유류 70℃ 이상 200℃ 미만), 품명을 먼저 확인하면 순서가 잡힌다.<br><b>초산에틸</b>은 제1석유류로 인화점이 약 -4℃라 가장 낮고, <b>메틸알코올</b>은 알코올류로 11℃여서 그다음이다.<br><b>나이트로벤젠</b>은 제3석유류(비수용성)로 약 88℃, <b>에틸렌글리콜</b>은 제3석유류(수용성)로 약 111℃여서 넷 중 가장 높다."
+      },
+      {
+        mainQuestion: "문제 35. [출제 26-1/20-3]<br>제2류 위험물 황화인에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 삼황화인·오황화인·칠황화인 중 조해성 있음: ( ① ) / 조해성 없음: ( ② )<br>▶ ① (조해성 있음)", type: "short", answers: ["오황화인, 칠황화인", "칠황화인, 오황화인"] },
+          { label: "▶ ② (조해성 없음)", type: "short", answers: ["삼황화인"] },
+          { label: "③ 발화점이 가장 낮은 물질의 명칭: ( ③ )", type: "short", answers: ["삼황화인", "삼황화인(P4S3)"] },
+          { label: "④ ③의 완전연소반응식: P<sub>4</sub>S<sub>3</sub> + ( ④ )O<sub>2</sub> → 2P<sub>2</sub>O<sub>5</sub> + ( ⑤ )SO<sub>2</sub><br>▶ ④", type: "short", answers: ["8"] },
+          { label: "▶ ⑤", type: "short", answers: ["3"] }
+        ],
+        explanation: "[해설]<br><b>황화인</b> 셋 중 삼황화인만 조해성이 없고, 오황화인과 칠황화인은 조해성이 있다. 조해성은 공기 중 수분을 빨아들여 스스로 녹는 성질이다.<br>발화점은 삼황화인이 약 <b>100℃</b>로 셋 중 가장 낮다. 완전연소하면 인은 오산화인이 되고 황은 이산화황이 된다.<br>우변 산소 원자가 2×5 + 3×2 = 16개이므로 O<sub>2</sub> 계수는 <b>8</b>, SO<sub>2</sub> 계수는 3이다.<br>P<sub>4</sub>S<sub>3</sub> + 8O<sub>2</sub> → 2P<sub>2</sub>O<sub>5</sub> + 3SO<sub>2</sub>"
+      },
+      {
+        mainQuestion: "문제 36. [출제 26-1/19-1]<br>분자량 32, 일산화탄소와 수소를 고온·고압으로 제조하며, 물에 녹고 연소 시 불꽃 색상이 보이지 않으며 비중 0.79인 위험물에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 화학식: ( ① )", type: "formula", answers: ["CH3OH"] },
+          { label: "② 품명: ( ② )", type: "short", answers: ["알코올류"] },
+          { label: "③ 연소반응식: 2CH<sub>3</sub>OH + ( ③ )O<sub>2</sub> → 2CO<sub>2</sub> + ( ④ )H<sub>2</sub>O<br>▶ ③", type: "short", answers: ["3"] },
+          { label: "▶ ④", type: "short", answers: ["4"] },
+          { label: "⑤ 지정수량: ( ⑤ )", type: "short", answers: ["400L", "400"] }
+        ],
+        explanation: "[해설]<br>분자량 32, 일산화탄소와 수소로 합성, 불꽃이 잘 보이지 않음, 비중 0.79라는 단서는 모두 <b>메탄올(CH<sub>3</sub>OH)</b>을 가리킨다. 메탄올은 제4류 위험물 중 <b>알코올류</b>에 속하고, 지정수량은 <b>400L</b>다.<br>연소반응식은 탄소·수소·산소 원자 수를 양쪽에서 맞추면 산소 계수 3, 물 계수 4가 된다.<br>2CH<sub>3</sub>OH + 3O<sub>2</sub> → 2CO<sub>2</sub> + 4H<sub>2</sub>O<br>실무 의미: 메탄올은 불꽃이 거의 보이지 않아 불이 난 것을 눈으로 알아채기 어렵다."
+      },
+      {
+        mainQuestion: "문제 37. [출제 26-1]<br>무색 유동성 액체로 물과 반응해 발열, 분자량 100.5, 비중 1.76, 염소산 중 가장 강한 산인 위험물에 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 시성식과 명칭: ( ① ), ( ② )<br>▶ ① (시성식)", type: "formula", answers: ["HClO4"] },
+          { label: "▶ ② (명칭)", type: "short", answers: ["과염소산"] },
+          { label: "③ 류별: ( ③ )", type: "short", answers: ["제6류", "제6류 위험물", "6류"] },
+          { label: "④ 제조소와 병원 사이 안전거리: ( ④ )", type: "short", answers: ["해당없음", "없음", "해당 없음"] },
+          { label: "⑤ 5000kg 취급 제조소의 보유공지 너비: ( ⑤ )", type: "short", answers: ["5m 이상", "5m", "5 이상", "5"] }
+        ],
+        explanation: "[해설]<br>분자량 100.5, 비중 1.76이고 염소의 산소산 중 가장 강한 산은 <b>과염소산(HClO<sub>4</sub>)</b>이며, 산화성 액체인 <b>제6류 위험물</b>이다.<br><b>위험물안전관리법 시행규칙</b>상 제6류 위험물을 취급하는 제조소는 안전거리 적용 대상에서 빠지므로, 병원과의 안전거리도 해당없음이다.<br>보유공지는 지정수량 10배 이하이면 3m 이상, 10배를 넘으면 5m 이상이며 과염소산의 지정수량은 300kg이다.<br>5000 / 300 ≈ 16.7배 > 10배 → <b>5m 이상</b>"
+      },
+      {
+        mainQuestion: "문제 38. [출제 26-1]<br>다음 위험물의 구조 골격을 화학식으로 쓰시오.",
+        score: 2,
+        subs: [
+          { label: "① 트라이나이트로페놀(피크르산): ( ① ) — 벤젠고리에 -OH 1개(1번), -NO<sub>2</sub> 3개(2,4,6번)", type: "formula", answers: ["C6H2(OH)(NO2)3", "C6H2OH(NO2)3"] },
+          { label: "② 2,4,6-트라이나이트로톨루엔: ( ② ) — 톨루엔 고리에 -CH<sub>3</sub> 1개(1번), -NO<sub>2</sub> 3개(2,4,6번)", type: "formula", answers: ["C6H2(CH3)(NO2)3", "C6H2CH3(NO2)3"] },
+          { label: "③ 나이트로글리세린: ( ③ ) — 글리세린 골격 C-C-C의 각 탄소에 -ONO<sub>2</sub> 1개씩", type: "formula", answers: ["C3H5(ONO2)3"] }
+        ],
+        explanation: "[해설]<br>세 물질은 모두 <b>제5류 위험물</b>이고, 기본 골격에 어떤 작용기가 몇 개 붙었는지를 화학식에 그대로 적는다.<br><ul><li>피크르산 — 벤젠고리의 수소 3개 자리에 -NO<sub>2</sub> 3개, 1개 자리에 -OH가 붙어 C<sub>6</sub>H<sub>2</sub>(OH)(NO<sub>2</sub>)<sub>3</sub>이다.</li><li>TNT — 피크르산의 -OH 자리에 메틸기(-CH<sub>3</sub>)가 붙어 C<sub>6</sub>H<sub>2</sub>(CH<sub>3</sub>)(NO<sub>2</sub>)<sub>3</sub>이다.</li><li>나이트로글리세린 — 글리세린 C<sub>3</sub>H<sub>5</sub>의 세 탄소에 질산에스터기(-ONO<sub>2</sub>)가 하나씩 붙어 C<sub>3</sub>H<sub>5</sub>(ONO<sub>2</sub>)<sub>3</sub>이다.</li></ul>외우는 요령: 벤젠고리에 치환기 4개가 붙으면 남는 수소는 <b>H<sub>2</sub></b>이고, 피크르산과 TNT는 -OH와 -CH<sub>3</sub>만 다르다."
+      },
+      {
+        mainQuestion: "문제 39. [출제 26-1]<br>다음 화학식에 해당하는 위험물의 명칭을 쓰시오. (해당 없으면 '해당없음')",
+        score: 2,
+        subs: [
+          { label: "① CH<sub>3</sub>COOCH<sub>3</sub> → ( ① )", type: "short", answers: ["아세트산메틸", "초산메틸"] },
+          { label: "② CH<sub>3</sub>CN → ( ② )", type: "short", answers: ["아세토나이트릴", "아세토니트릴"] },
+          { label: "③ CH<sub>3</sub>(CH<sub>2</sub>)<sub>4</sub>CH<sub>3</sub> → ( ③ )", type: "short", answers: ["헥산", "n-헥산", "제4류 제1석유류"] },
+          { label: "④ C<sub>6</sub>H<sub>5</sub>CHO → ( ④ )", type: "short", answers: ["벤즈알데하이드", "벤즈알데히드", "제2석유류 비수용성"] },
+          { label: "⑤ HCOOCH<sub>3</sub> → ( ⑤ )", type: "short", answers: ["폼산메틸", "포름산메틸", "의산메틸"] }
+        ],
+        explanation: "[해설]<br>화학식은 <b>작용기</b>(에스터·나이트릴·알데하이드)와 탄소 수로 읽는다. 다섯 가지 모두 <b>제4류 위험물</b>이므로 해당없음으로 답할 항목은 없다.<br><ul><li>CH<sub>3</sub>COOCH<sub>3</sub> — 아세트산과 메탄올의 에스터인 아세트산메틸이다.</li><li>CH<sub>3</sub>CN — 메틸기에 나이트릴기(-CN)가 붙은 아세토나이트릴이다.</li><li>CH<sub>3</sub>(CH<sub>2</sub>)<sub>4</sub>CH<sub>3</sub> — 탄소 6개가 곧게 이어진 포화탄화수소인 n-헥산(제1석유류)이다.</li><li>C<sub>6</sub>H<sub>5</sub>CHO — 벤젠고리에 알데하이드기(-CHO)가 붙은 벤즈알데하이드(제2석유류 비수용성)이다.</li><li>HCOOCH<sub>3</sub> — 폼산과 메탄올의 에스터인 폼산메틸이다.</li></ul>혼동 주의: 아세트산메틸과 폼산메틸은 에스터를 이루는 산의 탄소 수(CH<sub>3</sub>CO- 인지 HCO- 인지)로 구분한다."
+      },
+      {
+        mainQuestion: "문제 40. [출제 26-1]<br>제4류 위험물에 관한 다음 설명 중 틀린 부분을 바르게 고치시오.<br>① 대부분 유기화합물이다.<br>② 발생한 증기는 가연성이며 공기보다 (①가볍다/무겁다 )<br>③ 인화점, 발화점이 낮을수록 위험도가 (②낮아진다/높아진다 )<br>④ 정전기 축적이 용이하여 점화원이 될 수 있다.",
+        score: 1,
+        subs: [
+          { label: "▶ ① (가볍다/무겁다)", type: "short", answers: ["무겁다"] },
+          { label: "▶ ② (낮아진다/높아진다)", type: "short", answers: ["높아진다"] }
+        ],
+        explanation: "[해설]<br>제4류 위험물의 증기는 대부분 <b>공기보다 무거워</b> 낮은 곳에 체류하고 멀리 흘러가 점화원과 만나므로, '가볍다'는 서술은 '무겁다'로 고쳐야 한다.<br>인화점과 발화점이 <b>낮을수록</b> 적은 에너지로도 착화되므로 위험도는 <b>높아진다</b>. 따라서 '낮다'로 잘못 진술된 부분은 '높다'로 정정한다.<br>두 정정 모두 원래 서술과 정반대 방향이라는 점, 즉 증기비중과 위험도 관계를 거꾸로 써 두는 것이 이 유형의 전형적 함정이라는 점을 기억해야 한다."
+      },
+      {
+        mainQuestion: "문제 41. [출제 26-1]<br>과염소산칼륨에 관해 다음을 완성하시오.",
+        score: 2,
+        subs: [
+          { label: "① 화학식: ( ① )", type: "formula", answers: ["KClO4"] },
+          { label: "② 완전분해반응식: KClO<sub>4</sub> → ( ② ) + ( ③ )<br>▶ ②", type: "formula", answers: ["KCl"] },
+          { label: "▶ ③", type: "formula", answers: ["2O2"] },
+          { label: "③ 위험등급: ( ④ )", type: "short", answers: ["I 등급", "I등급", "1등급", "I", "1"] }
+        ],
+        explanation: "[해설]<br>과염소산칼륨(KClO<sub>4</sub>)은 가열하면 염화칼륨과 산소로 분해되는데, 이 <b>산소 방출</b>이 산화성 고체로서의 위험성을 보여준다.<br>KClO<sub>4</sub> → KCl + 2O<sub>2</sub><br>좌변의 산소 원자 4개가 우변에서 산소 분자 2개(=원자 4개)로 보존되도록 계수가 맞춰진 결과다.<br>과염소산칼륨은 제1류 위험물 중 <b>과염소산염류</b>에 속하며, 지정수량이 50kg인 이 품명은 <b>위험등급 I</b>로 분류된다."
+      },
+      {
+        mainQuestion: "문제 42. [출제 25-3]<br>제2류 위험물 황화인에 관한 표의 빈칸을 채우시오.",
+        score: 2,
+        subs: [
+          { label: "① P<sub>4</sub>S<sub>3</sub>의 명칭: ( ① )", type: "short", answers: ["삼황화인"] },
+          { label: "② P<sub>4</sub>S<sub>3</sub>의 조해성: ( ② )", type: "short", answers: ["비조해성", "조해성 없음", "없음"] },
+          { label: "③ 오황화인의 화학식: ( ③ )", type: "formula", answers: ["P2S5"] },
+          { label: "④ 오황화인의 조해성: ( ④ )", type: "short", answers: ["조해성", "조해성 있음", "있음"] },
+          { label: "⑤ 칠황화인(조해성)의 화학식: ( ⑤ )", type: "formula", answers: ["P4S7"] }
+        ],
+        explanation: "[해설]<br>제2류 위험물 <b>황화인</b>은 인과 황이 결합한 비율에 따라 삼황화인·오황화인·칠황화인으로 나뉜다.<br><ul><li>P<sub>4</sub>S<sub>3</sub>은 <b>삼황화인</b>이며, 조해성이 없어(비조해성) 습기에 비교적 안정하다.</li><li>오황화인의 화학식은 <b>P<sub>2</sub>S<sub>5</sub></b>이고 조해성이 있다.</li><li>칠황화인의 화학식은 P<sub>4</sub>S<sub>7</sub>이고 역시 조해성이 있다.</li></ul>조해성은 공기 중 수분을 흡수해 스스로 녹는 성질이다. 혼동 주의: 오황화인만 인 2개 기준(P<sub>2</sub>S<sub>5</sub>)으로 쓰고, 나머지 둘은 P<sub>4</sub>로 시작한다."
+      },
+      {
+        mainQuestion: "문제 43. [출제 25-3]<br>[보기] 중 인화점이 21℃ 이상 70℃ 미만이면서 수용성인 것을 모두 고르시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기] ① 메틸알코올 ② 아세트산(초산) ③ 의산(폼산) ④ 글리세린 ⑤ 나이트로벤젠</span>",
+        score: 1,
+        subs: [
+          { label: "→ ( ① ), ( ② )<br>▶ ①", type: "short", answers: ["아세트산", "아세트산(초산)", "초산", "2", "②"] },
+          { label: "▶ ②", type: "short", answers: ["의산", "의산(폼산)", "폼산", "포름산", "3", "③"] }
+        ],
+        explanation: "[해설]<br>인화점이 21℃ 이상 70℃ 미만인 제4류 위험물은 <b>제2석유류</b>이므로, 이 구간에 들면서 물에 잘 섞이는 것만 고르는 문제다.<br><b>아세트산(초산)</b>은 인화점 약 40℃, <b>의산(폼산)</b>은 약 55℃로 모두 제2석유류 범위에 들며, 카르복시기의 극성 때문에 수용성으로 분류된다.<br>메틸알코올은 인화점 11℃로 구간에 못 미치는 데다 품명이 별도의 알코올류이고, 글리세린(약 160℃)과 나이트로벤젠(약 88℃)은 인화점이 70℃를 넘어 제3석유류이므로 모두 제외된다."
+      },
+      {
+        mainQuestion: "문제 44. [출제 25-3]<br>분자량 34, 마개에 구멍, 물·알코올에 잘 녹고 안정제 사용하는 위험물에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 화학식: ( ① )", type: "formula", answers: ["H2O2"] },
+          { label: "② 분해 시 발생 기체 명칭: ( ② )", type: "short", answers: ["산소", "산소가스", "O2"] },
+          { label: "③ 분해반응식: 2H<sub>2</sub>O<sub>2</sub> → ( ③ ) + ( ④ )<br>▶ ③", type: "formula", answers: ["2H2O"] },
+          { label: "▶ ④", type: "formula", answers: ["O2"] },
+          { label: "④ 운반용기 외부 표시 주의사항: ( ⑤ )", type: "short", answers: ["가연물 접촉주의", "가연물접촉주의"] }
+        ],
+        explanation: "[해설]<br>분자량이 34이고, 분해 기체를 빼내려고 마개에 구멍을 뚫으며, 인산·요산을 안정제로 쓰는 물질은 제6류 위험물 <b>과산화수소(H<sub>2</sub>O<sub>2</sub>)</b>다.<br>분해되면 물과 <b>산소</b>가 생긴다.<br>2H<sub>2</sub>O<sub>2</sub> → 2H<sub>2</sub>O + O<sub>2</sub><br>제6류 위험물은 산화성이 강한 액체라 운반용기 외부에 <b>가연물 접촉주의</b>를 표시한다. 혼동 주의: 과산화수소는 농도가 36중량% 이상일 때만 위험물이다."
+      },
+      {
+        mainQuestion: "문제 45. [출제 25-3]<br>황린에 대한 옳은 설명을 [보기]에서 고르시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기] ① 무색·무취의 투명한 고체 ② 물과 이황화탄소에 녹는다 ③ 증기비중이 공기보다 가볍다 ④ 연소 시 포스핀 발생 ⑤ 공기를 차단하고 가열하면 적린이 생성된다</span>",
+        score: 1,
+        subs: [
+          { label: "→ ( ① )", type: "short", answers: ["5", "⑤", "5번", "⑤번", "공기를 차단하고 가열하면 적린이 생성된다", "공기를 차단하고 가열하면 적린이 생성된다."] }
+        ],
+        explanation: "[해설]<br>황린(P<sub>4</sub>)은 제3류 자연발화성물질로, <b>공기를 차단하고 약 260℃로 가열하면 적린</b>으로 바뀐다.<br>보기 가운데 옳은 설명은 이것 하나다.<br><ul><li>외관 — <b>백색~담황색</b> 고체이고 <b>마늘 냄새</b>가 난다.</li><li>용해성 — <b>물에는 녹지 않아</b> 물속에 저장하며, 이황화탄소에는 잘 녹는다.</li><li>증기비중 — 124 / 29 ≈ 4.3이라 공기에 비해 <b>무겁다</b>.</li><li>연소 생성물 — <b>오산화인(P<sub>2</sub>O<sub>5</sub>)</b>이며, 포스핀은 강알칼리 용액과 반응할 때 나온다.</li></ul>혼동 주의: 포스핀은 연소가 아닌 알칼리와의 반응 생성물이다."
+      },
+      {
+        mainQuestion: "문제 46. [출제 25-3]<br>메탄올과 에탄올을 비교하여 빈칸에 '크다/작다'를 쓰시오.",
+        score: 2,
+        subs: [
+          { label: "① 메탄올이 에탄올보다 분자량이 ( ① )", type: "short", answers: ["작다"] },
+          { label: "② 메탄올이 에탄올보다 증기비중이 ( ② )", type: "short", answers: ["작다"] },
+          { label: "③ 메탄올이 에탄올보다 끓는점이 ( ③ )", type: "short", answers: ["작다", "낮다"] },
+          { label: "④ 메탄올이 에탄올보다 발화점이 ( ④ )", type: "short", answers: ["크다", "높다"] },
+          { label: "⑤ 메탄올이 에탄올보다 연소 상한값이 ( ⑤ )", type: "short", answers: ["크다"] }
+        ],
+        explanation: "[해설]<br>메탄올(CH<sub>3</sub>OH)은 에탄올(C<sub>2</sub>H<sub>5</sub>OH)보다 탄소가 하나 적은 알코올이라 분자 크기에 따른 물성이 작다.<br><ul><li><b>분자량</b>은 메탄올 32, 에탄올 46이므로 메탄올이 작다.</li><li><b>증기비중</b>은 분자량을 29로 나눈 값이라 메탄올(약 1.1)이 에탄올(약 1.59)보다 작다.</li><li><b>끓는점</b>은 메탄올 약 65℃, 에탄올 약 78℃로 메탄올이 작다.</li><li><b>발화점</b>은 메탄올이 에탄올보다 높아 메탄올이 크다.</li><li><b>연소범위 상한</b>은 메탄올 약 36%, 에탄올 약 19%로 메탄올이 크다.</li></ul>외우는 요령: 분자량·증기비중·끓는점은 메탄올이 작고, <b>발화점·연소 상한</b>은 반대로 메탄올이 크다."
+      },
+      {
+        mainQuestion: "문제 47. [출제 25-2]<br>벤젠(C<sub>6</sub>H<sub>6</sub>) 16g을 1atm, 90℃에서 완전 증발시킬 때 부피[L]를 구하시오. (분자량 78)<br><br><i>V</i> = 16 / 78 × 0.082 × (273 + 90) = ( ① ) L",
+        score: 2,
+        subs: [
+          { label: "①", type: "calc", answers: ["6.11"] }
+        ],
+        explanation: "[해설]<br><b>이상기체 상태방정식</b> PV = nRT에서 몰수 n = 질량/분자량을 넣고 V에 대해 정리한다.<br>V = (w/M) × R × T / P<br>V = (16/78) × 0.082 × (273 + 90) / 1<br>V ≈ <b>6.11 L</b><br>혼동 주의: 온도는 반드시 <b>절대온도(273+℃)</b>로 바꿔야 한다. 기체상수 0.082는 atm·L 단위일 때의 값이다."
+      },
+      {
+        mainQuestion: "문제 48. [출제 25-2]<br>물과 반응하지 않으나 공기 중에서 반응하여 흰 연기를 발생시키는 제3류 물질에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 명칭(화학식): ( ① )", type: "formula", answers: ["황린(P4)", "P4", "황린"] },
+          { label: "② 옥내저장소 바닥면적: ( ② )m² 이하", type: "short", answers: ["1000", "1,000"] },
+          { label: "③ 수산화칼륨 등 강알칼리 용액과 반응 시 생성되는 맹독성 기체 화학식: ( ③ )", type: "formula", answers: ["PH3"] }
+        ],
+        explanation: "[해설]<br>물에는 녹지 않지만 공기 중에서 서서히 산화되며 흰 연기(오산화인)를 내는 제3류 위험물은 <b>황린(P<sub>4</sub>)</b>이다.<br>황린은 <b>위험등급 I</b>에 해당하는 물질이라 옥내저장소 저장창고 바닥면적은 <b>1,000m² 이하</b>로 제한된다.<br>황린이 강알칼리 수용액과 반응하면 맹독성·가연성 기체인 <b>PH<sub>3</sub>(포스핀)</b>이 발생하므로, 물속 저장 시에도 물이 알칼리성으로 기울지 않도록 관리해야 한다."
+      },
+      {
+        mainQuestion: "문제 49. [출제 25-2]<br>산화프로필렌(제4류)에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 증기비중: ( ① )", type: "calc", answers: ["2"] },
+          { label: "② 보냉장치 없는 이동탱크저장소 저장 온도: ( ② )", type: "short", answers: ["40℃ 이하", "40 이하", "40℃", "40"] },
+          { label: "③ 위험등급: ( ③ )", type: "short", answers: ["I등급", "1등급", "I", "1", "제I등급", "제1등급"] }
+        ],
+        explanation: "[해설]<br>산화프로필렌(CH<sub>3</sub>CHOCH<sub>2</sub>, 분자량 58)은 제4류 <b>특수인화물</b>이다. 운반·저장 기준에서는 아세트알데하이드와 함께 아세트알데하이드등으로 묶인다.<br><ul><li>증기비중 — 58 ÷ 29 = <b>2</b>이므로 증기가 공기보다 무겁다.</li><li>저장 온도 — 보냉장치가 없는 이동저장탱크에 아세트알데하이드등을 넣을 때는 <b>40℃ 이하</b>로 유지한다.</li><li>위험등급 — 특수인화물(지정수량 50L)은 제4류에서 가장 위험하므로 <b>I등급</b>이다.</li></ul>혼동 주의: 보냉장치가 있는 이동저장탱크라면 기준이 해당 물질의 비점 이하로 바뀐다."
+      },
+      {
+        mainQuestion: "문제 50. [출제 25-1]<br>다음 위험물의 증기비중을 구하시오. (증기비중 = 분자량/29)",
+        score: 2,
+        subs: [
+          { label: "① 이황화탄소 CS<sub>2</sub>: 76 / 29 = ( ① )", type: "calc", answers: ["2.62"] },
+          { label: "② 아세트알데하이드 CH<sub>3</sub>CHO: 44 / 29 = ( ② )", type: "calc", answers: ["1.52"] },
+          { label: "③ 벤젠 C<sub>6</sub>H<sub>6</sub>: 78 / 29 = ( ③ )", type: "calc", answers: ["2.69"] }
+        ],
+        explanation: "[해설]<br>증기비중은 <b>분자량을 공기의 평균분자량 29로 나눈 값</b>으로, 세 물질 모두 이 공식에 각 분자량을 대입하면 값이 나온다.<br>이황화탄소(분자량 76)는 76/29 ≈ 2.62, 아세트알데하이드(분자량 44)는 44/29 ≈ 1.52, 벤젠(분자량 78)은 78/29 ≈ 2.69이다.<br>모두 증기비중이 1보다 커 <b>공기보다 무거워</b> 낮은 곳에 체류하는 성질을 가지므로 환기 시 주의가 필요하다."
+      },
+      {
+        mainQuestion: "문제 51. [출제 25-1]<br>다음 위험물의 화학식을 쓰시오.",
+        score: 2,
+        subs: [
+          { label: "① 아조벤젠: ( ① )", type: "formula", answers: ["C6H5N=NC6H5", "C12H10N2"] },
+          { label: "② 질산메틸: ( ② )", type: "formula", answers: ["CH3ONO2"] },
+          { label: "③ 나이트로글리세린: ( ③ )", type: "formula", answers: ["C3H5(ONO2)3"] },
+          { label: "④ 트라이나이트로톨루엔: ( ④ )", type: "formula", answers: ["C6H2CH3(NO2)3", "C6H2(CH3)(NO2)3"] },
+          { label: "⑤ 트라이나이트로페놀: ( ⑤ )", type: "formula", answers: ["C6H2OH(NO2)3", "C6H2(OH)(NO2)3"] }
+        ],
+        explanation: "[해설]<br>다섯 물질은 모두 <b>제5류 위험물(자기반응성물질)</b>이다. 화학식은 모체 분자에 어떤 작용기가 붙었는지로 외운다.<br><ul><li>아조벤젠 — 페닐기 두 개가 <b>아조기(-N=N-)</b>로 이어진 C<sub>6</sub>H<sub>5</sub>N=NC<sub>6</sub>H<sub>5</sub>이다.</li><li>질산메틸 — 메탄올의 OH가 <b>질산에스터기(-ONO<sub>2</sub>)</b>로 바뀐 CH<sub>3</sub>ONO<sub>2</sub>이다.</li><li>나이트로글리세린 — 글리세린의 OH 3개가 모두 -ONO<sub>2</sub>로 바뀐 C<sub>3</sub>H<sub>5</sub>(ONO<sub>2</sub>)<sub>3</sub>이다.</li><li>트라이나이트로톨루엔 — 톨루엔 고리의 H 3개가 <b>나이트로기(-NO<sub>2</sub>)</b>로 바뀐 C<sub>6</sub>H<sub>2</sub>CH<sub>3</sub>(NO<sub>2</sub>)<sub>3</sub>이다.</li><li>트라이나이트로페놀 — 페놀 고리의 H 3개가 -NO<sub>2</sub>로 바뀐 C<sub>6</sub>H<sub>2</sub>OH(NO<sub>2</sub>)<sub>3</sub>이다.</li></ul>혼동 주의: 질산메틸·나이트로글리세린은 산소를 거쳐 붙은 -ONO<sub>2</sub>(질산에스터류)이다. TNT·피크르산은 탄소에 바로 붙은 -NO<sub>2</sub>(나이트로화합물)이다."
+      },
+      {
+        mainQuestion: "문제 52. [출제 24-3]<br>[보기]의 위험물을 인화점이 낮은 것부터 순서대로 나열하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기] ①C<sub>6</sub>H<sub>6</sub>, ②C<sub>6</sub>H<sub>5</sub>CH<sub>3</sub>, ③C<sub>6</sub>H<sub>5</sub>CH=CH<sub>2</sub>, ④C<sub>6</sub>H<sub>5</sub>C<sub>2</sub>H<sub>5</sub></span>",
+        score: 1,
+        subs: [
+          { label: "( ① ) → ( ② ) → ( ③ ) → ( ④ )<br>▶ 정답 나열 (예: 1-2-4-3)", type: "order", answers: ["1-2-4-3", "1243", "1,2,4,3"] }
+        ],
+        explanation: "[해설]<br>인화점은 벤젠(약 -11℃) < 톨루엔(약 4℃) < 에틸벤젠(약 15℃) < 스티렌(약 32℃) 순이므로, 치환기가 없는 <b>벤젠</b>이 가장 낮고 <b>스티렌</b>이 가장 높다.<br>벤젠고리에 곁사슬이 붙고 길어질수록 인화점이 올라가는 경향은 있으나, 스티렌은 에틸벤젠보다 분자량이 오히려 작은데도(104 < 106) 인화점은 더 높다.<br>따라서 분자량 순서로 외우면 에틸벤젠과 스티렌에서 순서가 뒤집히므로, <b>각 물질의 인화점 실측값</b>을 그대로 기억하는 것이 채점 포인트다."
+      },
+      {
+        mainQuestion: "문제 53. [출제 24-2]<br>다음 [보기] 중 지정수량이 서로 같은 품명 3가지를 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기] 적린, 과염소산, 황화인, 황, 브롬산염류, 철분, 알칼리토금속, 황린</span>",
+        score: 1,
+        subs: [
+          { label: "→ ( ① ), ( ② ), ( ③ )", type: "unordered_comma", answers: ["황화인, 황, 적린", "황화인, 적린, 황", "황, 황화인, 적린", "황, 적린, 황화인", "적린, 황, 황화인", "적린, 황화인, 황"] }
+        ],
+        explanation: "[해설]<br>보기 중 <b>황화인·황·적린</b>은 모두 제2류 위험물이며 지정수량이 <b>100kg</b>으로 서로 같다.<br>나머지는 지정수량이 제각각이다 — 철분 500kg, 과염소산(제6류)·브롬산염류(제1류) 300kg, <b>알칼리토금속(제3류) 50kg</b>, 황린(제3류) 20kg.<br>유별이 아니라 지정수량 숫자로 묶어야 하는 문제이므로, 품명별 지정수량을 유별과 짝지어 외워두어야 한다."
+      },
+      {
+        mainQuestion: "문제 54. [출제 24-2]<br>소화설비 능력단위 및 소요단위에 관하여 빈칸을 채우시오.",
+        score: 2,
+        subs: [
+          { label: "① 소화전용 물통: ( ① ) L → 능력단위 0.3", type: "short", answers: ["8", "8L"] },
+          { label: "② 수조(소화전용물통 3개 포함) 80L → 능력단위 ( ② )", type: "calc", answers: ["1.5"] },
+          { label: "③ 수조(소화전용물통 6개 포함) ( ③ ) L → 능력단위 2.5", type: "short", answers: ["190", "190L"] },
+          { label: "④ 연면적 200m², 내화구조 벽 제조소의 소요단위: ( ④ )", type: "short", answers: ["2 소요단위", "2소요단위", "2"] },
+          { label: "⑤ 과산화수소 6,000kg의 소요단위: ( ⑤ )", type: "short", answers: ["2 소요단위", "2소요단위", "2"] }
+        ],
+        explanation: "[해설]<br>능력단위 값은 <b>위험물안전관리법 시행규칙</b>의 소화설비 능력단위표에 정해진 고정값이다.<br><ul><li>소화전용 물통은 8L가 능력단위 0.3이다.</li><li>소화전용 물통 3개를 포함한 수조 80L는 능력단위 1.5이다.</li><li>소화전용 물통 6개를 포함한 수조 190L는 능력단위 2.5이다.</li></ul>소요단위는 외벽이 내화구조인 제조소는 연면적 <b>100m²</b>, 위험물은 <b>지정수량의 10배</b>가 1단위다.<br>제조소: 200 / 100 = 2 소요단위<br>과산화수소(지정수량 300kg): 6,000 / (300 × 10) = 2 소요단위"
+      },
+      {
+        mainQuestion: "문제 55. [출제 24-2]<br>다음 위험물 운반 시 운반용기 외부에 표시할 주의사항을 모두 쓰시오.",
+        score: 2,
+        subs: [
+          { label: "① 제1류 중 알칼리금속의 과산화물: ( ① )", type: "unordered_comma", answers: ["화기주의, 충격주의, 물기엄금, 가연물접촉주의", "화기주의,충격주의,물기엄금,가연물접촉주의", "화기충격주의, 물기엄금, 가연물접촉주의", "화기·충격주의, 물기엄금, 가연물접촉주의"] },
+          { label: "② 제3류 중 자연발화성 물질: ( ② )", type: "unordered_comma", answers: ["화기엄금, 공기접촉엄금", "화기엄금,공기접촉엄금"] },
+          { label: "③ 제5류 위험물: ( ③ )", type: "unordered_comma", answers: ["화기엄금, 충격주의", "화기엄금,충격주의"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 19</b>에 따라 운반용기 외부 주의사항은 유별과 세부 성질별로 정해져 있다.<br><ul><li>알칼리금속의 과산화물 — 산화성에 물과 반응하는 성질까지 있어 화기·충격주의, <b>물기엄금</b>, 가연물접촉주의를 모두 적는다.</li><li>제3류 자연발화성물질 — 공기에 닿기만 해도 발화하므로 화기엄금, <b>공기접촉엄금</b>을 적는다.</li><li>제5류 위험물 — 가열·충격으로 스스로 분해·폭발하므로 화기엄금, 충격주의를 적는다.</li></ul>혼동 주의: 알칼리금속의 과산화물이 아닌 제1류는 물기엄금이 빠진다. 제3류 금수성물질은 <b>물기엄금</b>만 적는다."
+      },
+      {
+        mainQuestion: "문제 56. [출제 24-2]<br>인화칼슘에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 유별: ( ① )", type: "short", answers: ["제3류 위험물", "제3류", "3류"] },
+          { label: "② 지정수량: ( ② )", type: "short", answers: ["300kg", "300"] },
+          { label: "③ 물과의 반응식: Ca<sub>3</sub>P<sub>2</sub> + ( ③ )H<sub>2</sub>O → 3Ca(OH)<sub>2</sub> + 2( ④ )<br>▶ ③", type: "short", answers: ["6"] },
+          { label: "▶ ④", type: "formula", answers: ["PH3"] },
+          { label: "④ 물과 반응 후 생성되는 가스의 명칭: ( ⑤ )", type: "short", answers: ["포스핀", "인화수소"] }
+        ],
+        explanation: "[해설]<br>인화칼슘(Ca<sub>3</sub>P<sub>2</sub>)은 금속의 인화물로 <b>제3류 위험물</b>이며, 지정수량은 <b>300kg</b>이다.<br>물과 반응하면 수산화칼슘과 포스핀이 생긴다.<br>Ca<sub>3</sub>P<sub>2</sub> + 6H<sub>2</sub>O → 3Ca(OH)<sub>2</sub> + 2PH<sub>3</sub><br>우변 수소가 Ca(OH)<sub>2</sub> 3분자에 6개, PH<sub>3</sub> 2분자에 6개로 모두 12개이므로 물은 6분자가 필요하다.<br><b>포스핀</b>은 불이 붙기 쉽고 독성이 매우 강한 기체라 인화칼슘은 물·산과 닿지 않게 저장한다."
+      },
+      {
+        mainQuestion: "문제 57. [출제 24-1]<br>제5류 위험물 과산화벤조일에 관하여 빈칸을 채우시오.",
+        score: 2,
+        subs: [
+          { label: "① 구조식: 두 개의 벤조일기가 ( ① ) 결합으로 연결된 구조", type: "short", answers: ["과산화(-O-O-)", "과산화", "과산화결합"] },
+          { label: "② 옥내저장소 저장 시 바닥면적: ( ② ) m² 이하", type: "short", answers: ["1000", "1,000"] },
+          { label: "③ 위험등급: ( ③ )", type: "short", answers: ["I등급", "1등급", "I", "1", "제I등급", "제1등급"] }
+        ],
+        explanation: "[해설]<br>과산화벤조일(BPO)은 제5류 <b>유기과산화물</b>이다. 분자 속 과산화결합이 쉽게 끊어지는 것이 위험성의 원인이다.<br><ul><li>구조 — 벤조일기(C<sub>6</sub>H<sub>5</sub>CO-) 두 개가 <b>과산화결합(-O-O-)</b>으로 이어진 (C<sub>6</sub>H<sub>5</sub>CO)<sub>2</sub>O<sub>2</sub>이다.</li><li>바닥면적 — 옥내저장소에 유기과산화물 같은 제5류 위험등급 I 물질을 저장할 때 창고 바닥면적은 <b>1,000m²</b> 이하이다.</li><li>위험등급 — 폭발 위험이 큰 유기과산화물이므로 <b>위험등급 I</b>이다.</li></ul>외우는 요령: 위험등급 I 물질을 두는 옥내저장창고는 1,000m², 그 밖의 위험물은 2,000m² 이하로 짝지어 기억한다."
+      },
+      {
+        mainQuestion: "문제 58. [출제 24-1]<br>[보기] 기어유, 동유, 야자유, 올리브유, 들기름, 실린더유<br>위 [보기]를 요오드값에 따라 구분하시오.",
+        score: 1,
+        subs: [
+          { label: "① 건성유: ( ① )", type: "unordered_comma", answers: ["동유, 들기름", "들기름, 동유"] },
+          { label: "② 불건성유: ( ② )", type: "unordered_comma", answers: ["야자유, 올리브유", "올리브유, 야자유"] }
+        ],
+        explanation: "[해설]<br>요오드값은 유지 100g에 흡수되는 요오드의 g수로, 값이 클수록 불포화도가 높아 <b>산화·자연발화 위험이 크다</b>.<br>보기 중 <b>동유·들기름</b>은 요오드값 130 이상으로 건성유에, <b>야자유·올리브유</b>는 100 미만으로 불건성유에 해당한다.<br>기어유와 실린더유는 동식물유류가 아닌 <b>광유(鑛油)</b>이므로 애초에 요오드값 분류 대상이 아니라는 점이 함정이다."
+      },
+      {
+        mainQuestion: "문제 59. [출제 24-1]<br>[보기]의 위험물을 인화점이 낮은 것부터 높은 순서대로 나열하시오. (인화점이 없는 위험물은 제외)<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>벤젠, 아세트알데히드, 아세트산, 과염소산, 니트로셀룰로오스</span>",
+        score: 1,
+        subs: [
+          { label: "( ① ) → ( ② ) → ( ③ ) → ( ④ )<br>▶ 정답 나열 (예: 가-나-다-라)", type: "short", answers: ["아세트알데히드-벤젠-니트로셀룰로오스-아세트산", "아세트알데히드 -> 벤젠 -> 니트로셀룰로오스 -> 아세트산", "아세트알데히드,벤젠,니트로셀룰로오스,아세트산", "아세트알데히드, 벤젠, 니트로셀룰로오스, 아세트산", "아세트알데하이드-벤젠-나이트로셀룰로오스-아세트산"] }
+        ],
+        explanation: "[해설]<br>인화점은 <b>제4류 품명 순서(특수인화물 < 제1석유류 < 제2석유류)</b>로 가늠한다. 제6류인 과염소산은 불연성이라 <b>인화점이 없어</b> 제외한다.<br><ul><li>아세트알데히드 — 특수인화물이며 약 -38℃로 가장 낮다.</li><li>벤젠 — 제1석유류이며 약 -11℃이다.</li><li>니트로셀룰로오스 — 제5류 자기반응성물질이며 약 13℃이다.</li><li>아세트산 — 제2석유류이며 약 40℃로 가장 높다.</li></ul>혼동 주의: 니트로셀룰로오스는 제4류가 아니지만 인화점이 있어 비교에 들어간다."
+      },
+      {
+        mainQuestion: "문제 60. [출제 23-4]<br>[보기] 동유, 아마인유, 피마자유, 야자유, 면실유, 올리브유<br>위 [보기]를 요오드값에 따라 구분하시오.",
+        score: 1,
+        subs: [
+          { label: "① 건성유: ( ① )", type: "unordered_comma", answers: ["동유, 아마인유", "아마인유, 동유"] },
+          { label: "② 반건성유: ( ② )", type: "short", answers: ["면실유"] },
+          { label: "③ 불건성유: ( ③ )", type: "unordered_comma", answers: ["피마자유, 야자유, 올리브유", "피마자유, 올리브유, 야자유", "야자유, 피마자유, 올리브유", "야자유, 올리브유, 피마자유", "올리브유, 피마자유, 야자유", "올리브유, 야자유, 피마자유"] }
+        ],
+        explanation: "[해설]<br>동식물유류는 <b>요오드값</b>으로 구분한다. <b>130 이상</b>은 건성유, <b>100~130</b>은 반건성유, <b>100 미만</b>은 불건성유다.<br><ul><li>건성유 — 동유와 아마인유는 요오드값이 130을 넘는다.</li><li>반건성유 — 면실유(목화씨 기름)는 요오드값이 100~130 사이이다.</li><li>불건성유 — 피마자유·야자유·올리브유는 요오드값이 100에 못 미친다.</li></ul>혼동 주의: 피마자유는 이름이 낯설어 건성유로 착각하기 쉽지만 불건성유다."
+      },
+      {
+        mainQuestion: "문제 61. [출제 23-4]<br>분자량 32이고 로켓 연료로 사용되는 물질에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 품명: ( ① )", type: "short", answers: ["제2석유류"] },
+          { label: "② 시성식: ( ② )", type: "formula", answers: ["N2H4"] },
+          { label: "③ 연소반응식: N<sub>2</sub>H<sub>4</sub> + ( ③ ) → N<sub>2</sub> + 2H<sub>2</sub>O", type: "formula", answers: ["O2"] }
+        ],
+        explanation: "[해설]<br>분자량 32(N 14×2 + H 1×4)이고 로켓 연료로 쓰이는 물질은 <b>하이드라진</b>이다. 제4류 위험물 중 수용성 <b>제2석유류</b>(지정수량 2,000L)에 속한다.<br>시성식은 N<sub>2</sub>H<sub>4</sub>이고, 연소하면 질소와 물만 생긴다.<br>N<sub>2</sub>H<sub>4</sub> + O<sub>2</sub> → N<sub>2</sub> + 2H<sub>2</sub>O<br>우변의 산소 원자는 물 2분자에 든 2개뿐이다. 그래서 좌변에는 <b>O<sub>2</sub> 1분자</b>만 있으면 된다."
+      },
+      {
+        mainQuestion: "문제 62. [출제 23-4]<br>제4류 위험물 아세톤에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 시성식: ( ① )", type: "formula", answers: ["CH3COCH3"] },
+          { label: "② 품명: ( ② )", type: "short", answers: ["제1석유류"] },
+          { label: "③ 지정수량: ( ③ )", type: "short", answers: ["400L", "400"] },
+          { label: "④ 증기비중: ( ④ )", type: "calc", answers: ["2"] }
+        ],
+        explanation: "[해설]<br><b>아세톤</b>은 인화점이 -18℃라 <b>제1석유류</b>에 속하며, 물에 잘 녹는 수용성이다.<br><ul><li>시성식 — 카보닐기(C=O) 양쪽에 메틸기가 하나씩 붙은 CH<sub>3</sub>COCH<sub>3</sub>이다.</li><li>지정수량 — 제1석유류 중 수용성이므로 <b>400L</b>이다(비수용성은 200L).</li><li>증기비중 — 분자량 58을 공기의 평균분자량 29로 나눈 값이다.</li></ul>증기비중 = 분자량 ÷ 29<br>= 58 ÷ 29 = <b>2</b>"
+      },
+      {
+        mainQuestion: "문제 63. [출제 23-2/22-1/20-3/20-2/19-1]<br>다음 설명에 해당하는 위험물에 답하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>물·알코올·에테르에 잘 녹는다 / 은거울반응 / 산화하여 아세트산이 되기 쉽다</span>",
+        score: 2,
+        subs: [
+          { label: "① 명칭: ( ① )", type: "short", answers: ["아세트알데히드", "아세트알데하이드"] },
+          { label: "② 화학식: ( ② )", type: "formula", answers: ["CH3CHO"] },
+          { label: "③ 지정수량: ( ③ )", type: "short", answers: ["50L", "50"] },
+          { label: "④ 위험등급: ( ④ )", type: "short", answers: ["1등급", "I등급", "1", "I", "제1등급", "제I등급"] }
+        ],
+        explanation: "[해설]<br>은거울반응(환원성)을 보이고 산화되면 아세트산이 되는 물질은 알데히드기(-CHO)를 가진 <b>아세트알데히드(CH<sub>3</sub>CHO)</b>다.<br>비점(약 21℃)과 인화점(약 -38℃)이 매우 낮은 <b>특수인화물</b>이다. 그래서 지정수량은 <b>50L</b>이고 위험등급은 I이다.<br>혼동 주의: 같은 특수인화물인 디에틸에테르·이황화탄소도 지정수량 50L, 위험등급 I이다."
+      },
+      {
+        mainQuestion: "문제 64. [출제 23-1]<br>동식물유류에 대하여 답하시오.",
+        score: 2,
+        subs: [
+          { label: "① 요오드가의 정의: 유지 100g에 흡수되는 ( ① )의 g수", type: "short", answers: ["요오드", "아이오딘"] },
+          { label: "② 요오드값에 따른 분류와 범위:<br>· 건성유 ( ② ) 이상", type: "short", answers: ["130"] },
+          { label: "· 반건성유 ( ③ )", type: "short", answers: ["100~130", "100 ~ 130", "100-130"] },
+          { label: "· 불건성유 ( ④ ) 미만", type: "short", answers: ["100"] }
+        ],
+        explanation: "[해설]<br><b>요오드값</b>은 유지 100g에 흡수되는 요오드의 g수다. 이중결합이 많을수록, 즉 불포화도가 높을수록 값이 커진다.<br><ul><li>건성유 — <b>130 이상</b>이며, 공기 중에서 잘 굳고 산화열이 쌓여 자연발화 위험이 가장 크다.</li><li>반건성유 — <b>100~130</b> 사이다.</li><li>불건성유 — <b>100 미만</b>이며, 공기 중에서 잘 굳지 않는다.</li></ul>외우는 요령: 경계값 100과 130 두 개만 기억하면 세 구간이 정해진다."
+      },
+      {
+        mainQuestion: "문제 65. [출제 23-1]<br>적린이 연소할 때 생성되는 기체에 관하여 빈칸을 채우시오.",
+        score: 2,
+        subs: [
+          { label: "① 화학식: ( ① )", type: "formula", answers: ["P2O5"] },
+          { label: "② 명칭: ( ② )", type: "short", answers: ["오산화인", "오산화 인"] },
+          { label: "③ 색상: ( ③ )", type: "short", answers: ["백색", "흰색", "백색(흰색)"] }
+        ],
+        explanation: "[해설]<br>적린(P, 제2류)은 황린과 동소체라서 연소하면 황린과 똑같이 <b>오산화인(P<sub>2</sub>O<sub>5</sub>)</b>이 생긴다.<br>4P + 5O<sub>2</sub> → 2P<sub>2</sub>O<sub>5</sub><br>오산화인은 <b>백색</b>이라 연소할 때 흰 연기로 보인다. 흡습성이 강해서 물을 만나면 인산이 된다."
+      }
+    ];
+
+    // 특정 문제 해설 열기/닫기 토글 함수
+    function toggleExplanation(qIndex) {
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (!expEl) return;
+      
+      if (expEl.style.display === 'none' || expEl.style.display === '') {
+        expEl.style.display = 'block';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 닫기';
+      } else {
+        expEl.style.display = 'none';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 열기';
+      }
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      let html = '';
+
+      quizData.forEach((q, qIndex) => {
+        gradingState[qIndex] = { subs: [], earnedScore: 0, isGraded: false };
+        
+        html += `<div class="question-card clearfix" id="qCard-${qIndex}">`;
+        html += `<div class="main-q-title">${q.mainQuestion} <span class="q-score-badge">배점: ${q.score}점</span></div>`;
+        
+        q.subs.forEach((sub, sIndex) => {
+          gradingState[qIndex].subs[sIndex] = { status: 0 }; 
+          
+          html += `<div class="sub-q-container">`;
+          html += `<div class="sub-q-label">${sub.label}</div>`;
+          
+          if (sub.image) {
+            html += `<div style="margin-bottom: 15px; text-align: center;">
+                       <img src="${sub.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px;" alt="문제 이미지">
+                     </div>`;
+          }
+
+          if (sub.type === 'calc') {
+            html += `<span class="calc-label">▶ 계산 과정 (채점 제외)</span>`;
+            html += `<textarea id="calc-${qIndex}-${sIndex}" class="textarea-formula" placeholder="필요시 계산식을 자유롭게 적어보세요."></textarea>`;
+            html += `<span class="calc-label">▶ 최종 정답 (채점 대상)</span>`;
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-calc" autocomplete="off" placeholder="최종 정답 입력">`;
+          } else if (sub.type === 'descriptive') {
+            html += `<textarea id="ans-${qIndex}-${sIndex}" class="textarea-formula" placeholder="※ 연습장에 직접 풀거나 구조식을 그린 후, [✔️ 정답 확인 및 채점] 버튼을 눌러 스스로 비교해 보세요."></textarea>`;
+          } else {
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-standard" autocomplete="off" placeholder="${sub.type === 'unordered_comma' ? '쉼표(,)로 구분하여 입력' : '정답 입력'}">`;
+          }
+          
+          html += `<div id="fb-${qIndex}-${sIndex}" class="feedback-box"></div>`;
+          html += `</div>`;
+        });
+        
+        // 새로 추가된 액션 버튼 (해설 열기 / 채점하기 분리)
+        html += `<div style="text-align: right; margin-top: 15px; margin-bottom: 10px; clear: both;">`;
+        // 처음에는 display: none 처리하여 시험 모드에서 숨김
+        html += `  <button id="btn-toggle-exp-${qIndex}" class="btn-grade-single" style="float: none; background-color: #8d6e63; margin-right: 8px; display: none;" onclick="toggleExplanation(${qIndex})">📖 해설 열기</button>`;
+        html += `  <button id="btn-grade-single-${qIndex}" class="btn-grade-single" style="float: none;" onclick="gradeSingleQuestion(${qIndex})">✔️ 정답 확인 및 채점</button>`;
+        html += `</div>`;
+        
+        if(q.explanation) {
+            html += `<div style="clear:both;"></div>`;
+            // 해설창은 초기에 숨김(display:none) 처리
+            html += `<div id="exp-${qIndex}" class="feedback-box" style="background-color:#f8f9fa; border:1px solid #dee2e6; color:#495057; font-weight:normal; margin-top:10px; display:none;">💡 <strong>문제 핵심 해설:</strong><br>${q.explanation}</div>`;
+        }
+        html += `</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    // 모드 변경 함수
+    function setMode(mode) {
+      const labelBasic = document.getElementById('label-basic');
+      const labelStudy = document.getElementById('label-study');
+      
+      if (mode === 'study') {
+        if(labelStudy.classList.contains('active')) return; 
+        
+        labelBasic.classList.remove('active');
+        labelStudy.classList.add('active');
+        
+        // 해설 모드: 힌트는 없애고, 해설창을 모두 펼쳐줌
+        quizData.forEach((q, qIndex) => {
+          const expEl = document.getElementById(`exp-${qIndex}`);
+          const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+          if (expEl) {
+            expEl.style.display = 'block';
+            if(toggleBtn) {
+              toggleBtn.style.display = 'inline-block'; // 해설 모드일 때 버튼 보이기
+              toggleBtn.innerHTML = '📖 해설 닫기';
+            }
+          }
+        });
+        
+      } else if (mode === 'basic') {
+        if(confirm("기본 모드로 전환하면 현재 입력된 내용이 초기화됩니다. 전환하시겠습니까?")) {
+          location.reload();
+        }
+      }
+    }
+
+    function isEquationCorrect(userInput, ansList) {
+      let u = userInput.replace(/\s+/g, '').replace(/=/g, '->');
+      let uParts = u.split('->');
+      if(uParts.length !== 2) return false;
+      let uLeft = uParts[0].split('+').sort().join('+');
+      let uRight = uParts[1].split('+').sort().join('+');
+      
+      for(let i=0; i<ansList.length; i++) {
+        let a = ansList[i].replace(/\s+/g, '').replace(/=/g, '->');
+        let aParts = a.split('->');
+        if(aParts.length !== 2) continue;
+        let aLeft = aParts[0].split('+').sort().join('+');
+        let aRight = aParts[1].split('+').sort().join('+');
+        if (uLeft === aLeft && uRight === aRight) return true;
+      }
+      return false;
+    }
+
+    function evaluateSub(qIndex, sIndex) {
+      const sub = quizData[qIndex].subs[sIndex];
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      if (inputEl.disabled) return; 
+
+      let userVal = inputEl.value;
+      let isCorrect = false;
+
+      if (userVal.trim() === "") {
+         isCorrect = false;
+      } else if (sub.type === 'short' || sub.type === 'calc') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '').toLowerCase() === uClean);
+      } else if (sub.type === 'formula') {
+        let uClean = userVal.replace(/\s+/g, '');
+        // formula 타입일 경우 대소문자 구분 (toLowerCase 사용 안함)
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '') === uClean);
+      } else if (sub.type === 'order') {
+        let uClean = userVal.replace(/[^0-9]/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/[^0-9]/g, '') === uClean);
+      } else if (sub.type === 'unordered_comma') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => {
+            let aClean = a.replace(/\s+/g, '').toLowerCase();
+            let uArr = uClean.split(',').filter(Boolean).sort();
+            let aArr = aClean.split(',').filter(Boolean).sort();
+            return uArr.length === aArr.length && uArr.every((val, index) => val === aArr[index]);
+        });
+      } else if (sub.type === 'equation') {
+        isCorrect = isEquationCorrect(userVal, sub.answers);
+      } else if (sub.type === 'descriptive') {
+        if (sub.keywords) {
+          let hasAllKeys = sub.keywords.every(kw => userVal.includes(kw));
+          isCorrect = hasAllKeys;
+        } else {
+          isCorrect = false; 
+        }
+      }
+
+      gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+      
+      inputEl.disabled = true;
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (calcEl) calcEl.disabled = true;
+
+      updateFeedbackUI(qIndex, sIndex);
+    }
+
+    function updateFeedbackUI(qIndex, sIndex) {
+      const q = quizData[qIndex];
+      const sub = q.subs[sIndex];
+      const state = gradingState[qIndex].subs[sIndex];
+      const fbDiv = document.getElementById(`fb-${qIndex}-${sIndex}`);
+      
+      let html = "";
+      if (state.status === 1) {
+        fbDiv.className = "feedback-box is-correct";
+        html += `✅ 정답입니다!`;
+      } else if (state.status === 0.5) {
+        fbDiv.className = "feedback-box is-partial";
+        html += `⚠ 부분 점수 (0.5개 인정)`;
+      } else {
+        fbDiv.className = "feedback-box is-incorrect";
+        
+        if (q.isUnordered || sub.type === 'unordered_comma') {
+          let allAnswers = q.subs.map(s => s.answers[0]).join(", ");
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        } else {
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        }
+      }
+
+      // 정답용 이미지
+      if (sub.answerImage) {
+        html += `<div style="margin-top: 15px; text-align: center;">
+                   <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px;" alt="정답 해설 이미지">
+                   <div style="font-size:0.85em; color:#1976d2; margin-top:5px;">[정답 참고 이미지]</div>
+                 </div>`;
+      }
+
+      if (sub.type === 'descriptive') {
+        html += `<div class="override-btns">
+                  <span style="font-size:0.85em; color:#666; font-weight:normal; margin-right:8px;">▶ 서술/그림 자율 채점:</span><br><br>
+                  <button class="btn-override btn-correct" onclick="overrideScore(${qIndex}, ${sIndex}, 1)">정답 인정</button>
+                  <button class="btn-override btn-partial" onclick="overrideScore(${qIndex}, ${sIndex}, 0.5)">부분 점수</button>
+                  <button class="btn-override btn-incorrect" onclick="overrideScore(${qIndex}, ${sIndex}, 0)">오답 처리</button>
+                 </div>`;
+      }
+
+      fbDiv.innerHTML = html;
+      fbDiv.style.display = "block";
+    }
+
+    function updateCardScore(qIndex) {
+      const q = quizData[qIndex];
+      let correctSubs = 0;
+      q.subs.forEach((sub, sIndex) => {
+        correctSubs += gradingState[qIndex].subs[sIndex].status;
+      });
+      gradingState[qIndex].earnedScore = (correctSubs / q.subs.length) * q.score;
+      
+      const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
+      if(cardTitle) {
+        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+        cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
+        if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
+        else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
+        else cardTitle.style.backgroundColor = "#ffebee";
+      }
+    }
+
+    function gradeSingleQuestion(qIndex) {
+      const q = quizData[qIndex];
+
+      if (q.isUnordered) {
+        // 순서 무관 문제 처리 시 'formula' 타입 여부에 따라 대소문자 변환 결정
+        let answerPool = q.subs.map(sub => {
+           return sub.answers.map(a => sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase());
+        });
+
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          if (!inputEl || inputEl.disabled) return;
+
+          let userVal = inputEl.value;
+          let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
+          let isCorrect = false;
+
+          if (uClean !== "") {
+            for (let i = 0; i < answerPool.length; i++) {
+              if (answerPool[i].includes(uClean)) {
+                isCorrect = true;
+                answerPool.splice(i, 1);
+                break;
+              }
+            }
+          }
+
+          gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+          inputEl.disabled = true;
+          updateFeedbackUI(qIndex, sIndex);
+        });
+      } else {
+        q.subs.forEach((sub, sIndex) => {
+          evaluateSub(qIndex, sIndex);
+        });
+      }
+
+      updateCardScore(qIndex);
+      gradingState[qIndex].isGraded = true;
+
+      // 채점 시 자동으로 해설 오픈 및 버튼 텍스트 변경
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (expEl) {
+          expEl.style.display = 'block';
+          if(toggleBtn) {
+            toggleBtn.style.display = 'inline-block';
+            toggleBtn.innerHTML = '📖 해설 닫기';
+          }
+      }
+      
+      // 채점 완료 후 채점 버튼 숨기기
+      const btnEl = document.getElementById(`btn-grade-single-${qIndex}`);
+      if (btnEl) btnEl.style.display = 'none';
+      
+      if (isTestSubmitted) calculateFinalTotal();
+    }
+
+    function gradeAll() {
+      isTestSubmitted = true;
+      quizData.forEach((q, qIndex) => {
+        if (!gradingState[qIndex].isGraded) {
+          gradeSingleQuestion(qIndex);
+        }
+      });
+      document.getElementById('submit-btn').style.display = 'none';
+      calculateFinalTotal();
+    }
+
+    function overrideScore(qIndex, sIndex, newStatus) {
+      gradingState[qIndex].subs[sIndex].status = newStatus;
+      updateFeedbackUI(qIndex, sIndex);
+      updateCardScore(qIndex);
+      if (isTestSubmitted) calculateFinalTotal(); 
+    }
+
+    function calculateFinalTotal() {
+      let totalEarned = 0;
+      let totalMax = 0;
+
+      quizData.forEach((q, qIndex) => {
+        totalMax += q.score;
+        totalEarned += gradingState[qIndex].earnedScore;
+      });
+
+      const resDiv = document.getElementById('final-result');
+      resDiv.style.display = "block";
+      
+      totalEarned = Math.round(totalEarned * 10) / 10;
+      let percent = Math.round((totalEarned / totalMax) * 100);
+      let passMsg = percent >= 60 
+        ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
+        : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
+
+      resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
+    }
+
+    renderQuiz();
+    // ================== 우측 문항 내비게이션 모듈 시작 ==================
+function initNavPanel() {
+  // 1. HTML 패널 동적 생성
+  const navHtml = `
+    <div id="q-nav-panel">
+      <div class="q-nav-header">📌 문항 이동</div>
+      <div class="q-nav-grid" id="q-nav-grid"></div>
+      <div class="q-nav-legend">
+        <div><span class="box" style="background:#fff; border:1px solid #dee2e6;"></span>미작성</div>
+        <div><span class="box" style="background:#e3f2fd; border:1px solid #90caf9;"></span>답안 입력됨</div>
+        <div><span class="box" style="background:#e8f5e9; border:1px solid #81c784;"></span>정답 / 채점완료</div>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', navHtml);
+
+  // 2. 문항 개수에 맞춰 버튼 생성
+  const navGrid = document.getElementById('q-nav-grid');
+  let gridHtml = '';
+  quizData.forEach((q, qIndex) => {
+    gridHtml += `<button class="q-nav-btn" id="nav-btn-${qIndex}" onclick="scrollToQuestion(${qIndex})">${qIndex + 1}</button>`;
+  });
+  navGrid.innerHTML = gridHtml;
+
+  // 3. 사용자가 답을 입력할 때마다 실시간 색상 업데이트 (이벤트 위임)
+  document.getElementById('quiz-container').addEventListener('input', updateNavStatus);
+
+  // 4. 기존 채점 기능에 내비게이션 업데이트 연동 (기존 코드 안전 후킹)
+  if (typeof gradeSingleQuestion === 'function') {
+    const originalGradeSingle = gradeSingleQuestion;
+    gradeSingleQuestion = function(qIndex) {
+      originalGradeSingle(qIndex);
+      updateNavStatus();
+    };
+  }
+
+  if (typeof overrideScore === 'function') {
+    const originalOverrideScore = overrideScore;
+    overrideScore = function(qIndex, sIndex, newStatus) {
+      originalOverrideScore(qIndex, sIndex, newStatus);
+      updateNavStatus();
+    };
+  }
+
+  if (typeof gradeAll === 'function') {
+    const originalGradeAll = gradeAll;
+    gradeAll = function() {
+      originalGradeAll();
+      updateNavStatus();
+    };
+  }
+
+  // 초기 상태 렌더링
+  updateNavStatus();
+}
+
+// 클릭 시 해당 문제로 부드럽게 스크롤
+function scrollToQuestion(qIndex) {
+  const target = document.getElementById(`qCard-${qIndex}`);
+  if(target) {
+    const topPos = target.getBoundingClientRect().top + window.pageYOffset - 20;
+    window.scrollTo({ top: topPos, behavior: 'smooth' });
+  }
+}
+
+// 답안 입력 및 채점 상태에 따라 버튼 색상 변경
+function updateNavStatus() {
+  quizData.forEach((q, qIndex) => {
+    const navBtn = document.getElementById(`nav-btn-${qIndex}`);
+    if(!navBtn) return;
+
+    // 1) 채점이 완료된 경우 (정답/부분점수/오답 색상)
+    if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
+      let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+      navBtn.className = 'q-nav-btn'; // 클래스 초기화
+      if (qEarnedScore === q.score) navBtn.classList.add('correct');
+      else if (qEarnedScore > 0) navBtn.classList.add('partial');
+      else navBtn.classList.add('incorrect');
+      return;
+    }
+
+    // 2) 채점 전인 경우 입력창(input, textarea)에 텍스트가 있는지 확인
+    let hasAnswer = false;
+    q.subs.forEach((sub, sIndex) => {
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
+      if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
+    });
+
+    if (hasAnswer) {
+      navBtn.classList.add('answered'); // 파란색(입력됨)
+    } else {
+      navBtn.classList.remove('answered'); // 흰색(미작성)
+    }
+  });
+}
+
+// 모든 요소가 로드된 후 내비게이션 패널 실행
+setTimeout(initNavPanel, 100);
+// ================== 우측 문항 내비게이션 모듈 끝 ==================
+  </script>
+
+  <!-- ================== 플로팅 연습장 모듈 시작 ================== -->
+<style>
+  /* 연습장 열기/닫기 버튼 */
+  #sp-toggle-btn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+    background-color: #ff9800; color: white; border: none; border-radius: 50px;
+    padding: 15px 20px; font-size: 16px; font-weight: bold; cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background-color 0.2s;
+  }
+  #sp-toggle-btn:hover { background-color: #f57c00; }
+  
+  /* 연습장 패널 (크기 80% 확대) */
+  #sp-panel {
+    position: fixed; bottom: 80px; right: 20px; z-index: 9998;
+    width: 95vw; max-width: 720px; height: 630px; /* 기존 400x350에서 80% 확대 */
+    background-color: #fff; border: 2px solid #ccc; border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    display: none; flex-direction: column; overflow: hidden;
+  }
+  
+  /* 연습장 상단 툴바 */
+  #sp-header {
+    background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .sp-title { font-weight: bold; color: #333; font-size: 14px; }
+  .sp-tools button {
+    background-color: #fff; border: 1px solid #ccc; border-radius: 4px;
+    padding: 6px 10px; cursor: pointer; font-size: 13px; margin-left: 4px;
+  }
+  .sp-tools button.active { 
+    background-color: #e3f2fd; border-color: #1976d2; font-weight: bold; color: #1976d2; 
+  }
+  
+  /* 캔버스 (그림 그리는 곳) */
+  #sp-canvas { 
+    flex-grow: 1; cursor: crosshair; background-color: #fff; touch-action: none; 
+  }
+</style>
+
+<!-- 연습장 UI -->
+<button id="sp-toggle-btn" onclick="toggleScratchpad()">📝 연습장</button>
+<div id="sp-panel">
+  <div id="sp-header">
+    <span class="sp-title">연습장 (구조식/계산식)</span>
+    <div class="sp-tools">
+      <button id="sp-pen" class="active" onclick="setSpTool('pen')">✏️ 펜</button>
+      <button id="sp-eraser" onclick="setSpTool('eraser')">🧽 지우개</button>
+      <button onclick="clearSpCanvas()">🗑️ 비우기</button>
+    </div>
+  </div>
+  <canvas id="sp-canvas"></canvas>
+</div>
+
+<!-- 연습장 스크립트 -->
+<script>
+  let spCanvas, spCtx;
+  let spIsDrawing = false;
+  let spCurrentTool = 'pen';
+
+  function toggleScratchpad() {
+    const panel = document.getElementById('sp-panel');
+    const btn = document.getElementById('sp-toggle-btn');
+    if (panel.style.display === 'flex') {
+      panel.style.display = 'none';
+      btn.innerText = "📝 연습장";
+      btn.style.backgroundColor = "#ff9800";
+    } else {
+      panel.style.display = 'flex';
+      btn.innerText = "❌ 닫기";
+      btn.style.backgroundColor = "#757575";
+      if (!spCanvas) initScratchpad();
+    }
+  }
+
+  function initScratchpad() {
+    spCanvas = document.getElementById('sp-canvas');
+    spCtx = spCanvas.getContext('2d');
+    
+    // 캔버스 크기 맞추기 (디스플레이 해상도 고려)
+    function resizeCanvas() {
+      const rect = spCanvas.parentElement.getBoundingClientRect();
+      const headerHeight = document.getElementById('sp-header').offsetHeight;
+      spCanvas.width = rect.width;
+      spCanvas.height = rect.height - headerHeight;
+    }
+    resizeCanvas();
+    
+    // 마우스 이벤트 (PC용)
+    spCanvas.addEventListener('mousedown', startSpDraw);
+    spCanvas.addEventListener('mousemove', drawSp);
+    spCanvas.addEventListener('mouseup', stopSpDraw);
+    spCanvas.addEventListener('mouseout', stopSpDraw);
+    
+    // 터치 이벤트 (스마트폰, 태블릿용 - 스크롤 방지 포함)
+    spCanvas.addEventListener('touchstart', startSpDraw, { passive: false });
+    spCanvas.addEventListener('touchmove', drawSp, { passive: false });
+    spCanvas.addEventListener('touchend', stopSpDraw);
+  }
+
+  function getSpCoordinates(e) {
+    const rect = spCanvas.getBoundingClientRect();
+    if (e.touches && e.touches.length > 0) {
+      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+    }
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+
+  function startSpDraw(e) {
+    e.preventDefault(); // 화면 스크롤 방지
+    spIsDrawing = true;
+    const pos = getSpCoordinates(e);
+    spCtx.beginPath();
+    spCtx.moveTo(pos.x, pos.y);
+  }
+
+  function drawSp(e) {
+    if (!spIsDrawing) return;
+    e.preventDefault(); // 터치 드래그 시 화면 스크롤 방지
+    const pos = getSpCoordinates(e);
+    
+    spCtx.lineTo(pos.x, pos.y);
+    if (spCurrentTool === 'eraser') {
+      spCtx.strokeStyle = '#fff'; // 지우개는 흰색으로 덮어씌움
+      spCtx.lineWidth = 20;       // 지우개는 두껍게
+    } else {
+      spCtx.strokeStyle = '#333'; // 펜은 진한 회색
+      spCtx.lineWidth = 2;        // 펜은 얇게
+    }
+    spCtx.lineCap = 'round';
+    spCtx.lineJoin = 'round';
+    spCtx.stroke();
+  }
+
+  function stopSpDraw() {
+    spIsDrawing = false;
+    spCtx.closePath();
+  }
+
+  function setSpTool(tool) {
+    spCurrentTool = tool;
+    document.getElementById('sp-pen').classList.remove('active');
+    document.getElementById('sp-eraser').classList.remove('active');
+    document.getElementById('sp-' + tool).classList.add('active');
+  }
+
+  function clearSpCanvas() {
+    spCtx.clearRect(0, 0, spCanvas.width, spCanvas.height);
+  }
+</script>
+<!-- ================== 플로팅 연습장 모듈 끝 ================== -->
+</body>
+</html>
