@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>위험물산업기사 실기(필답형) 2024년 2회 기출복원</title>
+  <style>
+    body { font-family: 'Malgun Gothic', sans-serif; margin: 30px; max-width: 900px; background-color: #f4f6f9; color: #333; }
+    h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+    .instruction { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 0.95em; }
+    
+    .mode-selection { text-align: center; margin-bottom: 30px; }
+    .mode-selection label {
+      display: inline-block; margin: 0 10px; padding: 10px 20px;
+      font-size: 1.05em; font-weight: bold; border-radius: 8px; cursor: pointer;
+      border: 2px solid #ced4da; transition: all 0.2s; background-color: #fff; color: #666;
+    }
+    .mode-selection label.active { border-color: #1976d2; background-color: #e3f2fd; color: #1976d2; }
+
+    .question-card { background-color: #fff; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .main-q-title { font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #1976d2; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; line-height: 1.4; }
+    
+    .sub-q-container { margin-top: 15px; padding-left: 10px; }
+    .sub-q-label { font-weight: bold; margin-bottom: 8px; font-size: 1.05em; line-height: 1.4; }
+    
+    .input-standard, .input-calc { 
+      width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; transition: border-color 0.2s;
+    }
+    .input-standard:focus, .input-calc:focus, .textarea-formula:focus { outline: none; border-color: #1976d2; box-shadow: 0 0 0 3px rgba(25,118,210,0.15); }
+    
+    .textarea-formula {
+      width: 100%; padding: 12px; font-size: 15px; border: 1px dashed #adb5bd; border-radius: 6px; box-sizing: border-box; margin-bottom: 5px; resize: vertical; min-height: 80px; background-color: #f8f9fa; line-height: 1.4;
+    }
+    .calc-label { font-size: 0.85em; color: #6c757d; font-weight: bold; margin-bottom: 3px; display: block; }
+    
+    .feedback-box { margin-top: 5px; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 0.95em; display: none; line-height: 1.5; }
+    .is-correct { background-color: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; }
+    .is-incorrect { background-color: #ffebee; border: 1px solid #ffcdd2; color: #c62828; }
+    .is-partial { background-color: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; }
+    
+    .override-btns { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc; }
+    .btn-override { padding: 6px 12px; font-size: 0.85em; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px; color: #fff; transition: opacity 0.2s; }
+    .btn-override:hover { opacity: 0.8; }
+    .btn-correct { background-color: #4caf50; }
+    .btn-partial { background-color: #ff9800; }
+    .btn-incorrect { background-color: #f44336; }
+    
+    .btn-grade-single { margin-top: 15px; padding: 10px 20px; font-size: 0.95em; background-color: #607d8b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; float: right; transition: background-color 0.2s; }
+    .btn-grade-single:hover { background-color: #455a64; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+
+    .submit-section { text-align: center; margin-top: 40px; margin-bottom: 50px; }
+    .btn-submit { padding: 15px 40px; font-size: 1.2em; background-color: #1976d2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(25,118,210,0.3); }
+    .btn-submit:hover { background-color: #1565c0; }
+    .btn-submit:disabled { background-color: #9e9e9e; cursor: not-allowed; box-shadow: none; }
+    
+    #final-result { margin-top: 25px; font-size: 1.4em; font-weight: bold; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; display: none; line-height: 1.5; }
+    .q-score-badge { float: right; font-size: 0.8em; background-color: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 20px; margin-left: 10px; }
+
+    /* ================== 우측 문항 내비게이션 패널 스타일 ================== */
+    #q-nav-panel {
+      position: fixed; top: 50px; right: 20px; width: 170px; background-color: #fff;
+      border: 2px solid #ced4da; border-radius: 10px; box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      z-index: 999; display: flex; flex-direction: column; max-height: calc(100vh - 120px);
+    }
+    .q-nav-header {
+      background-color: #f8f9fa; padding: 12px; text-align: center; font-weight: bold;
+      font-size: 0.95em; border-bottom: 1px solid #ced4da; border-top-left-radius: 8px;
+      border-top-right-radius: 8px; color: #1976d2;
+    }
+    .q-nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 12px; overflow-y: auto; }
+    .q-nav-btn {
+      padding: 8px 0; font-size: 0.9em; font-weight: bold; border: 1px solid #dee2e6;
+      border-radius: 6px; background-color: #fff; color: #6c757d; cursor: pointer; transition: all 0.2s;
+    }
+    .q-nav-btn:hover { background-color: #e9ecef; color: #495057; }
+    .q-nav-btn.answered { background-color: #e3f2fd; border-color: #90caf9; color: #1976d2; }
+    .q-nav-btn.correct { background-color: #e8f5e9; border-color: #81c784; color: #2e7d32; }
+    .q-nav-btn.partial { background-color: #fff3e0; border-color: #ffb74d; color: #e65100; }
+    .q-nav-btn.incorrect { background-color: #ffebee; border-color: #e57373; color: #c62828; }
+    .q-nav-legend {
+      font-size: 0.75em; padding: 10px; border-top: 1px solid #ced4da; background-color: #f8f9fa;
+      border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; color: #666; line-height: 1.6;
+    }
+    .q-nav-legend .box { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+    @media (max-width: 1150px) { #q-nav-panel { display: none; } }
+
+    /* 연습장 관련 스타일 */
+    #sp-toggle-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+      background-color: #ff9800; color: white; border: none; border-radius: 50px;
+      padding: 15px 20px; font-size: 16px; font-weight: bold; cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background-color 0.2s;
+    }
+    #sp-toggle-btn:hover { background-color: #f57c00; }
+    #sp-panel {
+      position: fixed; bottom: 80px; right: 20px; z-index: 9998;
+      width: 95vw; max-width: 720px; height: 630px;
+      background-color: #fff; border: 2px solid #ccc; border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden;
+    }
+    #sp-header {
+      background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .sp-title { font-weight: bold; color: #333; font-size: 14px; }
+    .sp-tools button {
+      background-color: #fff; border: 1px solid #ccc; border-radius: 4px;
+      padding: 6px 10px; cursor: pointer; font-size: 13px; margin-left: 4px;
+    }
+    .sp-tools button.active { background-color: #e3f2fd; border-color: #1976d2; font-weight: bold; color: #1976d2; }
+    #sp-canvas { flex-grow: 1; cursor: crosshair; background-color: #fff; touch-action: none; }
+  </style>
+</head>
+<body>
+
+  <h1>📝 위험물 실기(필답형) 2024년 2회 기출</h1>
+  <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.</p>
+  
+  <div class="mode-selection" id="mode-selection">
+    <label class="active" id="label-basic" onclick="setMode('basic')">📝 시험 모드 (실전 테스트)</label>
+    <label id="label-study" onclick="setMode('study')">📖 해설 모드 (해설 펼쳐보기)</label>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <div class="submit-section">
+    <button id="submit-btn" class="btn-submit" onclick="gradeAll()">전체 제출 및 채점하기</button>
+    <div id="final-result"></div>
+  </div>
+
+  <button id="sp-toggle-btn" onclick="toggleScratchpad()">📝 연습장</button>
+  <div id="sp-panel">
+    <div id="sp-header">
+      <span class="sp-title">연습장 (구조식/계산식)</span>
+      <div class="sp-tools">
+        <button id="sp-pen" class="active" onclick="setSpTool('pen')">✏️ 펜</button>
+        <button id="sp-eraser" onclick="setSpTool('eraser')">🧽 지우개</button>
+        <button onclick="clearSpCanvas()">🗑️ 비우기</button>
+      </div>
+    </div>
+    <canvas id="sp-canvas"></canvas>
+  </div>
+
+  <script>
+    let gradingState = [];
+    let isTestSubmitted = false;
+
+    const quizData = [
+      {
+        mainQuestion: "문제 1. [보기]에서 물에는 녹지 않으나 이황화탄소에 녹고, 연소 시 오산화인을 생성하는 물질을 찾아 다음 물음에 답하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>적린, 황, 황화인, 황린, 인화칼슘, 인화알루미늄</span>",
+        score: 5,
+        subs: [
+          { label: "① 이 물질이 수산화칼륨 수용액과 반응할 때 발생하는 기체의 화학식을 쓰시오. (없으면 해당없음)", type: "formula", answers: ["PH3"] },
+          { label: "② ①에서 발생한 기체의 연소반응식을 쓰시오.", type: "equation", answers: ["2PH3 + 4O2 -> P2O5 + 3H2O"] },
+          { label: "③ 옥내저장 시 바닥면적을 쓰시오.", type: "short", answers: ["1000m2", "1,000m2", "1000m²", "1,000m²", "1000", "1,000"] },
+          { label: "④ 위험등급을 쓰시오.", type: "short", answers: ["I 등급", "I등급", "1등급", "I", "제1등급", "제I등급"] }
+        ],
+        explanation: "[해설]<br>물에 녹지 않고 이황화탄소에 녹으며 연소하면 오산화인(P<sub>2</sub>O<sub>5</sub>)을 내는 물질은 <b>황린</b>이다. 황린은 강알칼리인 수산화칼륨 수용액과 반응해 유독한 포스핀(PH<sub>3</sub>)을 발생시킨다.<br>포스핀이 연소하면 오산화인과 물이 생긴다.<br>2PH<sub>3</sub> + 4O<sub>2</sub> → P<sub>2</sub>O<sub>5</sub> + 3H<sub>2</sub>O<br>황린은 지정수량 20kg의 <b>위험등급 I</b> 물질이어서 옥내저장소 바닥면적을 <b>1,000m²</b> 이하로 해야 한다.<br>혼동 주의: 적린도 연소하면 오산화인을 내지만 이황화탄소에 녹지 않는다."
+      },
+      {
+        mainQuestion: "문제 2. 다음 두 탱크에 대해 답하시오.<br><br>(1) 양쪽 끝이 볼록한 가로 원통형 탱크: 단면 원의 지름 60cm, 가운데 원통부 길이 250cm, 양쪽 볼록부 길이 각 30cm<br>(2) 윗면이 반구형인 세로 원통형 탱크: 단면 원의 반지름 60cm, 원통부 높이 250cm<br><br><div style='text-align:center;'><img src='탱크내용적.jpeg' style='max-width:100%; border:1px solid #ddd; border-radius:5px;' alt='탱크 이미지'></div>",
+        score: 5,
+        subs: [
+          { label: "① (1) 탱크의 내용적을 구하시오.", type: "calc", answers: ["763407.01", "763,407.01", "763407.01cm3", "763,407.01cm3", "0.76", "0.76m3"] },
+          { label: "② (2) 탱크의 내용적을 구하시오.", type: "calc", answers: ["2827433.39", "2,827,433.39", "2827433.39cm3", "2,827,433.39cm3", "2.83", "2.83m3"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리에 관한 세부기준</b>의 탱크 내용적 계산식을 쓴다. 가로형은 양쪽 볼록부 길이의 1/3을 원통 길이에 더하고, 세로형은 <b>원통부만</b> 계산한다.<br>가로형 탱크(지름 60cm → r = 30cm, l = 250cm, 볼록부 l<sub>1</sub> = l<sub>2</sub> = 30cm)<br>V = πr²(l + (l<sub>1</sub>+l<sub>2</sub>)/3)<br>V = π × 30² × (250 + 60/3) = π × 900 × 270<br>V ≈ <b>763,407.01 cm³</b> ≈ 0.76 m³<br>세로형 탱크(r = 60cm, h = 250cm)<br>V = πr²h = π × 60² × 250<br>V ≈ <b>2,827,433.39 cm³</b> ≈ 2.83 m³<br>혼동 주의: 세로형 윗부분의 반구는 내용적에 넣지 않는다. 또 가로형 그림에는 지름(60cm)이, 세로형 그림에는 반지름(60cm)이 적혀 있으니 r을 제대로 읽어야 한다."
+      },
+      {
+        mainQuestion: "문제 3. 피리딘에 대해 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 화학식을 쓰시오.", type: "formula", answers: ["C5H5N"] },
+          { label: "② 증기비중을 구하시오.", type: "calc", answers: ["2.72"] }
+        ],
+        explanation: "[해설]<br>증기비중은 그 증기의 분자량을 <b>공기의 평균분자량 29</b>로 나눈 값이다.<br>피리딘 <b>C<sub>5</sub>H<sub>5</sub>N</b>의 분자량<br>12 × 5 + 1 × 5 + 14 = 79<br>증기비중 = 79 / 29 ≈ <b>2.72</b><br>피리딘은 벤젠 고리의 CH 하나가 N으로 바뀐 구조로 물에 잘 섞이는 수용성 제1석유류이며, 증기비중이 1보다 크므로 누설 시 증기가 바닥에 깔린다."
+      },
+      {
+        mainQuestion: "문제 4. [보기] 중 지정수량이 서로 같은 품명 3가지를 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>적린, 과염소산, 황화인, 황, 브롬산염류, 철분, 알칼리토금속, 황린</span>",
+        score: 5,
+        subs: [
+          { label: "정답 (쉼표로 구분하여 작성)", type: "unordered_comma", answers: ["적린, 황, 황화인"] }
+        ],
+        explanation: "[해설]<br>적린·황화인·황은 모두 <b>제2류 위험물</b>로 지정수량이 <b>100 kg</b>으로 같다.<br>· 철분은 제2류이지만 지정수량이 500 kg이다.<br>· 알칼리토금속은 제3류로 50 kg이고, 황린은 제3류로 20 kg이다.<br>· 브롬산염류(제1류)와 과염소산(제6류)은 둘 다 300 kg이다.<br>혼동 주의: 300 kg으로 같은 품명은 브롬산염류와 과염소산 두 가지뿐이다. 세 가지가 같은 조합은 100 kg인 제2류 세 품명뿐이다."
+      },
+      {
+        mainQuestion: "문제 5. 위험물을 취급할 때 정전기가 발생할 우려가 있는 설비에서 정전기를 유효하게 제거하는 방법 3가지를 쓰시오.",
+        score: 5,
+        isUnordered: true,
+        subs: [
+          { label: "①", type: "short", answers: ["공기 이온화", "공기이온화", "공기를 이온화", "이온화"] },
+          { label: "②", type: "short", answers: ["상대습도 70% 이상", "공기 중의 상대습도 70% 이상", "습도 70% 이상", "상대습도 70이상", "습도 70%이상"] },
+          { label: "③", type: "short", answers: ["접지", "접지한다", "접지설비", "접지 실시"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에 따라 정전기 발생 우려가 있는 설비에는 정전기를 유효하게 제거하는 설비를 둔다. 방법은 전하를 흘려보내거나 중화하는 것이다.<br>· 접지 — 설비에 쌓인 전하를 대지로 흘려보낸다.<br>· 상대습도 <b>70% 이상</b> — 물체 표면에 수분막이 생겨 전하가 새어 나간다.<br>· 공기 이온화 — 이온화된 공기가 대전된 전하를 중화한다.<br>혼동 주의: 습도 기준은 60%가 아니라 <b>70% 이상</b>이다."
+      },
+      {
+        mainQuestion: "문제 6. 제1류 위험물의 특징으로 옳은 것을 모두 고르시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 전부 탄소 성분이 있다<br>② 전부 산소를 포함하고 있다<br>③ 전부 가연성이다<br>④ 전부 물과 반응한다<br>⑤ 전부 고체이다</span>",
+        score: 5,
+        subs: [
+          { label: "정답을 번호로 입력하세요 (예: 1, 2)", type: "order", answers: ["25", "2, 5", "②, ⑤", "2,5"] }
+        ],
+        explanation: "[해설]<br>제1류 위험물은 <b>산화성고체</b>로 정의되므로, 산소를 포함한다(②)와 상온에서 고체다(⑤)만 항상 참이다.<br>제1류는 대부분 무기화합물이라 탄소가 없는 것이 많고(① 오답), 그 자체는 <b>불연성</b>이며 남을 태우는 산소공급원 역할을 하고(③ 오답), 물과 반응하는 것은 무기과산화물 등 일부에 한정된다(④ 오답)."
+      },
+       {
+              mainQuestion: "문제 7. 다음 위험물을 제조소에서 저장·취급할 때 확보해야 할 보유공지를 ( )에 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>아세톤 400[L] : ( ① )m<br>시안화수소 100,000[L] : ( ② )m<br>톨루엔 15,000[L] : ( ③ )m<br>메탄올 8,000[L] : ( ④ )m<br>클로로벤젠 15,000[L] : ( ⑤ )m</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["3"] },
+          { label: "②", type: "short", answers: ["5"] },
+          { label: "③", type: "short", answers: ["5"] },
+          { label: "④", type: "short", answers: ["5"] },
+          { label: "⑤", type: "short", answers: ["5"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에 따라 제조소의 보유공지는 지정수량의 <b>10배 이하이면 3m 이상, 10배 초과면 5m 이상</b>이다.<br>· 아세톤 — 제1석유류 수용성(400L)이라 400÷400=1배로 3m이다.<br>· 시안화수소 — 제1석유류 수용성(400L)이라 100,000÷400=250배로 5m이다.<br>· 톨루엔 — 제1석유류 비수용성(200L)이라 15,000÷200=75배로 5m이다.<br>· 메탄올 — 알코올류(400L)이라 8,000÷400=20배로 5m이다.<br>· 클로로벤젠 — 제2석유류 비수용성(1,000L)이라 15,000÷1,000=15배로 5m이다.<br>혼동 주의: 옥내저장소·옥외탱크저장소의 보유공지는 배수 구간이 더 잘게 나뉘므로, 3m·5m 두 단계뿐인 제조소 기준과 구분한다."
+      },
+      {
+        mainQuestion: "문제 8. 소화설비의 능력단위에 관한 다음 물음에 답하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>소화전용(專用)물통 ( ① )[L] 능력단위 0.3<br>수조(소화전용물통 3개 포함) 80[L] 능력단위 ( ② )<br>수조(소화전용물통 6개 포함) ( ③ )[L] 능력단위 2.5</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["8"] },
+          { label: "②", type: "short", answers: ["1.5"] },
+          { label: "③", type: "short", answers: ["190"] },
+          { label: "④ 연면적 200[m²]이고 내화구조의 벽으로 된 제조소의 소요단위를 구하시오.", type: "short", answers: ["2", "2소요단위"] },
+          { label: "⑤ 과산화수소 6,000[kg]의 소요단위를 구하시오.", type: "short", answers: ["2", "2소요단위"] }
+        ],
+        explanation: "[해설]<br>소화설비의 능력단위는 용량별로 정해진 표값이고, 소요단위는 건축물은 연면적으로, 위험물은 지정수량 배수로 산정한다.<br>소화전용물통 <b>8L</b>가 0.3단위, 수조(소화전용물통 3개 포함) 80L가 <b>1.5단위</b>, 수조(소화전용물통 6개 포함) <b>190L</b>가 2.5단위다.<br>내화구조 벽으로 된 제조소는 연면적 100m²가 1소요단위이므로<br>200 ÷ 100 = 2소요단위<br>위험물은 지정수량의 10배가 1소요단위이고 과산화수소의 지정수량은 300kg이므로<br>6,000 / (300 × 10) = 2소요단위"
+      },
+      {
+        mainQuestion: "문제 9. 위험물을 운반할 때 다음 각 유별과 혼재할 수 없는 위험물의 유별을 모두 쓰시오. (단, 지정수량의 1/10을 초과하는 경우이다.)",
+        score: 5,
+        subs: [
+          { label: "① 제1류 위험물", type: "short", answers: ["제2류, 제3류, 제4류, 제5류 위험물", "제2류, 제3류, 제4류, 제5류", "2, 3, 4, 5", "2,3,4,5"] },
+          { label: "② 제2류 위험물", type: "short", answers: ["제1류, 제3류, 제6류 위험물", "제1류, 제3류, 제6류", "1, 3, 6", "1,3,6"] },
+          { label: "③ 제3류 위험물", type: "short", answers: ["제1류, 제2류, 제5류, 제6류 위험물", "제1류, 제2류, 제5류, 제6류", "1, 2, 5, 6", "1,2,5,6"] },
+          { label: "④ 제4류 위험물", type: "short", answers: ["제1류, 제6류 위험물", "제1류, 제6류", "1, 6", "1,6"] },
+          { label: "⑤ 제5류 위험물", type: "short", answers: ["제1류, 제3류, 제6류 위험물", "제1류, 제3류, 제6류", "1, 3, 6", "1,3,6"] },
+          { label: "⑥ 제6류 위험물", type: "short", answers: ["제2류, 제3류, 제4류, 제5류 위험물", "제2류, 제3류, 제4류, 제5류", "2, 3, 4, 5", "2,3,4,5"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 19</b>(운반 시 혼재기준)에 따라 혼재가 허용되는 조합은 <b>1-6, 2-4, 2-5, 3-4, 4-5</b>뿐이다. 나머지 조합은 모두 혼재할 수 없다.<br>· 제1류(산화성고체)는 제6류와만 실을 수 있어 제2·3·4·5류와는 혼재할 수 없다.<br>· 제2류(가연성고체)는 제4·5류와만 실을 수 있어 제1·3·6류와는 혼재할 수 없다.<br>· 제3류(자연발화성·금수성)는 제4류와만 실을 수 있어 제1·2·5·6류와는 혼재할 수 없다.<br>· 제4류(인화성액체)는 제2·3·5류와 실을 수 있어 제1·6류와는 혼재할 수 없다.<br>· 제5류(자기반응성)는 제2·4류와 실을 수 있어 제1·3·6류와는 혼재할 수 없다.<br>· 제6류(산화성액체)는 제1류와만 실을 수 있어 제2·3·4·5류와는 혼재할 수 없다.<br>외우는 요령: 「423·524·61」(4류는 2·3류와, 5류는 2·4류와, 6류는 1류와)로 가능한 조합만 외우면 나머지는 모두 혼재 불가다. 지정수량의 1/10 이하로 실을 때는 이 기준을 적용하지 않는다."
+      },
+      {
+        mainQuestion: "문제 10. 다음 [보기]의 위험물 중 ㉠ 불활성가스 소화설비, ㉡ 옥외소화전설비, ㉢ 포소화설비에 각각 적응성이 있는 것을 모두 골라 번호를 쓰시오. (단, 위험물안전관리법령 기준)<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>① 제1류 위험물 중 알칼리금속의 과산화물<br>② 제2류 위험물 중 인화성 고체<br>③ 제3류 위험물(금수성 물질 제외)<br>④ 제4류 위험물<br>⑤ 제5류 위험물<br>⑥ 제6류 위험물</span>",
+        score: 5,
+        subs: [
+          { label: "㉠ 불활성가스 소화설비", type: "short", answers: ["2,4", "2, 4", "②, ④", "②,④"] },
+          { label: "㉡ 옥외소화전설비", type: "short", answers: ["2,3,5,6", "2, 3, 5, 6", "②, ③, ⑤, ⑥", "②,③,⑤,⑥"] },
+          { label: "㉢ 포소화설비", type: "short", answers: ["2,3,4,5,6", "2, 3, 4, 5, 6", "②, ③, ④, ⑤, ⑥", "②,③,④,⑤,⑥"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 17</b>의 소화설비 적응성 표에서 나온다. 설비의 소화원리(질식·냉각)와 위험물이 물과 반응하는지에 따라 적응성이 갈린다.<br>· 불활성가스 소화설비는 질식소화라서 인화성 고체와 <b>제4류</b>에만 적응성이 있다.<br>· 옥외소화전설비는 물을 뿌리는 방식이라 인화성 고체·제3류(금수성 제외)·제5류·제6류에 적응하지만, 기름이 물 위에 떠서 번지는 제4류에는 쓸 수 없다.<br>· 포소화설비는 냉각과 질식을 함께 하므로 옥외소화전설비의 적응 대상에 <b>제4류</b>까지 더해진다.<br>혼동 주의: 알칼리금속의 과산화물은 물과 반응해 산소를 내므로 세 설비 모두 적응성이 없다."
+      },
+      {
+        mainQuestion: "문제 11. 다음 위험물을 운반할 때 운반용기 외부에 표시해야 할 주의사항을 모두 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "① 제1류 위험물 중 알칼리금속의 과산화물", type: "unordered_comma", answers: ["화기주의, 충격주의, 물기엄금, 가연물접촉주의", "화기주의,충격주의,물기엄금,가연물접촉주의", "화기충격주의, 물기엄금, 가연물접촉주의", "화기·충격주의, 물기엄금, 가연물접촉주의"] },
+          { label: "② 제3류 위험물 중 자연발화성 물질", type: "short", answers: ["화기엄금, 공기접촉엄금", "공기접촉엄금, 화기엄금"] },
+          { label: "③ 제5류 위험물", type: "short", answers: ["화기엄금, 충격주의", "충격주의, 화기엄금"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 19</b>에 따라 운반용기 외부에는 유별·성질에 맞는 주의사항을 표시한다.<br>· 알칼리금속의 과산화물 — 제1류 공통인 화기·충격주의와 가연물접촉주의에 더해, 물과 반응해 산소와 열을 내므로 <b>물기엄금</b>을 표시한다.<br>· 자연발화성 물질 — 공기 중에서 스스로 발화하므로 화기엄금과 <b>공기접촉엄금</b>을 표시한다.<br>· 제5류 위험물 — 자기반응성 물질이라 가열·충격으로 폭발할 수 있어 화기엄금과 충격주의를 표시한다.<br>혼동 주의: 같은 제3류라도 금수성 물질은 공기접촉엄금이 아니라 물기엄금을 표시한다."
+      },
+      {
+              mainQuestion: "문제 12. 위험물안전관리법에서 정한 이동탱크저장소의 주입설비 기준이다. 빈칸 ( ① )~( ⑥ )에 알맞은 답을 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 위험물이 ( ① ) 우려가 없고 화재예방상 안전한 구조로 할 것<br>② 주입설비의 길이는 ( ② ) 이내로 하고, 그 끝부분에 축적되는 ( ③ )를 유효하게 제거할 수 있는 장치를 할 것<br>③ 분당 배출량은 ( ④ ) 이하로 할 것<br>④ 주입호스는 내경이 ( ⑤ ) 이상이고, ( ⑥ ) 이상의 압력에 견딜 수 있는 것으로 하며, 필요 이상으로 길게 하지 아니할 것</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["샐"] },
+          { label: "②", type: "short", answers: ["50m"] },
+          { label: "③", type: "short", answers: ["정전기"] },
+          { label: "④", type: "short", answers: ["200L"] },
+          { label: "⑤", type: "short", answers: ["23mm"] },
+          { label: "⑥", type: "short", answers: ["0.3MPa"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>의 이동탱크저장소 주입설비 기준은 누설, 정전기, 과속 주입을 막으려고 정한 것이다.<br>· 위험물이 샐 우려가 없는 구조여야 한다(누설 방지).<br>· 주입설비 길이는 <b>50m</b> 이내로 하고, 끝부분에는 정전기 제거장치를 둔다.<br>· 분당 배출량은 <b>200L</b> 이하로 해서 유속을 제한한다.<br>· 주입호스는 내경 <b>23mm</b> 이상이고, <b>0.3MPa</b> 이상의 압력을 견뎌야 한다.<br>외우는 요령: 50m·200L·23mm·0.3MPa를 길이 → 유량 → 굵기 → 압력 순서로 묶어 외운다."
+      },
+      {
+        mainQuestion: "문제 13. 인화성액체위험물 옥외탱크저장소의 탱크 주위에 설치하는 방유제에 관한 내용이다. ( )에 알맞은 답을 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>방유제의 용량은 방유제 안에 설치된 탱크가 하나인 때에는 그 탱크 용량의 ( ① )% 이상, 2기 이상인 때에는 그 탱크 중 용량이 최대인 것의 용량의 ( ② )% 이상으로 할 것<br>방유제 높이는 0.5m 이상 ( ③ )m 이하, 두께 ( ④ )m 이상, 지하매설깊이 1m 이상으로 할 것<br>방유제 면적은 ( ⑤ )m² 이하로 할 것</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["110"] },
+          { label: "②", type: "short", answers: ["110"] },
+          { label: "③", type: "short", answers: ["3"] },
+          { label: "④", type: "short", answers: ["0.2"] },
+          { label: "⑤", type: "short", answers: ["80000", "80,000"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 6</b>(옥외탱크저장소 기준)에서 정한 방유제 규격이다.<br>· 용량은 탱크가 1기면 그 탱크 용량의 <b>110%</b> 이상, 2기 이상이면 용량이 가장 큰 탱크의 110% 이상이다.<br>· 높이는 0.5m 이상 <b>3m</b> 이하로 정해져 있다.<br>· 두께는 <b>0.2m</b> 이상, 땅속에 묻히는 깊이는 1m 이상이다.<br>· 면적은 <b>80,000m²</b> 이하이다.<br>혼동 주의: 탱크가 2기 이상이어도 모든 탱크 용량을 더하지 않고 가장 큰 탱크 하나만 기준으로 삼는다. 인화성이 없는 액체위험물 탱크의 방유제는 110%가 아니라 100% 이상이다."
+      },
+      {
+        mainQuestion: "문제 14. 다음 제5류 위험물 [보기]에 대해 답하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>나이트로글리세린, 트라이나이트로톨루엔, 트라이나이트로페놀, 과산화벤조일, 다이나이트로벤젠</span>",
+        score: 5,
+        subs: [
+          { label: "① 질산에스테르류에 속하는 물질을 모두 쓰시오.", type: "short", answers: ["나이트로글리세린", "니트로글리세린"] },
+          { label: "② 상온에서는 액체이나 겨울철에 동결하는 물질의 분해 폭발 반응식을 쓰시오.", type: "equation", answers: ["4C3H5(ONO2)3 -> 12CO2 + 10H2O + 6N2 + O2"] }
+        ],
+        explanation: "[해설]<br>질산에스테르류는 알코올의 -OH가 질산과 결합한 <b>-O-NO<sub>2</sub></b> 구조를 가진 품명이라, 보기 중에서는 <b>나이트로글리세린</b>만 해당한다. 과산화벤조일은 유기과산화물이고 트라이나이트로톨루엔·트라이나이트로페놀·다이나이트로벤젠은 나이트로화합물이다.<br>상온에서 액체이면서 응고점이 약 <b>13℃</b>여서 겨울철에 동결하는 물질도 나이트로글리세린이며, 동결된 것은 충격에 더 민감해 위험하다.<br>분해폭발반응식<br>4C<sub>3</sub>H<sub>5</sub>(ONO<sub>2</sub>)<sub>3</sub> → 12CO<sub>2</sub> + 10H<sub>2</sub>O + 6N<sub>2</sub> + O<sub>2</sub>"
+      },
+      {
+        mainQuestion: "문제 15. 아이소프로필알코올을 산화시켜 얻으며 아이오딘폼 반응을 하는 제1석유류에 대해 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 이 물질의 명칭을 쓰시오.", type: "short", answers: ["아세톤"] },
+          { label: "② 아이오딘폼 반응에서 생성되는 노란색 침전물의 화학식을 쓰시오.", type: "formula", answers: ["CHI3"] },
+          { label: "③ 아이오딘폼 반응 후의 색깔을 쓰시오.", type: "short", answers: ["노란색", "노랑", "황색", "노랑색"] }
+        ],
+        explanation: "[해설]<br>아이소프로필알코올(CH<sub>3</sub>CH(OH)CH<sub>3</sub>)을 산화하면 <b>아세톤</b>(CH<sub>3</sub>COCH<sub>3</sub>)이 되며, 아세톤은 지정수량 400L인 수용성 제1석유류다.<br><b>아이오딘폼 반응</b>은 CH<sub>3</sub>CO- 구조를 가진 물질이 아이오딘·수산화나트륨과 반응해 아이오딘폼(<b>CHI<sub>3</sub></b>)을 만드는 확인 반응이다.<br>아이오딘폼은 특유의 냄새가 나는 <b>노란색</b> 침전이어서 반응 후 용액이 노랗게 흐려진다."
+      },
+      {
+        mainQuestion: "문제 16. 인화칼슘에 대하여 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 제 몇 류 위험물인지 쓰시오.", type: "short", answers: ["제3류", "3류", "제3류 위험물", "3류 위험물", "3"] },
+          { label: "② 지정수량을 쓰시오.", type: "short", answers: ["300kg", "300"] },
+          { label: "③ 물과의 반응식을 쓰시오.", type: "equation", answers: ["Ca3P2 + 6H2O -> 3Ca(OH)2 + 2PH3"] },
+          { label: "④ 물과 반응한 후 생성되는 가스의 명칭을 쓰시오.", type: "short", answers: ["포스핀(인화수소)", "포스핀", "인화수소", "PH3"] }
+        ],
+        explanation: "[해설]<br>인화칼슘(Ca<sub>3</sub>P<sub>2</sub>)은 <b>제3류 위험물</b> 중 금속의 인화물이며, 지정수량은 <b>300kg</b>이다.<br>물과 만나면 수산화칼슘과 인화수소가 생긴다.<br>Ca<sub>3</sub>P<sub>2</sub> + 6H<sub>2</sub>O → 3Ca(OH)<sub>2</sub> + 2PH<sub>3</sub><br>생성 가스는 <b>포스핀</b>(PH<sub>3</sub>, 인화수소)으로, 맹독성이면서 가연성이다. 그래서 물로 끄면 안 되고 마른모래로 질식소화한다."
+      },
+      {
+        mainQuestion: "문제 17. 제2류 위험물인 오황화인에 대해 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 물과의 반응식을 쓰시오.", type: "equation", answers: ["P2S5 + 8H2O -> 5H2S + 2H3PO4"] },
+          { label: "② ①에서 생성되는 기체의 완전연소반응식을 쓰시오.", type: "equation", answers: ["2H2S + 3O2 -> 2SO2 + 2H2O"] }
+        ],
+        explanation: "[해설]<br>오황화인(P<sub>2</sub>S<sub>5</sub>)은 물과 반응해 불에 타고 독성이 있는 <b>황화수소(H<sub>2</sub>S)</b>와 인산(H<sub>3</sub>PO<sub>4</sub>)을 만든다.<br>P<sub>2</sub>S<sub>5</sub> + 8H<sub>2</sub>O → 5H<sub>2</sub>S + 2H<sub>3</sub>PO<sub>4</sub><br>황화수소가 완전히 타면 황은 <b>이산화황(SO<sub>2</sub>)</b>이 되고 수소는 물이 된다.<br>2H<sub>2</sub>S + 3O<sub>2</sub> → 2SO<sub>2</sub> + 2H<sub>2</sub>O<br>계수 맞추는 요령: 인 2개는 인산 2개로, 황 5개는 황화수소 5개로 보낸 뒤 수소·산소 수에 맞춰 물을 8개로 정한다."
+      },
+      {
+        mainQuestion: "문제 18. 주유취급소 중 항공기 주유취급소의 기준에 관한 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 항공기의 연료탱크에 직접 주유하기 위한 주유설비를 갖춘 이동탱크저장소의 명칭을 쓰시오.", type: "short", answers: ["주유탱크차"] },
+          { label: "② 비행장에서 항공기 또는 비행장 소속 차량 등에 주유하는 주유취급소에 특례를 적용할 수 있는지 여부를 쓰시오.", type: "short", answers: ["가능", "가능하다", "O"] },
+          { label: "③ 다음 내용의 빈칸에 O, X를 넣으시오.<br>㉠ 주유호스차 또는 주유탱크차로 주유하는 때에는 주유호스의 끝부분을 항공기의 연료탱크 급유구에 긴밀히 결합하여야 한다.", type: "short", answers: ["O", "o"] },
+          { label: "㉡ 고정주유설비에는 당해 주유설비에 접속한 전용탱크 또는 위험물을 저장·취급하는 탱크의 배관 외의 것을 통하여 위험물을 주입하지 아니할 것.", type: "short", answers: ["O", "o"] },
+          { label: "㉢ 주유호스차 또는 주유탱크차로 주유하는 때에는 주유호스차의 호스기기 또는 주유탱크차의 주유설비를 항공기와 전기적으로 결합할 것", type: "short", answers: ["O", "o"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>의 주유취급소 특례는 비행장에서 항공기나 비행장 소속 차량 등에 주유하는 <b>항공기 주유취급소</b>에도 적용할 수 있다. 항공기 연료탱크에 직접 주유하는 주유설비를 갖춘 이동탱크저장소를 <b>주유탱크차</b>라 한다.<br><ul><li>주유호스 끝부분을 급유구에 긴밀히 결합하라는 것은 주유 중 누설과 비산을 막기 위한 규정이다.</li><li>고정주유설비에 전용탱크 등의 배관 외의 경로로 위험물을 주입하지 않는 것은 일반 주유취급소와 같은 기준이다.</li><li>호스기기나 주유설비를 항공기와 전기적으로 결합하는 것은 정전기 불꽃을 막기 위해서다.</li></ul>세 문장 모두 규정 내용 그대로여서 전부 <b>O</b>다. 혼동 주의: 주유호스차는 호스기기를 싣고 배관에서 위험물을 받아 주유하는 차량이라, 탱크를 갖춘 주유탱크차와 다르다."
+      },
+      {
+        mainQuestion: "문제 19. 다음 위험물을 인화점이 낮은 것부터 높은 순서대로 나열하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>이황화탄소, 아세톤, 메탄올(메틸알코올), 글리세린, 아닐린</span>",
+        score: 5,
+        subs: [
+          { label: "정답을 나열하시오 (예: 가-나-다-라-마)", type: "short", answers: ["이황화탄소-아세톤-메탄올-아닐린-글리세린", "이황화탄소 -> 아세톤 -> 메탄올 -> 아닐린 -> 글리세린", "이황화탄소,아세톤,메탄올,아닐린,글리세린", "이황화탄소, 아세톤, 메탄올, 아닐린, 글리세린", "이황화탄소 아세톤 메탄올 아닐린 글리세린", "이황화탄소-아세톤-메틸알코올-아닐린-글리세린", "이황화탄소 -> 아세톤 -> 메틸알코올 -> 아닐린 -> 글리세린", "이황화탄소,아세톤,메틸알코올,아닐린,글리세린", "이황화탄소, 아세톤, 메틸알코올, 아닐린, 글리세린"] }
+        ],
+        explanation: "[해설]<br>제4류 위험물의 인화점은 대체로 <b>특수인화물 → 제1석유류 → 알코올류 → 제3석유류</b> 순으로 높아진다.<br><ul><li>이황화탄소 — 특수인화물, 약 <b>-30℃</b>.</li><li>아세톤 — 제1석유류, 약 -18℃.</li><li>메탄올 — 알코올류, 약 11℃.</li><li>아닐린 — 제3석유류, 약 <b>70℃</b>.</li><li>글리세린 — 제3석유류, 약 <b>160℃</b>.</li></ul>혼동 주의: 아닐린과 글리세린은 같은 제3석유류라 품명만으로는 순서가 안 나오므로 <b>아닐린 70℃ < 글리세린 160℃</b>를 수치로 외운다."
+      },
+      {
+        mainQuestion: "문제 20. 다음 위험물이 열분해할 때 산소가 발생하는 반응식을 쓰시오. (단, 해당하지 않으면 해당없음으로 쓰시오.)",
+        score: 5,
+        subs: [
+          { label: "① 과염소산칼륨", type: "equation", answers: ["KClO4 -> KCl + 2O2"] },
+          { label: "② 질산칼륨", type: "equation", answers: ["2KNO3 -> 2KNO2 + O2"] },
+          { label: "③ 과산화칼륨", type: "equation", answers: ["2K2O2 -> 2K2O + O2"] }
+        ],
+        explanation: "[해설]<br>세 물질은 모두 <b>제1류 위험물</b>(산화성고체)이라 가열하면 분자 속 산소를 O<sub>2</sub>로 내놓는다. 채점의 핵심은 양변의 원자 수를 맞춘 계수다.<br>과염소산칼륨은 염화칼륨과 산소로 분해된다.<br>KClO<sub>4</sub> → KCl + 2O<sub>2</sub><br>질산칼륨은 아질산칼륨과 산소로 분해된다.<br>2KNO<sub>3</sub> → 2KNO<sub>2</sub> + O<sub>2</sub><br><b>과산화칼륨</b>은 과산화 결합(-O-O-)이 끊어지면서 산화칼륨과 산소가 된다.<br>2K<sub>2</sub>O<sub>2</sub> → 2K<sub>2</sub>O + O<sub>2</sub>"
+      }
+    ];
+
+    function toggleExplanation(qIndex) {
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (!expEl) return;
+      if (expEl.style.display === 'none' || expEl.style.display === '') {
+        expEl.style.display = 'block';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 닫기';
+      } else {
+        expEl.style.display = 'none';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 열기';
+      }
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      let html = '';
+      quizData.forEach((q, qIndex) => {
+        gradingState[qIndex] = { subs: [], earnedScore: 0, isGraded: false };
+        html += `<div class="question-card clearfix" id="qCard-${qIndex}">`;
+        html += `<div class="main-q-title">${q.mainQuestion} <span class="q-score-badge">배점: ${q.score}점</span></div>`;
+        q.subs.forEach((sub, sIndex) => {
+          gradingState[qIndex].subs[sIndex] = { status: 0 }; 
+          html += `<div class="sub-q-container">`;
+          html += `<div class="sub-q-label">${sub.label}</div>`;
+          if (sub.image) {
+            html += `<div style="margin-bottom: 15px; text-align: center;">
+                       <img src="${sub.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px;" alt="문제 이미지">
+                     </div>`;
+          }
+          if (sub.type === 'calc') {
+            html += `<span class="calc-label">▶ 계산 과정 (채점 제외)</span>`;
+            html += `<textarea id="calc-${qIndex}-${sIndex}" class="textarea-formula" placeholder="필요시 계산식을 자유롭게 적어보세요."></textarea>`;
+            html += `<span class="calc-label">▶ 최종 정답 (채점 대상)</span>`;
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-calc" autocomplete="off" placeholder="최종 정답 입력">`;
+          } else if (sub.type === 'descriptive') {
+            html += `<textarea id="ans-${qIndex}-${sIndex}" class="textarea-formula" placeholder="※ 연습장에 직접 풀거나 구조식을 그린 후, [✔️ 정답 확인 및 채점] 버튼을 눌러 스스로 비교해 보세요."></textarea>`;
+          } else {
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-standard" autocomplete="off" placeholder="${sub.type === 'unordered_comma' ? '쉼표(,)로 구분하여 입력' : '정답 입력'}">`;
+          }
+          html += `<div id="fb-${qIndex}-${sIndex}" class="feedback-box"></div>`;
+          html += `</div>`;
+        });
+        html += `<div style="text-align: right; margin-top: 15px; margin-bottom: 10px; clear: both;">`;
+        html += `  <button id="btn-toggle-exp-${qIndex}" class="btn-grade-single" style="float: none; background-color: #8d6e63; margin-right: 8px; display: none;" onclick="toggleExplanation(${qIndex})">📖 해설 열기</button>`;
+        html += `  <button id="btn-grade-single-${qIndex}" class="btn-grade-single" style="float: none;" onclick="gradeSingleQuestion(${qIndex})">✔️ 정답 확인 및 채점</button>`;
+        html += `</div>`;
+        if(q.explanation) {
+            html += `<div style="clear:both;"></div>`;
+            html += `<div id="exp-${qIndex}" class="feedback-box" style="background-color:#f8f9fa; border:1px solid #dee2e6; color:#495057; font-weight:normal; margin-top:10px; display:none;">💡 <strong>문제 핵심 해설:</strong><br>${q.explanation}</div>`;
+        }
+        html += `</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function setMode(mode) {
+      const labelBasic = document.getElementById('label-basic');
+      const labelStudy = document.getElementById('label-study');
+      if (mode === 'study') {
+        if(labelStudy.classList.contains('active')) return; 
+        labelBasic.classList.remove('active');
+        labelStudy.classList.add('active');
+        quizData.forEach((q, qIndex) => {
+          const expEl = document.getElementById(`exp-${qIndex}`);
+          const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+          if (expEl) {
+            expEl.style.display = 'block';
+            if(toggleBtn) {
+              toggleBtn.style.display = 'inline-block';
+              toggleBtn.innerHTML = '📖 해설 닫기';
+            }
+          }
+        });
+      } else if (mode === 'basic') {
+        if(confirm("기본 모드로 전환하면 현재 입력된 내용이 초기화됩니다. 전환하시겠습니까?")) {
+          location.reload();
+        }
+      }
+    }
+
+    function isEquationCorrect(userInput, ansList) {
+      let u = userInput.replace(/\s+/g, '').replace(/=/g, '->');
+      let uParts = u.split('->');
+      if(uParts.length !== 2) return false;
+      let uLeft = uParts[0].split('+').sort().join('+');
+      let uRight = uParts[1].split('+').sort().join('+');
+      for(let i=0; i<ansList.length; i++) {
+        let a = ansList[i].replace(/\s+/g, '').replace(/=/g, '->');
+        let aParts = a.split('->');
+        if(aParts.length !== 2) continue;
+        let aLeft = aParts[0].split('+').sort().join('+');
+        let aRight = aParts[1].split('+').sort().join('+');
+        if (uLeft === aLeft && uRight === aRight) return true;
+      }
+      return false;
+    }
+
+    function evaluateSub(qIndex, sIndex) {
+      const sub = quizData[qIndex].subs[sIndex];
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      if (inputEl.disabled) return; 
+      let userVal = inputEl.value;
+      let isCorrect = false;
+
+      if (userVal.trim() === "") {
+         isCorrect = false;
+      } else if (sub.type === 'short' || sub.type === 'calc') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '').toLowerCase() === uClean);
+      } else if (sub.type === 'formula') {
+        let uClean = userVal.replace(/\s+/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '') === uClean);
+      } else if (sub.type === 'order') {
+        let uClean = userVal.replace(/[^0-9]/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/[^0-9]/g, '') === uClean);
+      } else if (sub.type === 'unordered_comma') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => {
+            let aClean = a.replace(/\s+/g, '').toLowerCase();
+            let uArr = uClean.split(',').filter(Boolean).sort();
+            let aArr = aClean.split(',').filter(Boolean).sort();
+            return uArr.length === aArr.length && uArr.every((val, index) => val === aArr[index]);
+        });
+      } else if (sub.type === 'equation') {
+        isCorrect = isEquationCorrect(userVal, sub.answers);
+      } else if (sub.type === 'descriptive') {
+        if (sub.keywords) {
+          let hasAllKeys = sub.keywords.every(kw => userVal.includes(kw));
+          isCorrect = hasAllKeys;
+        } else {
+          isCorrect = false; 
+        }
+      }
+
+      gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+      inputEl.disabled = true;
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (calcEl) calcEl.disabled = true;
+      updateFeedbackUI(qIndex, sIndex);
+    }
+
+    function updateFeedbackUI(qIndex, sIndex) {
+      const q = quizData[qIndex];
+      const sub = q.subs[sIndex];
+      const state = gradingState[qIndex].subs[sIndex];
+      const fbDiv = document.getElementById(`fb-${qIndex}-${sIndex}`);
+      
+      let html = "";
+      if (state.status === 1) {
+        fbDiv.className = "feedback-box is-correct";
+        html += `✅ 정답입니다!`;
+      } else if (state.status === 0.5) {
+        fbDiv.className = "feedback-box is-partial";
+        html += `⚠ 부분 점수 (0.5개 인정)`;
+      } else {
+        fbDiv.className = "feedback-box is-incorrect";
+        if (q.isUnordered || sub.type === 'unordered_comma') {
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        } else {
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        }
+      }
+
+      if (sub.answerImage) {
+        html += `<div style="margin-top: 15px; text-align: center;">
+                   <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px;" alt="정답 해설 이미지">
+                   <div style="font-size:0.85em; color:#1976d2; margin-top:5px;">[정답 참고 이미지]</div>
+                 </div>`;
+      }
+
+      if (sub.type === 'descriptive') {
+        html += `<div class="override-btns">
+                  <span style="font-size:0.85em; color:#666; font-weight:normal; margin-right:8px;">▶ 서술/그림 자율 채점:</span><br><br>
+                  <button class="btn-override btn-correct" onclick="overrideScore(${qIndex}, ${sIndex}, 1)">정답 인정</button>
+                  <button class="btn-override btn-partial" onclick="overrideScore(${qIndex}, ${sIndex}, 0.5)">부분 점수</button>
+                  <button class="btn-override btn-incorrect" onclick="overrideScore(${qIndex}, ${sIndex}, 0)">오답 처리</button>
+                 </div>`;
+      }
+
+      fbDiv.innerHTML = html;
+      fbDiv.style.display = "block";
+    }
+
+    function updateCardScore(qIndex) {
+      const q = quizData[qIndex];
+      let correctSubs = 0;
+      q.subs.forEach((sub, sIndex) => {
+        correctSubs += gradingState[qIndex].subs[sIndex].status;
+      });
+      gradingState[qIndex].earnedScore = (correctSubs / q.subs.length) * q.score;
+      
+      const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
+      if(cardTitle) {
+        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+        cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
+        if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
+        else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
+        else cardTitle.style.backgroundColor = "#ffebee";
+      }
+    }
+
+    function gradeSingleQuestion(qIndex) {
+      const q = quizData[qIndex];
+
+      if (q.isUnordered) {
+        let answerPool = q.subs.map(sub => {
+           return sub.answers.map(a => sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase());
+        });
+
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          if (!inputEl || inputEl.disabled) return;
+          let userVal = inputEl.value;
+          let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
+          let isCorrect = false;
+
+          if (uClean !== "") {
+            for (let i = 0; i < answerPool.length; i++) {
+              if (answerPool[i].includes(uClean)) {
+                isCorrect = true;
+                answerPool.splice(i, 1);
+                break;
+              }
+            }
+          }
+          gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+          inputEl.disabled = true;
+          updateFeedbackUI(qIndex, sIndex);
+        });
+      } else {
+        q.subs.forEach((sub, sIndex) => {
+          evaluateSub(qIndex, sIndex);
+        });
+      }
+
+      updateCardScore(qIndex);
+      gradingState[qIndex].isGraded = true;
+
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (expEl) {
+          expEl.style.display = 'block';
+          if(toggleBtn) {
+            toggleBtn.style.display = 'inline-block';
+            toggleBtn.innerHTML = '📖 해설 닫기';
+          }
+      }
+      
+      const btnEl = document.getElementById(`btn-grade-single-${qIndex}`);
+      if (btnEl) btnEl.style.display = 'none';
+      if (isTestSubmitted) calculateFinalTotal();
+    }
+
+    function gradeAll() {
+      isTestSubmitted = true;
+      quizData.forEach((q, qIndex) => {
+        if (!gradingState[qIndex].isGraded) {
+          gradeSingleQuestion(qIndex);
+        }
+      });
+      document.getElementById('submit-btn').style.display = 'none';
+      calculateFinalTotal();
+    }
+
+    function overrideScore(qIndex, sIndex, newStatus) {
+      gradingState[qIndex].subs[sIndex].status = newStatus;
+      updateFeedbackUI(qIndex, sIndex);
+      updateCardScore(qIndex);
+      if (isTestSubmitted) calculateFinalTotal(); 
+    }
+
+    function calculateFinalTotal() {
+      let totalEarned = 0;
+      let totalMax = 0;
+      quizData.forEach((q, qIndex) => {
+        totalMax += q.score;
+        totalEarned += gradingState[qIndex].earnedScore;
+      });
+      const resDiv = document.getElementById('final-result');
+      resDiv.style.display = "block";
+      totalEarned = Math.round(totalEarned * 10) / 10;
+      let percent = Math.round((totalEarned / totalMax) * 100);
+      let passMsg = percent >= 60 
+        ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
+        : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
+      resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
+    }
+
+    renderQuiz();
+
+    // ================== 우측 문항 내비게이션 모듈 ==================
+    function initNavPanel() {
+      const navHtml = `
+        <div id="q-nav-panel">
+          <div class="q-nav-header">📌 문항 이동</div>
+          <div class="q-nav-grid" id="q-nav-grid"></div>
+          <div class="q-nav-legend">
+            <div><span class="box" style="background:#fff; border:1px solid #dee2e6;"></span>미작성</div>
+            <div><span class="box" style="background:#e3f2fd; border:1px solid #90caf9;"></span>답안 입력됨</div>
+            <div><span class="box" style="background:#e8f5e9; border:1px solid #81c784;"></span>정답/채점완료</div>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', navHtml);
+
+      const navGrid = document.getElementById('q-nav-grid');
+      let gridHtml = '';
+      quizData.forEach((q, qIndex) => {
+        gridHtml += `<button class="q-nav-btn" id="nav-btn-${qIndex}" onclick="scrollToQuestion(${qIndex})">${qIndex + 1}</button>`;
+      });
+      navGrid.innerHTML = gridHtml;
+
+      document.getElementById('quiz-container').addEventListener('input', updateNavStatus);
+
+      if (typeof gradeSingleQuestion === 'function') {
+        const originalGradeSingle = gradeSingleQuestion;
+        gradeSingleQuestion = function(qIndex) {
+          originalGradeSingle(qIndex);
+          updateNavStatus();
+        };
+      }
+      if (typeof overrideScore === 'function') {
+        const originalOverrideScore = overrideScore;
+        overrideScore = function(qIndex, sIndex, newStatus) {
+          originalOverrideScore(qIndex, sIndex, newStatus);
+          updateNavStatus();
+        };
+      }
+      if (typeof gradeAll === 'function') {
+        const originalGradeAll = gradeAll;
+        gradeAll = function() {
+          originalGradeAll();
+          updateNavStatus();
+        };
+      }
+      updateNavStatus();
+    }
+
+    function scrollToQuestion(qIndex) {
+      const target = document.getElementById(`qCard-${qIndex}`);
+      if(target) {
+        const topPos = target.getBoundingClientRect().top + window.pageYOffset - 20;
+        window.scrollTo({ top: topPos, behavior: 'smooth' });
+      }
+    }
+
+    function updateNavStatus() {
+      quizData.forEach((q, qIndex) => {
+        const navBtn = document.getElementById(`nav-btn-${qIndex}`);
+        if(!navBtn) return;
+        if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
+          let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+          navBtn.className = 'q-nav-btn'; 
+          if (qEarnedScore === q.score) navBtn.classList.add('correct');
+          else if (qEarnedScore > 0) navBtn.classList.add('partial');
+          else navBtn.classList.add('incorrect');
+          return;
+        }
+        let hasAnswer = false;
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+          if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
+          if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
+        });
+        if (hasAnswer) navBtn.classList.add('answered'); 
+        else navBtn.classList.remove('answered');
+      });
+    }
+
+    setTimeout(initNavPanel, 100);
+
+    // ================== 연습장 스크립트 ==================
+    let spCanvas, spCtx, spIsDrawing = false, spCurrentTool = 'pen';
+    function toggleScratchpad() {
+      const panel = document.getElementById('sp-panel');
+      const btn = document.getElementById('sp-toggle-btn');
+      if (panel.style.display === 'flex') {
+        panel.style.display = 'none';
+        btn.innerText = "📝 연습장";
+        btn.style.backgroundColor = "#ff9800";
+      } else {
+        panel.style.display = 'flex';
+        btn.innerText = "❌ 닫기";
+        btn.style.backgroundColor = "#757575";
+        if (!spCanvas) initScratchpad();
+      }
+    }
+    function initScratchpad() {
+      spCanvas = document.getElementById('sp-canvas');
+      spCtx = spCanvas.getContext('2d');
+      function resizeCanvas() {
+        const rect = spCanvas.parentElement.getBoundingClientRect();
+        const headerHeight = document.getElementById('sp-header').offsetHeight;
+        spCanvas.width = rect.width;
+        spCanvas.height = rect.height - headerHeight;
+      }
+      resizeCanvas();
+      spCanvas.addEventListener('mousedown', startSpDraw);
+      spCanvas.addEventListener('mousemove', drawSp);
+      spCanvas.addEventListener('mouseup', stopSpDraw);
+      spCanvas.addEventListener('mouseout', stopSpDraw);
+      spCanvas.addEventListener('touchstart', startSpDraw, { passive: false });
+      spCanvas.addEventListener('touchmove', drawSp, { passive: false });
+      spCanvas.addEventListener('touchend', stopSpDraw);
+    }
+    function getSpCoordinates(e) {
+      const rect = spCanvas.getBoundingClientRect();
+      if (e.touches && e.touches.length > 0) {
+        return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+      }
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+    function startSpDraw(e) {
+      e.preventDefault(); spIsDrawing = true;
+      const pos = getSpCoordinates(e);
+      spCtx.beginPath(); spCtx.moveTo(pos.x, pos.y);
+    }
+    function drawSp(e) {
+      if (!spIsDrawing) return;
+      e.preventDefault();
+      const pos = getSpCoordinates(e);
+      spCtx.lineTo(pos.x, pos.y);
+      if (spCurrentTool === 'eraser') {
+        spCtx.strokeStyle = '#fff'; spCtx.lineWidth = 20;
+      } else {
+        spCtx.strokeStyle = '#333'; spCtx.lineWidth = 2;
+      }
+      spCtx.lineCap = 'round'; spCtx.lineJoin = 'round';
+      spCtx.stroke();
+    }
+    function stopSpDraw() { spIsDrawing = false; spCtx.closePath(); }
+    function setSpTool(tool) {
+      spCurrentTool = tool;
+      document.getElementById('sp-pen').classList.remove('active');
+      document.getElementById('sp-eraser').classList.remove('active');
+      document.getElementById('sp-' + tool).classList.add('active');
+    }
+    function clearSpCanvas() { spCtx.clearRect(0, 0, spCanvas.width, spCanvas.height); }
+  </script>
+</body>
+</html>
