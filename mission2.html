@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>미션 2: 원자량 & 분자량 마스터</title>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" crossorigin="anonymous" />
+
+  <style>
+    :root {
+      --glass-bg: rgba(30, 41, 59, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --neon-blue: #38bdf8;
+      --neon-red: #f87171;
+      --neon-green: #34d399;
+      --neon-yellow: #fbbf24;
+    }
+
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background-color: #020617;
+      color: #f8fafc;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bg-blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: -1;
+      opacity: 0.2;
+    }
+    .blob-1 { top: 10%; left: 10%; width: 400px; height: 400px; background: var(--neon-blue); }
+    .blob-2 { bottom: 10%; right: 10%; width: 500px; height: 500px; background: #8b5cf6; }
+
+    header {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      z-index: 10;
+    }
+
+    .title-area h1 {
+      margin: 0 0 10px 0;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .status-area {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    
+    .health-bar { font-size: 1.2rem; letter-spacing: 2px; }
+    .score-bar { font-size: 1.1rem; font-weight: bold; color: var(--neon-green); }
+    .phase-bar { font-size: 0.9rem; color: var(--neon-yellow); font-weight: bold; }
+
+    /* 게임 컨테이너 */
+    #game-container {
+      width: 100%;
+      max-width: 600px;
+      height: 60vh;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+    }
+
+    /* 실시간 힌트 패널 (게임이 멈추지 않음) */
+    #hint-panel {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 85%;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--neon-blue);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 50;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    #hint-panel span { font-weight: bold; color: var(--neon-yellow); }
+
+    /* 떨어지는 블록 */
+    .molecule-block {
+      position: absolute;
+      padding: 15px 25px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 2px solid var(--neon-blue);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      text-align: center;
+      font-weight: bold;
+      transition: opacity 0.2s;
+      user-select: none;
+    }
+    .molecule-block.phase2 {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+    }
+    .molecule-name { font-size: 0.9rem; color: #94a3b8; margin-bottom: 5px; }
+    .molecule-formula { font-size: 1.6rem; color: #fff; letter-spacing: 1px; }
+
+    .explode {
+      transform: scale(1.4);
+      opacity: 0;
+      border-color: var(--neon-green) !important;
+      box-shadow: 0 0 30px var(--neon-green) !important;
+      transition: all 0.3s ease-out;
+    }
+
+    .phase-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .phase-message h2 { color: var(--neon-yellow); font-size: 2rem; margin: 0 0 10px 0; text-shadow: 0 0 15px var(--neon-yellow); }
+    .phase-message p { color: #fff; font-size: 1.2rem; margin: 0; }
+    
+    @keyframes popIn {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .input-area { width: 100%; max-width: 600px; display: flex; gap: 10px; padding: 0 20px; box-sizing: border-box; }
+    #answer-input {
+      flex-grow: 1; padding: 15px; font-size: 1.2rem; border-radius: 12px;
+      border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.05);
+      color: #fff; outline: none; text-align: center; transition: border-color 0.3s;
+    }
+    #answer-input:focus { border-color: var(--neon-blue); }
+    
+    .shake { animation: shake 0.3s; border-color: var(--neon-red) !important; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 100; }
+    .modal-content { background: #1e293b; padding: 40px; border-radius: 20px; border: 1px solid var(--glass-border); text-align: center; max-width: 400px; width: 90%; }
+    .modal-content h2 { font-size: 1.8rem; margin-top: 0; color: #fff;}
+    .modal-buttons { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
+    .btn { padding: 15px; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s; text-decoration: none; color: #fff; }
+    .btn-primary { background: #3b82f6; } .btn-primary:hover { background: #2563eb; }
+    .btn-secondary { background: #475569; } .btn-secondary:hover { background: #334155; }
+    .btn-level { background: #10b981; } .btn-level:hover { background: #059669; }
+    .hidden { display: none !important; }
+    
+    .hint-btn { background: transparent; color: #94a3b8; border: 1px solid #475569; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: all 0.2s; font-size: 0.85rem;}
+    .hint-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+
+  <header>
+    <div class="title-area">
+      <h1>미션 2: 원자량 & 분자량</h1>
+      <button class="hint-btn" onclick="toggleHint()">💡 힌트 ON/OFF</button>
+    </div>
+    <div class="status-area">
+      <div class="phase-bar" id="phase-display">현재 단계: 원자량 (Phase 1)</div>
+      <div class="health-bar" id="health-display">❤️❤️❤️❤️❤️</div>
+      <div class="score-bar">Score: <span id="score-display">0</span></div>
+    </div>
+  </header>
+
+  <div id="game-container">
+    <!-- 실시간 힌트 패널 (기본 숨김) -->
+    <div id="hint-panel" class="hidden">
+      <span>H</span>(1), <span>C</span>(12), <span>N</span>(14), <span>O</span>(16), <span>Na</span>(23)<br>
+      <span>Mg</span>(24), <span>Al</span>(27), <span>P</span>(31), <span>S</span>(32)<br>
+      <span>Cl</span>(35.5), <span>K</span>(39), <span>Ca</span>(40)
+    </div>
+  </div>
+
+  <div class="input-area">
+    <input type="number" step="0.1" id="answer-input" placeholder="숫자를 입력하고 Enter를 누르세요" autocomplete="off" disabled>
+  </div>
+
+  <!-- 시작 모달 -->
+  <div id="start-modal" class="modal-overlay">
+    <div class="modal-content">
+      <h2>집중력 훈련 모드</h2>
+      <p style="color: #cbd5e1; line-height: 1.5;">
+        블록은 <strong style="color: #38bdf8;">하나씩</strong> 떨어집니다.<br>
+        처음 <strong style="color: #fbbf24;">15번</strong>은 <strong>원자량</strong>을,<br>
+        이후부터는 <strong style="color: #8b5cf6;">분자량</strong>을 입력하세요!
+      </p>
+      <div class="modal-buttons">
+        <button class="btn btn-level" onclick="startGame(1)">1단계 (초급 - 천천히)</button>
+        <button class="btn btn-level" onclick="startGame(2)">2단계 (중급 - 보통)</button>
+        <button class="btn btn-level" onclick="startGame(3)">3단계 (고급 - 빠르게)</button>
+        <a href="mission1.html" class="btn btn-secondary">🔙 이전 1미션으로 돌아가기</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 게임 오버 모달 -->
+  <div id="end-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h2 id="end-title" style="color: var(--neon-red);">GAME OVER</h2>
+      <p>최종 점수: <strong id="final-score">0</strong>점</p>
+      <div class="modal-buttons">
+        <button class="btn btn-primary" onclick="showStartModal()">🔄 다시 도전하기</button>
+        <a href="mission1.html" class="btn btn-secondary">🔙 1미션(주기율표)으로 가기</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Phase 1: 필수 원자량 리스트 (spawnCount 속성 추가)
+    const elementsData = [
+      { name: '수소', formula: 'H', weight: 1, spawnCount: 0 },
+      { name: '탄소', formula: 'C', weight: 12, spawnCount: 0 },
+      { name: '질소', formula: 'N', weight: 14, spawnCount: 0 },
+      { name: '산소', formula: 'O', weight: 16, spawnCount: 0 },
+      { name: '나트륨', formula: 'Na', weight: 23, spawnCount: 0 },
+      { name: '마그네슘', formula: 'Mg', weight: 24, spawnCount: 0 },
+      { name: '알루미늄', formula: 'Al', weight: 27, spawnCount: 0 },
+      { name: '인', formula: 'P', weight: 31, spawnCount: 0 },
+      { name: '황', formula: 'S', weight: 32, spawnCount: 0 },
+      { name: '염소', formula: 'Cl', weight: 35.5, spawnCount: 0 },
+      { name: '칼륨', formula: 'K', weight: 39, spawnCount: 0 },
+      { name: '칼슘', formula: 'Ca', weight: 40, spawnCount: 0 }
+    ];
+
+    // Phase 2: 분자량 리스트
+    const moleculesData = [
+      { name: '산화마그네슘', formula: 'MgO', weight: 40, spawnCount: 0 },
+      { name: '과산화나트륨', formula: 'Na₂O₂', weight: 78, spawnCount: 0 },
+      { name: '트리메틸알루미늄', formula: '(CH₃)₃Al', weight: 72, spawnCount: 0 },
+      { name: '물', formula: 'H₂O', weight: 18, spawnCount: 0 },
+      { name: '이산화탄소', formula: 'CO₂', weight: 44, spawnCount: 0 },
+      { name: '암모니아', formula: 'NH₃', weight: 17, spawnCount: 0 },
+      { name: '메탄', formula: 'CH₄', weight: 16, spawnCount: 0 },
+      { name: '수산화나트륨', formula: 'NaOH', weight: 40, spawnCount: 0 },
+      { name: '탄산칼슘', formula: 'CaCO₃', weight: 100, spawnCount: 0 },
+      { name: '황산', formula: 'H₂SO₄', weight: 98, spawnCount: 0 },
+      { name: '염화나트륨', formula: 'NaCl', weight: 58.5, spawnCount: 0 }
+    ];
+
+    let health = 5;
+    let score = 0;
+    let currentPhase = 1; 
+    let targetScoreForPhase2 = 150; // 15개 맞추면 (150점) Phase 2 진입
+    
+    let activeBlock = null; 
+    let gameLoopInterval;
+    let isPlaying = false;
+    let fallSpeed = 1; 
+
+    const gameContainer = document.getElementById('game-container');
+    const inputField = document.getElementById('answer-input');
+    const healthDisplay = document.getElementById('health-display');
+    const scoreDisplay = document.getElementById('score-display');
+    const phaseDisplay = document.getElementById('phase-display');
+    const startModal = document.getElementById('start-modal');
+    const endModal = document.getElementById('end-modal');
+    const hintPanel = document.getElementById('hint-panel');
+
+    // 힌트 패널 껐다 켜기 (게임 진행에 영향 없음)
+    function toggleHint() {
+      hintPanel.classList.toggle('hidden');
+    }
+
+    function showStartModal() {
+      endModal.classList.add('hidden');
+      startModal.classList.remove('hidden');
+    }
+
+    function startGame(level) {
+      startModal.classList.add('hidden');
+      
+      // 속도 설정
+      if(level === 1) fallSpeed = 0.8;
+      else if(level === 2) fallSpeed = 1.4;
+      else if(level === 3) fallSpeed = 2.0;
+
+      // 상태 초기화
+      health = 5;
+      score = 0;
+      currentPhase = 1;
+      
+      // 스폰 카운트 초기화 (재시작 시 중복 로직 리셋)
+      elementsData.forEach(e => e.spawnCount = 0);
+      moleculesData.forEach(m => m.spawnCount = 0);
+
+      phaseDisplay.textContent = '현재 단계: 원자량 (Phase 1)';
+      phaseDisplay.style.color = 'var(--neon-yellow)';
+      
+      if(activeBlock) activeBlock.element.remove();
+      activeBlock = null;
+      
+      // 기존 블록 및 메세지 지우기 (힌트 패널은 살려둠)
+      Array.from(gameContainer.children).forEach(child => {
+        if (child.id !== 'hint-panel') child.remove();
+      });
+      
+      updateUI();
+      isPlaying = true;
+      inputField.disabled = false;
+      inputField.value = '';
+      inputField.focus();
+
+      gameLoopInterval = setInterval(gameLoop, 20); 
+      spawnBlock(); 
+    }
+
+    // 조건에 맞는 아이템 랜덤 추출 로직 (최대 2번 중복 제한)
+    function getRandomItem(dataList) {
+      // 출현 횟수가 2번 미만인 아이템만 필터링
+      let availableItems = dataList.filter(item => item.spawnCount < 2);
+      
+      // 만약 모든 아이템이 2번씩 다 나왔다면 (게임이 길어질 경우 대비) 카운트 초기화
+      if (availableItems.length === 0) {
+        dataList.forEach(item => item.spawnCount = 0);
+        availableItems = dataList;
+      }
+
+      // 필터링된 배열에서 무작위 하나 선택 후 카운트 1 증가
+      const selectedIndex = Math.floor(Math.random() * availableItems.length);
+      const selectedItem = availableItems[selectedIndex];
+      selectedItem.spawnCount++;
+      
+      return selectedItem;
+    }
+
+    function spawnBlock() {
+      if (!isPlaying) return;
+
+      const dataList = (currentPhase === 1) ? elementsData : moleculesData;
+      const targetData = getRandomItem(dataList); // 랜덤 및 중복제한 로직 적용
+      
+      const blockEl = document.createElement('div');
+      blockEl.className = currentPhase === 1 ? 'molecule-block' : 'molecule-block phase2';
+      
+      blockEl.innerHTML = `
+        <div class="molecule-name">${targetData.name}</div>
+        <div class="molecule-formula">${targetData.formula}</div>
+      `;
+      
+      const maxLeft = gameContainer.clientWidth - 150; 
+      const startLeft = Math.max(0, Math.floor(Math.random() * maxLeft));
+      
+      blockEl.style.left = `${startLeft}px`;
+      blockEl.style.top = `-100px`; 
+      
+      gameContainer.appendChild(blockEl);
+
+      activeBlock = {
+        element: blockEl,
+        weight: targetData.weight,
+        top: -100
+      };
+    }
+
+    function gameLoop() {
+      const containerHeight = gameContainer.clientHeight;
+
+      if (activeBlock) {
+        activeBlock.top += fallSpeed;
+        activeBlock.element.style.top = `${activeBlock.top}px`;
+
+        if (activeBlock.top > containerHeight) {
+          activeBlock.element.remove();
+          activeBlock = null;
+          takeDamage();
+          
+          if (health > 0) {
+            setTimeout(spawnBlock, 500);
+          }
+        }
+      }
+    }
+
+    inputField.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const answer = parseFloat(inputField.value);
+        if (isNaN(answer)) return;
+
+        if (activeBlock && activeBlock.weight === answer) {
+          
+          activeBlock.element.classList.add('explode');
+          const tempElement = activeBlock.element;
+          setTimeout(() => {
+            if (tempElement.parentNode) tempElement.remove();
+          }, 300);
+          
+          activeBlock = null; 
+          score += 10;
+          updateUI();
+          inputField.value = '';
+
+          // 15개(150점) 맞추면 Phase 2 진입
+          if (currentPhase === 1 && score >= targetScoreForPhase2) {
+            transitionToPhase2();
+          } else {
+            setTimeout(spawnBlock, 400);
+          }
+
+        } else {
+          inputField.classList.add('shake');
+          inputField.value = '';
+          setTimeout(() => inputField.classList.remove('shake'), 300);
+        }
+      }
+    });
+
+    function transitionToPhase2() {
+      currentPhase = 2;
+      phaseDisplay.textContent = '현재 단계: 심화 분자량 (Phase 2)';
+      phaseDisplay.style.color = '#8b5cf6';
+
+      const phaseMsg = document.createElement('div');
+      phaseMsg.className = 'phase-message';
+      phaseMsg.innerHTML = `
+        <h2>15개 클리어!</h2>
+        <p>지금부터 복합 <strong style="color:#8b5cf6;">분자량</strong>이 떨어집니다!</p>
+      `;
+      gameContainer.appendChild(phaseMsg);
+      
+      setTimeout(() => {
+        phaseMsg.remove();
+        spawnBlock();
+      }, 2500);
+    }
+
+    function takeDamage() {
+      health--;
+      updateUI();
+      gameContainer.style.borderColor = 'var(--neon-red)';
+      setTimeout(() => { gameContainer.style.borderColor = 'var(--glass-border)'; }, 200);
+
+      if (health <= 0) {
+        gameOver();
+      }
+    }
+
+    function updateUI() {
+      healthDisplay.textContent = '❤️'.repeat(Math.max(0, health)) + '🖤'.repeat(5 - Math.max(0, health));
+      scoreDisplay.textContent = score;
+    }
+
+    function gameOver() {
+      isPlaying = false;
+      clearInterval(gameLoopInterval);
+      inputField.disabled = true;
+
+      document.getElementById('end-title').textContent = "GAME OVER";
+      document.getElementById('final-score').textContent = score;
+      endModal.classList.remove('hidden');
+    }
+  </script>
+
+</body>
+</html>

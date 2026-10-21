@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주기율표 퍼즐 맞추기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" crossorigin="anonymous" />
+  <style>
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background-color: #1a222c;
+      color: #f8fafc;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+      color: #cbd5e1;
+    }
+
+    .game-info {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .level-buttons button {
+      padding: 8px 16px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 5px;
+      background-color: #3b82f6;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .level-buttons button:hover { background-color: #2563eb; }
+
+    #spawn-area {
+      width: 120px;
+      height: 120px;
+      border: 2px dashed #475569;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      background-color: #0f172a;
+      transition: all 0.3s ease;
+    }
+
+    .periodic-table {
+      display: grid;
+      grid-template-columns: repeat(8, 80px);
+      grid-template-rows: auto repeat(4, 90px);
+      gap: 8px;
+    }
+
+    .group-header {
+      text-align: center;
+      color: #64748b;
+      font-weight: bold;
+      font-size: 0.9rem;
+      align-self: end;
+      padding-bottom: 5px;
+    }
+
+    .drop-zone {
+      background-color: #273548;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      position: relative;
+    }
+    .drop-zone.active {
+      background-color: #3b4b61;
+      border-color: #94a3b8;
+    }
+
+    .element-card {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      position: relative;
+      user-select: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .element-card:active { cursor: grabbing; }
+    
+    .element-card.blue { background-color: #3b609e; color: #f8fafc; }
+    .element-card.yellow { background-color: #b09935; color: #f8fafc; }
+
+    .el-num {
+      position: absolute;
+      top: 4px;
+      left: 6px;
+      font-size: 0.7rem;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .el-sym { font-size: 1.8rem; font-weight: 900; line-height: 1; margin-bottom: 2px; }
+    .el-name { font-size: 0.75rem; font-weight: bold; }
+
+    .hidden-cell { visibility: hidden; }
+
+    #message {
+      color: #fbbf24;
+      font-size: 1.2rem;
+      font-weight: bold;
+      height: 24px;
+      margin-bottom: 10px;
+    }
+
+    /* 미션 2 이동 버튼 스타일 */
+    .next-mission-btn {
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+      animation: popIn 0.5s ease-out;
+      transition: transform 0.2s;
+    }
+    .next-mission-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>주기율표 퍼즐 맞추기</h1>
+  
+  <div class="level-buttons">
+    <button onclick="startGame(1)">1단계 (초급 - 120초)</button>
+    <button onclick="startGame(2)">2단계 (중급 - 60초)</button>
+    <button onclick="startGame(3)">3단계 (고급 - 30초)</button>
+  </div>
+
+  <div class="game-info">
+    <div>남은 시간: <span id="timer">0</span>초</div>
+    <div>맞춘 개수: <span id="score">0</span> / 20</div>
+  </div>
+
+  <div id="message">난이도를 선택해 게임을 시작하세요!</div>
+
+  <!-- 원소가 하나씩 나타나는 곳 -->
+  <div id="spawn-area"></div>
+
+  <!-- 주기율표 그리드 -->
+  <div class="periodic-table" id="pt-grid"></div>
+
+  <script>
+    const elementsData = [
+      { num: 1, sym: 'H', name: '수소', col: 1, row: 1, color: 'blue' },
+      { num: 2, sym: 'He', name: '헬륨', col: 8, row: 1, color: 'blue' },
+      { num: 3, sym: 'Li', name: '리튬', col: 1, row: 2, color: 'yellow' },
+      { num: 4, sym: 'Be', name: '베릴륨', col: 2, row: 2, color: 'yellow' },
+      { num: 5, sym: 'B', name: '붕소', col: 3, row: 2, color: 'blue' },
+      { num: 6, sym: 'C', name: '탄소', col: 4, row: 2, color: 'blue' },
+      { num: 7, sym: 'N', name: '질소', col: 5, row: 2, color: 'blue' },
+      { num: 8, sym: 'O', name: '산소', col: 6, row: 2, color: 'blue' },
+      { num: 9, sym: 'F', name: '플루오린', col: 7, row: 2, color: 'blue' },
+      { num: 10, sym: 'Ne', name: '네온', col: 8, row: 2, color: 'blue' },
+      { num: 11, sym: 'Na', name: '나트륨', col: 1, row: 3, color: 'yellow' },
+      { num: 12, sym: 'Mg', name: '마그네슘', col: 2, row: 3, color: 'yellow' },
+      { num: 13, sym: 'Al', name: '알루미늄', col: 3, row: 3, color: 'yellow' },
+      { num: 14, sym: 'Si', name: '규소', col: 4, row: 3, color: 'blue' },
+      { num: 15, sym: 'P', name: '인', col: 5, row: 3, color: 'blue' },
+      { num: 16, sym: 'S', name: '황', col: 6, row: 3, color: 'blue' },
+      { num: 17, sym: 'Cl', name: '염소', col: 7, row: 3, color: 'blue' },
+      { num: 18, sym: 'Ar', name: '아르곤', col: 8, row: 3, color: 'blue' },
+      { num: 19, sym: 'K', name: '칼륨', col: 1, row: 4, color: 'yellow' },
+      { num: 20, sym: 'Ca', name: '칼슘', col: 2, row: 4, color: 'yellow' }
+    ];
+
+    let timerInterval;
+    let timeLeft = 0;
+    let currentScore = 0;
+    let remainingElements = [];
+    let isGameRunning = false;
+
+    function createGrid() {
+      const grid = document.getElementById('pt-grid');
+      grid.innerHTML = '';
+
+      const groups = ['1족', '2족', '13족', '14족', '15족', '16족', '17족', '18족'];
+      groups.forEach(g => {
+        const div = document.createElement('div');
+        div.className = 'group-header';
+        div.textContent = g;
+        grid.appendChild(div);
+      });
+
+      for (let r = 1; r <= 4; r++) {
+        for (let c = 1; c <= 8; c++) {
+          const cell = document.createElement('div');
+          const targetElement = elementsData.find(e => e.row === r && e.col === c);
+          
+          if (targetElement) {
+            cell.className = 'drop-zone';
+            cell.setAttribute('data-num', targetElement.num);
+            cell.addEventListener('dragover', dragOver);
+            cell.addEventListener('dragenter', dragEnter);
+            cell.addEventListener('dragleave', dragLeave);
+            cell.addEventListener('drop', drop);
+          } else {
+            cell.className = 'hidden-cell';
+          }
+          grid.appendChild(cell);
+        }
+      }
+    }
+
+    function startGame(level) {
+      clearInterval(timerInterval);
+      isGameRunning = true;
+      currentScore = 0;
+      document.getElementById('score').textContent = currentScore;
+      document.getElementById('message').textContent = '게임을 시작합니다! 블록을 알맞은 빈칸으로 드래그하세요.';
+      document.getElementById('message').style.color = '#fbbf24';
+      
+      // 스폰 에어리어 초기화
+      const spawnArea = document.getElementById('spawn-area');
+      spawnArea.style.border = '2px dashed #475569';
+      spawnArea.style.backgroundColor = '#0f172a';
+
+      if (level === 1) timeLeft = 120;
+      if (level === 2) timeLeft = 60;
+      if (level === 3) timeLeft = 30;
+      
+      document.getElementById('timer').textContent = timeLeft;
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').textContent = timeLeft;
+        if (timeLeft <= 0) {
+          endGame(false);
+        }
+      }, 1000);
+
+      createGrid();
+      remainingElements = [...elementsData];
+      spawnNextElement();
+    }
+
+    function spawnNextElement() {
+      const spawnArea = document.getElementById('spawn-area');
+      spawnArea.innerHTML = '';
+
+      if (remainingElements.length === 0) {
+        endGame(true);
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * remainingElements.length);
+      const el = remainingElements[randomIndex];
+
+      const card = document.createElement('div');
+      card.className = `element-card ${el.color}`;
+      card.draggable = true;
+      card.setAttribute('data-num', el.num);
+
+      card.innerHTML = `
+        <div class="el-sym">${el.sym}</div>
+        <div class="el-name">${el.name}</div>
+      `;
+
+      card.addEventListener('dragstart', dragStart);
+      spawnArea.appendChild(card);
+    }
+
+    function dragStart(e) {
+      if (!isGameRunning) { e.preventDefault(); return; }
+      e.dataTransfer.setData('text/plain', e.target.getAttribute('data-num'));
+    }
+
+    function dragOver(e) { e.preventDefault(); }
+
+    function dragEnter(e) {
+      e.preventDefault();
+      if (e.target.classList.contains('drop-zone') && e.target.childElementCount === 0) {
+        e.target.classList.add('active');
+      }
+    }
+
+    function dragLeave(e) { e.target.classList.remove('active'); }
+
+    function drop(e) {
+      e.preventDefault();
+      e.target.classList.remove('active');
+
+      const draggedNum = e.dataTransfer.getData('text/plain');
+      const targetNum = e.target.getAttribute('data-num');
+
+      if (draggedNum === targetNum && e.target.childElementCount === 0) {
+        const draggedCard = document.querySelector(`#spawn-area .element-card`);
+        
+        draggedCard.draggable = false;
+        draggedCard.style.cursor = 'default';
+
+        const numDiv = document.createElement('div');
+        numDiv.className = 'el-num';
+        numDiv.textContent = draggedNum;
+        draggedCard.appendChild(numDiv);
+
+        e.target.appendChild(draggedCard);
+
+        currentScore++;
+        document.getElementById('score').textContent = currentScore;
+        document.getElementById('message').textContent = '정답입니다! 다음 원소를 맞추세요.';
+
+        remainingElements = remainingElements.filter(el => el.num !== parseInt(draggedNum));
+        spawnNextElement();
+      } else {
+        document.getElementById('message').textContent = '틀렸습니다! 올바른 위치를 찾아보세요.';
+      }
+    }
+
+    function endGame(isWin) {
+      clearInterval(timerInterval);
+      isGameRunning = false;
+      const spawnArea = document.getElementById('spawn-area');
+      spawnArea.innerHTML = '';
+
+      if (isWin) {
+        document.getElementById('message').textContent = `🎉 축하합니다! 모든 원소를 맞췄습니다. (남은 시간: ${timeLeft}초)`;
+        document.getElementById('message').style.color = '#34d399';
+        
+        // 미션 2로 넘어가는 버튼 동적 생성
+        spawnArea.style.border = 'none';
+        spawnArea.style.backgroundColor = 'transparent';
+        spawnArea.innerHTML = `<a href="mission2.html" class="next-mission-btn">🚀 미션 2<br>분자량 맞추기</a>`;
+      } else {
+        document.getElementById('message').textContent = '⏰ 시간 초과! 다시 도전해보세요.';
+        document.getElementById('message').style.color = '#f87171';
+      }
+    }
+
+    createGrid();
+  </script>
+
+</body>
+</html>
