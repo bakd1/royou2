@@ -57,118 +57,150 @@
     #final-result { margin-top: 25px; font-size: 1.4em; font-weight: bold; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; display: none; line-height: 1.5; }
     .q-score-badge { float: right; font-size: 0.8em; background-color: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 20px; margin-left: 10px; }
 
-    /* 연습장 관련 스타일 */
-    #sp-toggle-btn {
-      position: fixed; bottom: 20px; right: 20px; z-index: 9999;
-      background-color: #ff9800; color: white; border: none; border-radius: 50px;
-      padding: 15px 20px; font-size: 16px; font-weight: bold; cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background-color 0.2s;
-    }
-    #sp-toggle-btn:hover { background-color: #f57c00; }
-    
-    #sp-panel {
-      position: fixed; bottom: 80px; right: 20px; z-index: 9998;
-      width: 95vw; max-width: 720px; height: 630px;
-      background-color: #fff; border: 2px solid #ccc; border-radius: 10px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      display: none; flex-direction: column; overflow: hidden;
-    }
-    
-    #sp-header {
-      background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .sp-title { font-weight: bold; color: #333; font-size: 14px; }
-    .sp-tools button {
-      background-color: #fff; border: 1px solid #ccc; border-radius: 4px;
-      padding: 6px 10px; cursor: pointer; font-size: 13px; margin-left: 4px;
-    }
-    .sp-tools button.active { 
-      background-color: #e3f2fd; border-color: #1976d2; font-weight: bold; color: #1976d2; 
-    }
-    
-    #sp-canvas { 
-      flex-grow: 1; cursor: crosshair; background-color: #fff; touch-action: none; 
-    }
     /* ================== 우측 문항 내비게이션 패널 스타일 ================== */
-#q-nav-panel {
-  position: fixed;
-  top: 50px;
-  right: 20px;
-  width: 170px;
-  background-color: #fff;
-  border: 2px solid #ced4da;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  max-height: calc(100vh - 120px); /* 화면 높이에 맞게 스크롤 자동 생성 */
-}
+    #q-nav-panel {
+      position: fixed;
+      top: 50px;
+      right: 20px;
+      width: 170px;
+      background-color: #fff;
+      border: 2px solid #ced4da;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 120px);
+    }
 
-.q-nav-header {
-  background-color: #f8f9fa;
-  padding: 12px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 0.95em;
-  border-bottom: 1px solid #ced4da;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  color: #1976d2;
-}
+    .q-nav-header {
+      background-color: #f8f9fa;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.95em;
+      border-bottom: 1px solid #ced4da;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      color: #1976d2;
+    }
 
-.q-nav-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
-  padding: 12px;
-  overflow-y: auto;
-}
+    .q-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      padding: 12px;
+      overflow-y: auto;
+    }
 
-.q-nav-btn {
-  padding: 8px 0;
-  font-size: 0.9em;
-  font-weight: bold;
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  background-color: #fff;
-  color: #6c757d;
-  cursor: pointer;
-  transition: all 0.2s;
-}
+    .q-nav-btn {
+      padding: 8px 0;
+      font-size: 0.9em;
+      font-weight: bold;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      background-color: #fff;
+      color: #6c757d;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
 
-.q-nav-btn:hover { background-color: #e9ecef; color: #495057; }
+    .q-nav-btn:hover { background-color: #e9ecef; color: #495057; }
+    .q-nav-btn.answered { background-color: #e3f2fd; border-color: #90caf9; color: #1976d2; } 
+    .q-nav-btn.correct { background-color: #e8f5e9; border-color: #81c784; color: #2e7d32; }  
+    .q-nav-btn.partial { background-color: #fff3e0; border-color: #ffb74d; color: #e65100; }  
+    .q-nav-btn.incorrect { background-color: #ffebee; border-color: #e57373; color: #c62828; } 
 
-/* 상태별 버튼 색상 */
-.q-nav-btn.answered { background-color: #e3f2fd; border-color: #90caf9; color: #1976d2; } /* 답안 작성 중 */
-.q-nav-btn.correct { background-color: #e8f5e9; border-color: #81c784; color: #2e7d32; }  /* 정답 */
-.q-nav-btn.partial { background-color: #fff3e0; border-color: #ffb74d; color: #e65100; }  /* 부분 점수 */
-.q-nav-btn.incorrect { background-color: #ffebee; border-color: #e57373; color: #c62828; } /* 오답 */
+    .q-nav-legend {
+      font-size: 0.75em;
+      padding: 10px;
+      border-top: 1px solid #ced4da;
+      background-color: #f8f9fa;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      color: #666;
+      line-height: 1.6;
+    }
 
-.q-nav-legend {
-  font-size: 0.75em;
-  padding: 10px;
-  border-top: 1px solid #ced4da;
-  background-color: #f8f9fa;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  color: #666;
-  line-height: 1.6;
-}
+    .q-nav-legend .box {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
 
-.q-nav-legend .box {
-  display: inline-block;
-  width: 10px; height: 10px;
-  border-radius: 2px;
-  margin-right: 4px;
-  vertical-align: middle;
-}
+    @media (max-width: 1150px) {
+      #q-nav-panel { display: none; }
+    }
 
-/* 해상도가 낮을 경우 본문을 가리지 않게 숨김 처리 */
-@media (max-width: 1150px) {
-  #q-nav-panel { display: none; }
-}
+    /* ================== 이미지 확대 모달 스타일 수정 (PAN 기능 추가) ================== */
+    #image-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      flex-direction: column;
+    }
+
+    #image-modal-content {
+      position: relative;
+      width: 100%;
+      height: calc(100% - 60px);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #modal-img {
+      position: absolute;
+      max-width: 100%;
+      max-height: 100%;
+      cursor: grab;
+      transform-origin: center center;
+      transition: transform 0.05s linear;
+      user-select: none;
+    }
+
+    #modal-img:active {
+      cursor: grabbing;
+    }
+
+    .modal-zoom-controls {
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      background-color: rgba(34, 34, 34, 0.9);
+      z-index: 10001;
+    }
+
+    .modal-zoom-controls button {
+      padding: 10px 15px;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #1976d2;
+      color: white;
+      transition: background-color 0.2s;
+    }
+    .modal-zoom-controls button:hover {
+      background-color: #1565c0;
+    }
+    .modal-zoom-controls .modal-close-btn {
+      background-color: #f44336;
+    }
+    .modal-zoom-controls .modal-close-btn:hover {
+      background-color: #d32f2f;
+    }
   </style>
 </head>
 <body>
@@ -391,7 +423,7 @@
     ];
 
 // 특정 문제 해설 열기/닫기 토글 함수
-    function toggleExplanation(qIndex) {
+function toggleExplanation(qIndex) {
       const expEl = document.getElementById(`exp-${qIndex}`);
       const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
       if (!expEl) return;
@@ -421,9 +453,11 @@
           html += `<div class="sub-q-container">`;
           html += `<div class="sub-q-label">${sub.label}</div>`;
           
+          // 문제 이미지 렌더링에 확대 기능(onclick) 적용
           if (sub.image) {
             html += `<div style="margin-bottom: 15px; text-align: center;">
-                       <img src="${sub.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px;" alt="문제 이미지">
+                       <img src="${sub.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px; cursor: zoom-in;" alt="문제 이미지" onclick="openImageModal(this.src)" title="클릭하여 확대">
+                       <div style="font-size:0.85em; color:#7f8c8d; margin-top:5px;">[이미지를 클릭하면 확대됩니다]</div>
                      </div>`;
           }
 
@@ -442,16 +476,13 @@
           html += `</div>`;
         });
         
-        // 새로 추가된 액션 버튼 (해설 열기 / 채점하기 분리)
         html += `<div style="text-align: right; margin-top: 15px; margin-bottom: 10px; clear: both;">`;
-        // 처음에는 display: none 처리하여 시험 모드에서 숨김
         html += `  <button id="btn-toggle-exp-${qIndex}" class="btn-grade-single" style="float: none; background-color: #8d6e63; margin-right: 8px; display: none;" onclick="toggleExplanation(${qIndex})">📖 해설 열기</button>`;
         html += `  <button id="btn-grade-single-${qIndex}" class="btn-grade-single" style="float: none;" onclick="gradeSingleQuestion(${qIndex})">✔️ 정답 확인 및 채점</button>`;
         html += `</div>`;
         
         if(q.explanation) {
             html += `<div style="clear:both;"></div>`;
-            // 해설창은 초기에 숨김(display:none) 처리
             html += `<div id="exp-${qIndex}" class="feedback-box" style="background-color:#f8f9fa; border:1px solid #dee2e6; color:#495057; font-weight:normal; margin-top:10px; display:none;">💡 <strong>문제 핵심 해설:</strong><br>${q.explanation}</div>`;
         }
         html += `</div>`;
@@ -459,7 +490,6 @@
       container.innerHTML = html;
     }
 
-    // 모드 변경 함수
     function setMode(mode) {
       const labelBasic = document.getElementById('label-basic');
       const labelStudy = document.getElementById('label-study');
@@ -470,14 +500,13 @@
         labelBasic.classList.remove('active');
         labelStudy.classList.add('active');
         
-        // 해설 모드: 힌트는 없애고, 해설창을 모두 펼쳐줌
         quizData.forEach((q, qIndex) => {
           const expEl = document.getElementById(`exp-${qIndex}`);
           const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
           if (expEl) {
             expEl.style.display = 'block';
             if(toggleBtn) {
-              toggleBtn.style.display = 'inline-block'; // 해설 모드일 때 버튼 보이기
+              toggleBtn.style.display = 'inline-block'; 
               toggleBtn.innerHTML = '📖 해설 닫기';
             }
           }
@@ -523,7 +552,6 @@
         isCorrect = sub.answers.some(a => a.replace(/\s+/g, '').toLowerCase() === uClean);
       } else if (sub.type === 'formula') {
         let uClean = userVal.replace(/\s+/g, '');
-        // formula 타입일 경우 대소문자 구분 (toLowerCase 사용 안함)
         isCorrect = sub.answers.some(a => a.replace(/\s+/g, '') === uClean);
       } else if (sub.type === 'order') {
         let uClean = userVal.replace(/[^0-9]/g, '');
@@ -580,11 +608,11 @@
         }
       }
 
-      // 정답용 이미지
+      // 정답용 이미지 렌더링에 확대 기능(onclick) 적용
       if (sub.answerImage) {
         html += `<div style="margin-top: 15px; text-align: center;">
-                   <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px;" alt="정답 해설 이미지">
-                   <div style="font-size:0.85em; color:#1976d2; margin-top:5px;">[정답 참고 이미지]</div>
+                   <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px; cursor: zoom-in;" alt="정답 해설 이미지" onclick="openImageModal(this.src)" title="클릭하여 확대">
+                   <div style="font-size:0.85em; color:#1976d2; margin-top:5px;">[정답 참고 이미지 - 클릭 시 확대]</div>
                  </div>`;
       }
 
@@ -623,7 +651,6 @@
       const q = quizData[qIndex];
 
       if (q.isUnordered) {
-        // 순서 무관 문제 처리 시 'formula' 타입 여부에 따라 대소문자 변환 결정
         let answerPool = q.subs.map(sub => {
            return sub.answers.map(a => sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase());
         });
@@ -659,7 +686,6 @@
       updateCardScore(qIndex);
       gradingState[qIndex].isGraded = true;
 
-      // 채점 시 자동으로 해설 오픈 및 버튼 텍스트 변경
       const expEl = document.getElementById(`exp-${qIndex}`);
       const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
       if (expEl) {
@@ -670,7 +696,6 @@
           }
       }
       
-      // 채점 완료 후 채점 버튼 숨기기
       const btnEl = document.getElementById(`btn-grade-single-${qIndex}`);
       if (btnEl) btnEl.style.display = 'none';
       
@@ -717,259 +742,361 @@
     }
 
     renderQuiz();
+
     // ================== 우측 문항 내비게이션 모듈 시작 ==================
-function initNavPanel() {
-  // 1. HTML 패널 동적 생성
-  const navHtml = `
-    <div id="q-nav-panel">
-      <div class="q-nav-header">📌 문항 이동</div>
-      <div class="q-nav-grid" id="q-nav-grid"></div>
-      <div class="q-nav-legend">
-        <div><span class="box" style="background:#fff; border:1px solid #dee2e6;"></span>미작성</div>
-        <div><span class="box" style="background:#e3f2fd; border:1px solid #90caf9;"></span>답안 입력됨</div>
-        <div><span class="box" style="background:#e8f5e9; border:1px solid #81c784;"></span>정답 / 채점완료</div>
-      </div>
-    </div>
-  `;
-  document.body.insertAdjacentHTML('beforeend', navHtml);
+    function initNavPanel() {
+      const navHtml = `
+        <div id="q-nav-panel">
+          <div class="q-nav-header">📌 문항 이동</div>
+          <div class="q-nav-grid" id="q-nav-grid"></div>
+          <div class="q-nav-legend">
+            <div><span class="box" style="background:#fff; border:1px solid #dee2e6;"></span>미작성</div>
+            <div><span class="box" style="background:#e3f2fd; border:1px solid #90caf9;"></span>답안 입력됨</div>
+            <div><span class="box" style="background:#e8f5e9; border:1px solid #81c784;"></span>정답 / 채점완료</div>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', navHtml);
 
-  // 2. 문항 개수에 맞춰 버튼 생성
-  const navGrid = document.getElementById('q-nav-grid');
-  let gridHtml = '';
-  quizData.forEach((q, qIndex) => {
-    gridHtml += `<button class="q-nav-btn" id="nav-btn-${qIndex}" onclick="scrollToQuestion(${qIndex})">${qIndex + 1}</button>`;
-  });
-  navGrid.innerHTML = gridHtml;
+      const navGrid = document.getElementById('q-nav-grid');
+      let gridHtml = '';
+      quizData.forEach((q, qIndex) => {
+        gridHtml += `<button class="q-nav-btn" id="nav-btn-${qIndex}" onclick="scrollToQuestion(${qIndex})">${qIndex + 1}</button>`;
+      });
+      navGrid.innerHTML = gridHtml;
 
-  // 3. 사용자가 답을 입력할 때마다 실시간 색상 업데이트 (이벤트 위임)
-  document.getElementById('quiz-container').addEventListener('input', updateNavStatus);
+      document.getElementById('quiz-container').addEventListener('input', updateNavStatus);
 
-  // 4. 기존 채점 기능에 내비게이션 업데이트 연동 (기존 코드 안전 후킹)
-  if (typeof gradeSingleQuestion === 'function') {
-    const originalGradeSingle = gradeSingleQuestion;
-    gradeSingleQuestion = function(qIndex) {
-      originalGradeSingle(qIndex);
+      if (typeof gradeSingleQuestion === 'function') {
+        const originalGradeSingle = gradeSingleQuestion;
+        gradeSingleQuestion = function(qIndex) {
+          originalGradeSingle(qIndex);
+          updateNavStatus();
+        };
+      }
+
+      if (typeof overrideScore === 'function') {
+        const originalOverrideScore = overrideScore;
+        overrideScore = function(qIndex, sIndex, newStatus) {
+          originalOverrideScore(qIndex, sIndex, newStatus);
+          updateNavStatus();
+        };
+      }
+
+      if (typeof gradeAll === 'function') {
+        const originalGradeAll = gradeAll;
+        gradeAll = function() {
+          originalGradeAll();
+          updateNavStatus();
+        };
+      }
+
       updateNavStatus();
-    };
-  }
-
-  if (typeof overrideScore === 'function') {
-    const originalOverrideScore = overrideScore;
-    overrideScore = function(qIndex, sIndex, newStatus) {
-      originalOverrideScore(qIndex, sIndex, newStatus);
-      updateNavStatus();
-    };
-  }
-
-  if (typeof gradeAll === 'function') {
-    const originalGradeAll = gradeAll;
-    gradeAll = function() {
-      originalGradeAll();
-      updateNavStatus();
-    };
-  }
-
-  // 초기 상태 렌더링
-  updateNavStatus();
-}
-
-// 클릭 시 해당 문제로 부드럽게 스크롤
-function scrollToQuestion(qIndex) {
-  const target = document.getElementById(`qCard-${qIndex}`);
-  if(target) {
-    const topPos = target.getBoundingClientRect().top + window.pageYOffset - 20;
-    window.scrollTo({ top: topPos, behavior: 'smooth' });
-  }
-}
-
-// 답안 입력 및 채점 상태에 따라 버튼 색상 변경
-function updateNavStatus() {
-  quizData.forEach((q, qIndex) => {
-    const navBtn = document.getElementById(`nav-btn-${qIndex}`);
-    if(!navBtn) return;
-
-    // 1) 채점이 완료된 경우 (정답/부분점수/오답 색상)
-    if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
-      let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
-      navBtn.className = 'q-nav-btn'; // 클래스 초기화
-      if (qEarnedScore === q.score) navBtn.classList.add('correct');
-      else if (qEarnedScore > 0) navBtn.classList.add('partial');
-      else navBtn.classList.add('incorrect');
-      return;
     }
 
-    // 2) 채점 전인 경우 입력창(input, textarea)에 텍스트가 있는지 확인
-    let hasAnswer = false;
-    q.subs.forEach((sub, sIndex) => {
-      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
-      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
-      if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
-      if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
-    });
-
-    if (hasAnswer) {
-      navBtn.classList.add('answered'); // 파란색(입력됨)
-    } else {
-      navBtn.classList.remove('answered'); // 흰색(미작성)
+    function scrollToQuestion(qIndex) {
+      const target = document.getElementById(`qCard-${qIndex}`);
+      if(target) {
+        const topPos = target.getBoundingClientRect().top + window.pageYOffset - 20;
+        window.scrollTo({ top: topPos, behavior: 'smooth' });
+      }
     }
-  });
-}
 
-// 모든 요소가 로드된 후 내비게이션 패널 실행
-setTimeout(initNavPanel, 100);
-// ================== 우측 문항 내비게이션 모듈 끝 ==================
+    function updateNavStatus() {
+      quizData.forEach((q, qIndex) => {
+        const navBtn = document.getElementById(`nav-btn-${qIndex}`);
+        if(!navBtn) return;
+
+        if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
+          let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+          navBtn.className = 'q-nav-btn'; 
+          if (qEarnedScore === q.score) navBtn.classList.add('correct');
+          else if (qEarnedScore > 0) navBtn.classList.add('partial');
+          else navBtn.classList.add('incorrect');
+          return;
+        }
+
+        let hasAnswer = false;
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+          if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
+          if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
+        });
+
+        if (hasAnswer) {
+          navBtn.classList.add('answered'); 
+        } else {
+          navBtn.classList.remove('answered'); 
+        }
+      });
+    }
+
+    setTimeout(initNavPanel, 100);
   </script>
 
   <!-- ================== 플로팅 연습장 모듈 시작 ================== -->
-<style>
-  /* 연습장 열기/닫기 버튼 */
-  #sp-toggle-btn {
-    position: fixed; bottom: 20px; right: 20px; z-index: 9999;
-    background-color: #ff9800; color: white; border: none; border-radius: 50px;
-    padding: 15px 20px; font-size: 16px; font-weight: bold; cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background-color 0.2s;
-  }
-  #sp-toggle-btn:hover { background-color: #f57c00; }
-  
-  /* 연습장 패널 (크기 80% 확대) */
-  #sp-panel {
-    position: fixed; bottom: 80px; right: 20px; z-index: 9998;
-    width: 95vw; max-width: 720px; height: 630px; /* 기존 400x350에서 80% 확대 */
-    background-color: #fff; border: 2px solid #ccc; border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    display: none; flex-direction: column; overflow: hidden;
-  }
-  
-  /* 연습장 상단 툴바 */
-  #sp-header {
-    background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .sp-title { font-weight: bold; color: #333; font-size: 14px; }
-  .sp-tools button {
-    background-color: #fff; border: 1px solid #ccc; border-radius: 4px;
-    padding: 6px 10px; cursor: pointer; font-size: 13px; margin-left: 4px;
-  }
-  .sp-tools button.active { 
-    background-color: #e3f2fd; border-color: #1976d2; font-weight: bold; color: #1976d2; 
-  }
-  
-  /* 캔버스 (그림 그리는 곳) */
-  #sp-canvas { 
-    flex-grow: 1; cursor: crosshair; background-color: #fff; touch-action: none; 
-  }
-</style>
+  <style>
+    #sp-toggle-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+      background-color: #ff9800; color: white; border: none; border-radius: 50px;
+      padding: 15px 20px; font-size: 16px; font-weight: bold; cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background-color 0.2s;
+    }
+    #sp-toggle-btn:hover { background-color: #f57c00; }
+    
+    #sp-panel {
+      position: fixed; bottom: 80px; right: 20px; z-index: 9998;
+      width: 95vw; max-width: 720px; height: 630px; 
+      background-color: #fff; border: 2px solid #ccc; border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      display: none; flex-direction: column; overflow: hidden;
+    }
+    
+    #sp-header {
+      background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .sp-title { font-weight: bold; color: #333; font-size: 14px; }
+    .sp-tools button {
+      background-color: #fff; border: 1px solid #ccc; border-radius: 4px;
+      padding: 6px 10px; cursor: pointer; font-size: 13px; margin-left: 4px;
+    }
+    .sp-tools button.active { 
+      background-color: #e3f2fd; border-color: #1976d2; font-weight: bold; color: #1976d2; 
+    }
+    
+    #sp-canvas { 
+      flex-grow: 1; cursor: crosshair; background-color: #fff; touch-action: none; 
+    }
+  </style>
 
-<!-- 연습장 UI -->
-<button id="sp-toggle-btn" onclick="toggleScratchpad()">📝 연습장</button>
-<div id="sp-panel">
-  <div id="sp-header">
-    <span class="sp-title">연습장 (구조식/계산식)</span>
-    <div class="sp-tools">
-      <button id="sp-pen" class="active" onclick="setSpTool('pen')">✏️ 펜</button>
-      <button id="sp-eraser" onclick="setSpTool('eraser')">🧽 지우개</button>
-      <button onclick="clearSpCanvas()">🗑️ 비우기</button>
+  <button id="sp-toggle-btn" onclick="toggleScratchpad()">📝 연습장</button>
+  <div id="sp-panel">
+    <div id="sp-header">
+      <span class="sp-title">연습장 (구조식/계산식)</span>
+      <div class="sp-tools">
+        <button id="sp-pen" class="active" onclick="setSpTool('pen')">✏️ 펜</button>
+        <button id="sp-eraser" onclick="setSpTool('eraser')">🧽 지우개</button>
+        <button onclick="clearSpCanvas()">🗑️ 비우기</button>
+      </div>
+    </div>
+    <canvas id="sp-canvas"></canvas>
+  </div>
+
+  <script>
+    let spCanvas, spCtx;
+    let spIsDrawing = false;
+    let spCurrentTool = 'pen';
+
+    function toggleScratchpad() {
+      const panel = document.getElementById('sp-panel');
+      const btn = document.getElementById('sp-toggle-btn');
+      if (panel.style.display === 'flex') {
+        panel.style.display = 'none';
+        btn.innerText = "📝 연습장";
+        btn.style.backgroundColor = "#ff9800";
+      } else {
+        panel.style.display = 'flex';
+        btn.innerText = "❌ 닫기";
+        btn.style.backgroundColor = "#757575";
+        if (!spCanvas) initScratchpad();
+      }
+    }
+
+    function initScratchpad() {
+      spCanvas = document.getElementById('sp-canvas');
+      spCtx = spCanvas.getContext('2d');
+      
+      function resizeCanvas() {
+        const rect = spCanvas.parentElement.getBoundingClientRect();
+        const headerHeight = document.getElementById('sp-header').offsetHeight;
+        spCanvas.width = rect.width;
+        spCanvas.height = rect.height - headerHeight;
+      }
+      resizeCanvas();
+      
+      spCanvas.addEventListener('mousedown', startSpDraw);
+      spCanvas.addEventListener('mousemove', drawSp);
+      spCanvas.addEventListener('mouseup', stopSpDraw);
+      spCanvas.addEventListener('mouseout', stopSpDraw);
+      
+      spCanvas.addEventListener('touchstart', startSpDraw, { passive: false });
+      spCanvas.addEventListener('touchmove', drawSp, { passive: false });
+      spCanvas.addEventListener('touchend', stopSpDraw);
+    }
+
+    function getSpCoordinates(e) {
+      const rect = spCanvas.getBoundingClientRect();
+      if (e.touches && e.touches.length > 0) {
+        return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+      }
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    function startSpDraw(e) {
+      e.preventDefault(); 
+      spIsDrawing = true;
+      const pos = getSpCoordinates(e);
+      spCtx.beginPath();
+      spCtx.moveTo(pos.x, pos.y);
+    }
+
+    function drawSp(e) {
+      if (!spIsDrawing) return;
+      e.preventDefault(); 
+      const pos = getSpCoordinates(e);
+      
+      spCtx.lineTo(pos.x, pos.y);
+      if (spCurrentTool === 'eraser') {
+        spCtx.strokeStyle = '#fff'; 
+        spCtx.lineWidth = 20;       
+      } else {
+        spCtx.strokeStyle = '#333'; 
+        spCtx.lineWidth = 2;        
+      }
+      spCtx.lineCap = 'round';
+      spCtx.lineJoin = 'round';
+      spCtx.stroke();
+    }
+
+    function stopSpDraw() {
+      spIsDrawing = false;
+      spCtx.closePath();
+    }
+
+    function setSpTool(tool) {
+      spCurrentTool = tool;
+      document.getElementById('sp-pen').classList.remove('active');
+      document.getElementById('sp-eraser').classList.remove('active');
+      document.getElementById('sp-' + tool).classList.add('active');
+    }
+
+    function clearSpCanvas() {
+      spCtx.clearRect(0, 0, spCanvas.width, spCanvas.height);
+    }
+  </script>
+  <!-- ================== 플로팅 연습장 모듈 끝 ================== -->
+
+  <!-- ================== 이미지 확대 및 PAN(드래그) 모달 UI ================== -->
+  <div id="image-modal">
+    <!-- 여백 클릭 시 모달이 닫히도록 설정 -->
+    <div id="image-modal-content" onclick="if(event.target === this) closeImageModal()">
+      <img id="modal-img" src="" alt="확대된 이미지" draggable="false">
+    </div>
+    <div class="modal-zoom-controls">
+      <button onclick="zoomImage(0.25)">확대 ➕</button>
+      <button onclick="zoomImage(-0.25)">축소 ➖</button>
+      <button onclick="resetZoom()">원래 크기 🔄</button>
+      <button class="modal-close-btn" onclick="closeImageModal()">닫기 ❌</button>
     </div>
   </div>
-  <canvas id="sp-canvas"></canvas>
-</div>
 
-<!-- 연습장 스크립트 -->
-<script>
-  let spCanvas, spCtx;
-  let spIsDrawing = false;
-  let spCurrentTool = 'pen';
+  <script>
+    // ================== 이미지 확대/축소 및 Pan(드래그) 모달 제어 스크립트 ==================
+    let currentZoom = 1;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let translateX = 0, translateY = 0;
 
-  function toggleScratchpad() {
-    const panel = document.getElementById('sp-panel');
-    const btn = document.getElementById('sp-toggle-btn');
-    if (panel.style.display === 'flex') {
-      panel.style.display = 'none';
-      btn.innerText = "📝 연습장";
-      btn.style.backgroundColor = "#ff9800";
-    } else {
-      panel.style.display = 'flex';
-      btn.innerText = "❌ 닫기";
-      btn.style.backgroundColor = "#757575";
-      if (!spCanvas) initScratchpad();
+    function openImageModal(src) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      
+      modalImg.src = src;
+      currentZoom = 1;
+      translateX = 0;
+      translateY = 0;
+      updateImageTransform();
+      
+      modal.style.display = 'flex';
     }
-  }
 
-  function initScratchpad() {
-    spCanvas = document.getElementById('sp-canvas');
-    spCtx = spCanvas.getContext('2d');
-    
-    // 캔버스 크기 맞추기 (디스플레이 해상도 고려)
-    function resizeCanvas() {
-      const rect = spCanvas.parentElement.getBoundingClientRect();
-      const headerHeight = document.getElementById('sp-header').offsetHeight;
-      spCanvas.width = rect.width;
-      spCanvas.height = rect.height - headerHeight;
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      modal.style.display = 'none';
     }
-    resizeCanvas();
-    
-    // 마우스 이벤트 (PC용)
-    spCanvas.addEventListener('mousedown', startSpDraw);
-    spCanvas.addEventListener('mousemove', drawSp);
-    spCanvas.addEventListener('mouseup', stopSpDraw);
-    spCanvas.addEventListener('mouseout', stopSpDraw);
-    
-    // 터치 이벤트 (스마트폰, 태블릿용 - 스크롤 방지 포함)
-    spCanvas.addEventListener('touchstart', startSpDraw, { passive: false });
-    spCanvas.addEventListener('touchmove', drawSp, { passive: false });
-    spCanvas.addEventListener('touchend', stopSpDraw);
-  }
 
-  function getSpCoordinates(e) {
-    const rect = spCanvas.getBoundingClientRect();
-    if (e.touches && e.touches.length > 0) {
-      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+    function zoomImage(step) {
+      currentZoom += step;
+      if (currentZoom < 0.5) currentZoom = 0.5;
+      if (currentZoom > 5) currentZoom = 5; 
+      updateImageTransform();
     }
-    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-  }
 
-  function startSpDraw(e) {
-    e.preventDefault(); // 화면 스크롤 방지
-    spIsDrawing = true;
-    const pos = getSpCoordinates(e);
-    spCtx.beginPath();
-    spCtx.moveTo(pos.x, pos.y);
-  }
-
-  function drawSp(e) {
-    if (!spIsDrawing) return;
-    e.preventDefault(); // 터치 드래그 시 화면 스크롤 방지
-    const pos = getSpCoordinates(e);
-    
-    spCtx.lineTo(pos.x, pos.y);
-    if (spCurrentTool === 'eraser') {
-      spCtx.strokeStyle = '#fff'; // 지우개는 흰색으로 덮어씌움
-      spCtx.lineWidth = 20;       // 지우개는 두껍게
-    } else {
-      spCtx.strokeStyle = '#333'; // 펜은 진한 회색
-      spCtx.lineWidth = 2;        // 펜은 얇게
+    function resetZoom() {
+      currentZoom = 1;
+      translateX = 0;
+      translateY = 0;
+      updateImageTransform();
     }
-    spCtx.lineCap = 'round';
-    spCtx.lineJoin = 'round';
-    spCtx.stroke();
-  }
 
-  function stopSpDraw() {
-    spIsDrawing = false;
-    spCtx.closePath();
-  }
+    function updateImageTransform() {
+      const modalImg = document.getElementById('modal-img');
+      modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+    }
 
-  function setSpTool(tool) {
-    spCurrentTool = tool;
-    document.getElementById('sp-pen').classList.remove('active');
-    document.getElementById('sp-eraser').classList.remove('active');
-    document.getElementById('sp-' + tool).classList.add('active');
-  }
+    // --- 드래그(Pan) 이벤트 ---
+    const modalImg = document.getElementById('modal-img');
 
-  function clearSpCanvas() {
-    spCtx.clearRect(0, 0, spCanvas.width, spCanvas.height);
-  }
-</script>
-<!-- ================== 플로팅 연습장 모듈 끝 ================== -->
+    // 마우스 이벤트 (PC 환경)
+    modalImg.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      modalImg.style.cursor = 'grabbing';
+      modalImg.style.transition = 'none'; 
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      updateImageTransform();
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        modalImg.style.cursor = 'grab';
+        modalImg.style.transition = 'transform 0.05s linear'; 
+      }
+    });
+
+    // 터치 이벤트 (모바일/태블릿 환경)
+    modalImg.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX - translateX;
+        startY = e.touches[0].clientY - translateY;
+        modalImg.style.transition = 'none';
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault(); 
+      translateX = e.touches[0].clientX - startX;
+      translateY = e.touches[0].clientY - startY;
+      updateImageTransform();
+    }, { passive: false });
+
+    document.addEventListener('touchend', () => {
+      if (isDragging) {
+        isDragging = false;
+        modalImg.style.transition = 'transform 0.05s linear';
+      }
+    });
+
+    // 마우스 휠 확대/축소 지원
+    modalImg.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        zoomImage(0.1);
+      } else {
+        zoomImage(-0.1);
+      }
+    }, { passive: false });
+  </script>
 </body>
 </html>
