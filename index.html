@@ -5,15 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>위험물산업기사 실기시험 대비</title>
   
-  <!-- [수정됨] 1. 트렌디한 웹 폰트 Pretendard 로드 (HTML 표준 오류 해결) -->
+  <!-- 트렌디한 웹 폰트 Pretendard 로드 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" crossorigin="anonymous" />
 
   <style>
     :root {
-      /* 테마 컬러 정의 (오렌지, 그린, 블루) */
+      /* 테마 컬러 정의 (오렌지, 그린, 블루, 핑크) */
       --glow-orange: rgba(245, 158, 11, 0.8);
       --glow-green: rgba(52, 211, 153, 0.8);
       --glow-blue: rgba(56, 189, 248, 0.8);
+      --glow-pink: rgba(236, 72, 153, 0.8);
       --glass-bg: rgba(30, 41, 59, 0.4);
       --glass-border: rgba(255, 255, 255, 0.1);
     }
@@ -41,18 +42,18 @@
     .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #38bdf8; }
     .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #10b981; }
     .blob-3 { top: 40%; left: 50%; width: 400px; height: 400px; background: #f59e0b; transform: translate(-50%, -50%); opacity: 0.15; }
+    .blob-4 { top: 10%; right: 20%; width: 300px; height: 300px; background: #e11d48; opacity: 0.15; }
 
     .header {
       text-align: center;
-      margin-bottom: 60px;
+      margin-bottom: 40px;
       position: relative;
       z-index: 1;
     }
     .header h1 {
       font-size: 2.5em;
-      margin-bottom: 15px;
+      margin-bottom: 25px;
       letter-spacing: -0.5px;
-      /* [수정됨] 2. 제목 그라데이션 표준 속성 추가 */
       background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
       -webkit-background-clip: text;
       background-clip: text;
@@ -60,14 +61,58 @@
       color: transparent;
       font-weight: 800;
     }
-    .header p {
-      color: #94a3b8;
-      font-size: 1.15em;
-      font-weight: 500;
-    }
     
+    /* --- 하트 모양 메인 버튼 --- */
+    .heart-btn-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 2;
+    }
+    .heart-btn {
+      position: relative;
+      width: 200px;
+      height: 170px;
+      cursor: pointer;
+      animation: heartbeat 1.8s infinite;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .heart-btn:hover {
+      animation: none;
+      transform: scale(1.1);
+    }
+    .heart-svg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      fill: url(#heart-gradient);
+      filter: drop-shadow(0 10px 20px rgba(225, 29, 72, 0.5));
+      z-index: 1;
+    }
+    .heart-text {
+      position: relative;
+      z-index: 2;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      text-align: center;
+      line-height: 1.4;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      margin-top: -20px; /* 하트 모양 중앙에 텍스트가 오도록 조정 */
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      15% { transform: scale(1.08); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.08); }
+      60% { transform: scale(1); }
+    }
+
     .menu-container {
-      max-width: 900px;
+      max-width: 1000px; /* 3단 배치를 위해 컨테이너 여유 확보 */
       margin: 0 auto;
       position: relative;
       z-index: 1;
@@ -84,7 +129,6 @@
       display: block;
     }
 
-    /* [수정됨] 3. 애니메이션 초기값 명시 (일부 브라우저 경고 방지) */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
@@ -94,6 +138,8 @@
     .glass-main-grid {
       display: grid;
       gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
     }
     .glass-card {
       background: var(--glass-bg);
@@ -146,7 +192,6 @@
     }
 
     /* --- 테마별 네온 글로우 및 그라데이션 --- */
-    /* [수정됨] 4. 각 테마 텍스트 그라데이션에 표준 속성 추가 */
     
     /* 1. 오렌지 테마 */
     .theme-orange:hover {
@@ -231,7 +276,8 @@
     /* --- 서브 메뉴 내부 글래스 카드 --- */
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      /* minmax(260px)로 설정하여 데스크톱에서 완벽한 3줄(3단) 배치 유도 */
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 24px;
     }
     .sub-card {
@@ -246,6 +292,7 @@
       display: flex;
       flex-direction: column;
       transition: all 0.3s ease;
+      position: relative; /* 파티클 효과 기준점 */
     }
     
     .tag {
@@ -260,9 +307,10 @@
     .tag.single { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24; }
     .tag.blank { background: rgba(52, 211, 153, 0.1); border-color: rgba(52, 211, 153, 0.3); color: #34d399; }
     .tag.exam { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; }
+    .tag.heart { background: rgba(225, 29, 72, 0.1); border-color: rgba(225, 29, 72, 0.3); color: #f43f5e; }
 
     .sub-card-title {
-      font-size: 1.2em;
+      font-size: 1.15em;
       font-weight: 700;
       margin: 0 0 20px 0;
       line-height: 1.4;
@@ -277,7 +325,7 @@
       align-items: center;
       gap: 12px;
       color: #94a3b8;
-      font-size: 0.9em;
+      font-size: 0.85em;
       font-weight: 500;
     }
     .profile-icon {
@@ -291,10 +339,12 @@
       font-size: 0.8em;
       font-weight: 800;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      flex-shrink: 0;
     }
     .profile-icon.orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
     .profile-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
     .profile-icon.blue { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+    .profile-icon.pink { background: linear-gradient(135deg, #f43f5e, #be123c); }
 
     /* 서브 카드 호버 (테마별 매칭) */
     .sub-card.hover-orange:hover {
@@ -318,18 +368,74 @@
     }
     .sub-card.hover-blue:hover .sub-card-title { color: #38bdf8; }
 
+    .sub-card.hover-pink:hover {
+      transform: translateY(-6px);
+      border-color: rgba(225, 29, 72, 0.4);
+      box-shadow: 0 8px 30px rgba(225, 29, 72, 0.2);
+    }
+    .sub-card.hover-pink:hover .sub-card-title { color: #fb7185; }
+
+    /* --- 클릭 시 솟구치며 사라지는 파티클 스타일 (별, 하트 공통) --- */
+    .particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      /* 빛나는 효과 */
+      box-shadow: 0 0 8px #fff, 0 0 15px currentColor;
+      animation: particleRise 0.6s ease-out forwards;
+    }
+    @keyframes particleRise {
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.2); opacity: 0; }
+    }
+
+    /* 하트 전용 파티클 (배경색 없음, 텍스트 형태) */
+    .heart-particle {
+      position: absolute;
+      pointer-events: none;
+      z-index: 100;
+      animation: heartRise 0.8s ease-out forwards;
+    }
+    @keyframes heartRise {
+      0% { transform: translate(-50%, -50%) scale(0.5) rotate(0deg); opacity: 1; }
+      100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.5) rotate(var(--rot)); opacity: 0; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- SVG 하트 그라데이션 정의 -->
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <linearGradient id="heart-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fb7185" />
+        <stop offset="100%" stop-color="#e11d48" />
+      </linearGradient>
+    </defs>
+  </svg>
 
   <!-- 배경 엠비언트 효과 (글래스모피즘 극대화) -->
   <div class="bg-blob blob-1"></div>
   <div class="bg-blob blob-2"></div>
   <div class="bg-blob blob-3"></div>
+  <div class="bg-blob blob-4"></div>
 
   <div class="header">
     <h1>🔥 위험물산업기사 실기시험 대비</h1>
-    <p>안전관리 및 화학 전문 학습 시스템</p>
+    
+    <!-- 하트 모양 기초화학게임 버튼 -->
+    <div class="heart-btn-wrapper">
+      <div class="heart-btn" onclick="navigateTo('game', event, true)">
+        <svg viewBox="0 0 24 24" class="heart-svg">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        <span class="heart-text">기초화학게임<br>시작하기</span>
+      </div>
+    </div>
   </div>
 
   <div class="menu-container">
@@ -339,7 +445,7 @@
       <div class="glass-main-grid">
         
         <!-- 오렌지 테마 -->
-        <div onclick="navigateTo('section1')" class="glass-card theme-orange">
+        <div onclick="navigateTo('section1', event)" class="glass-card theme-orange">
           <div class="card-num">01</div>
           <div class="card-body">
             <span class="card-sub-tag">화학식 & 지정수량</span>
@@ -349,7 +455,7 @@
         </div>
 
         <!-- 그린 테마 -->
-        <div onclick="navigateTo('section2')" class="glass-card theme-green">
+        <div onclick="navigateTo('section2', event)" class="glass-card theme-green">
           <div class="card-num">02</div>
           <div class="card-body">
             <span class="card-sub-tag">실기 암기장</span>
@@ -359,7 +465,7 @@
         </div>
 
         <!-- 블루 테마 -->
-        <div onclick="navigateTo('section3')" class="glass-card theme-blue">
+        <div onclick="navigateTo('section3', event)" class="glass-card theme-blue">
           <div class="card-num">03</div>
           <div class="card-body">
             <span class="card-sub-tag">실전 모의고사</span>
@@ -371,13 +477,38 @@
       </div>
     </div>
 
+    <!-- [서브 화면 4 - 기초화학게임] 메뉴 (하트/핑크 톤) -->
+    <div id="view-game" class="view-section">
+      <div class="back-btn" onclick="navigateTo('main', event)">◀ 뒤로 가기</div>
+      <h2 class="sub-menu-title" style="color: #fb7185;">🎮 기초화학게임</h2>
+      
+      <div class="card-grid">
+        <a href="mission1.html" class="sub-card hover-pink" onclick="createHeartParticles(event)">
+          <div class="tag heart">미션 1</div>
+          <h2 class="sub-card-title">주기율표 퍼즐 맞추기</h2>
+          <div class="card-footer">
+            <div class="profile-icon pink">🧩</div>
+            <span>제한시간 내 원소 배치</span>
+          </div>
+        </a>
+        <a href="mission2.html" class="sub-card hover-pink" onclick="createHeartParticles(event)">
+          <div class="tag heart">미션 2</div>
+          <h2 class="sub-card-title">원자량 & 분자량 마스터</h2>
+          <div class="card-footer">
+            <div class="profile-icon pink">⚖️</div>
+            <span>분자량 계산 집중 훈련</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
     <!-- [서브 화면 1] 메뉴 1 내용 (오렌지 톤) -->
     <div id="view-section1" class="view-section">
-      <div class="back-btn" onclick="navigateTo('main')">◀ 뒤로 가기</div>
+      <div class="back-btn" onclick="navigateTo('main', event)">◀ 뒤로 가기</div>
       <h2 class="sub-menu-title">1. 위험물 산업기사 각류별 위험물 화학식</h2>
       
       <div class="card-grid">
-        <a href="80.html" class="sub-card hover-orange">
+        <a href="80.html" class="sub-card hover-orange" onclick="createParticles(event, '#fbbf24')">
           <div class="tag single">단답·서술형</div>
           <h2 class="sub-card-title">위험물산업기사 1~6류 화학식 및 지정수량</h2>
           <div class="card-footer">
@@ -385,7 +516,7 @@
             <span>화학식 마스터 과정</span>
           </div>
         </a>
-        <a href="81.html" class="sub-card hover-orange">
+        <a href="81.html" class="sub-card hover-orange" onclick="createParticles(event, '#fbbf24')">
           <div class="tag single">단답·서술형</div>
           <h2 class="sub-card-title">반드시 암기해야 할 화학반응식 (총 87제 완벽대비)</h2>
           <div class="card-footer">
@@ -398,11 +529,11 @@
 
     <!-- [서브 화면 2] 메뉴 2 내용 (그린 톤) -->
     <div id="view-section2" class="view-section">
-      <div class="back-btn" onclick="navigateTo('main')">◀ 뒤로 가기</div>
+      <div class="back-btn" onclick="navigateTo('main', event)">◀ 뒤로 가기</div>
       <h2 class="sub-menu-title">2. 위험물산업기사 실기 단원별 빈칸 암기장 — 기출 핵심 총정리</h2>
       
       <div class="card-grid">
-        <a href="90.html" class="sub-card hover-green">
+        <a href="90.html" class="sub-card hover-green" onclick="createParticles(event, '#34d399')">
           <div class="tag blank">빈칸 암기장</div>
           <h2 class="sub-card-title">1. 위험물 분류·품명·지정수량 (총 55제 완벽대비)</h2>
           <div class="card-footer">
@@ -411,7 +542,7 @@
           </div>
         </a>
         
-        <a href="91.html" class="sub-card hover-green">
+        <a href="91.html" class="sub-card hover-green" onclick="createParticles(event, '#34d399')">
           <div class="tag blank">빈칸 암기장</div>
           <h2 class="sub-card-title">2. 위험물 성상·물성·식별 (총 65제 완벽대비)</h2>
           <div class="card-footer">
@@ -420,7 +551,7 @@
           </div>
         </a>
 
-        <a href="92.html" class="sub-card hover-green">
+        <a href="92.html" class="sub-card hover-green" onclick="createParticles(event, '#34d399')">
           <div class="tag blank">빈칸 암기장</div>
           <h2 class="sub-card-title">3. 화학반응식 (총 78제 완벽대비)</h2>
           <div class="card-footer">
@@ -433,11 +564,12 @@
 
     <!-- [서브 화면 3] 메뉴 3 내용 (블루 톤) -->
     <div id="view-section3" class="view-section">
-      <div class="back-btn" onclick="navigateTo('main')">◀ 뒤로 가기</div>
+      <div class="back-btn" onclick="navigateTo('main', event)">◀ 뒤로 가기</div>
       <h2 class="sub-menu-title">3. 위험물산업기사 기출문제 모의고사</h2>
       
+      <!-- 3줄(단) 배치가 자연스럽게 이루어집니다 (minmax(260px, 1fr) 적용) -->
       <div class="card-grid">
-        <a href="3.html" class="sub-card hover-blue">
+        <a href="3.html" class="sub-card hover-blue" onclick="createParticles(event, '#38bdf8')">
           <div class="tag exam">기출 복원</div>
           <h2 class="sub-card-title">위험물산업기사 실기 2022년 3회 모의고사</h2>
           <div class="card-footer">
@@ -445,7 +577,7 @@
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="4.html" class="sub-card hover-blue">
+        <a href="4.html" class="sub-card hover-blue" onclick="createParticles(event, '#38bdf8')">
           <div class="tag exam">기출 복원</div>
           <h2 class="sub-card-title">위험물산업기사 실기 2022년 4회 모의고사</h2>
           <div class="card-footer">
@@ -453,7 +585,7 @@
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="5.html" class="sub-card hover-blue">
+        <a href="5.html" class="sub-card hover-blue" onclick="createParticles(event, '#38bdf8')">
           <div class="tag exam">기출 복원</div>
           <h2 class="sub-card-title">위험물산업기사 실기 2023년 1회 모의고사</h2>
           <div class="card-footer">
@@ -461,7 +593,7 @@
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="6.html" class="sub-card hover-blue">
+        <a href="6.html" class="sub-card hover-blue" onclick="createParticles(event, '#38bdf8')">
           <div class="tag exam">기출 복원</div>
           <h2 class="sub-card-title">위험물산업기사 실기 2023년 2회 모의고사</h2>
           <div class="card-footer">
@@ -469,7 +601,7 @@
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="7.html" class="sub-card hover-blue">
+        <a href="7.html" class="sub-card hover-blue" onclick="createParticles(event, '#38bdf8')">
           <div class="tag exam">기출 복원</div>
           <h2 class="sub-card-title">위험물산업기사 실기 2023년 4회 모의고사</h2>
           <div class="card-footer">
@@ -477,7 +609,7 @@
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="8.html" class="sub-card hover-blue">
+        <a href="8.html" class="sub-card hover-blue" onclick="createParticles(event, '#38bdf8')">
           <div class="tag exam">기출 복원</div>
           <h2 class="sub-card-title">위험물산업기사 실기 2024년 1회 모의고사</h2>
           <div class="card-footer">
@@ -485,9 +617,25 @@
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="9.html" class="sub-card hover-blue">
+        <a href="9.html" class="sub-card hover-blue" onclick="createParticles(event, '#38bdf8')">
           <div class="tag exam">기출 복원</div>
           <h2 class="sub-card-title">위험물산업기사 실기 2024년 2회 모의고사</h2>
+          <div class="card-footer">
+            <div class="profile-icon blue">기</div>
+            <span>실전 기출 테스트</span>
+          </div>
+        </a>
+        <a href="10.html" class="sub-card hover-blue" onclick="createParticles(event, '#38bdf8')">
+          <div class="tag exam">기출 복원</div>
+          <h2 class="sub-card-title">위험물산업기사 실기 2024년 3회 모의고사</h2>
+          <div class="card-footer">
+            <div class="profile-icon blue">기</div>
+            <span>실전 기출 테스트</span>
+          </div>
+        </a>
+        <a href="11.html" class="sub-card hover-blue" onclick="createParticles(event, '#38bdf8')">
+          <div class="tag exam">기출 복원</div>
+          <h2 class="sub-card-title">위험물산업기사 실기 2025년 1회 모의고사</h2>
           <div class="card-footer">
             <div class="profile-icon blue">기</div>
             <span>실전 기출 테스트</span>
@@ -501,10 +649,8 @@
   <script>
     // 화면 전환 함수
     function showView(viewId) {
-      // [수정됨] 5. 예기치 못한 주소창 해시값 방어 로직 추가
       const targetView = document.getElementById('view-' + viewId);
       
-      // 타겟 ID가 존재하지 않으면 메인 화면으로 강제 이동
       if (!targetView) {
         window.location.hash = 'main';
         return;
@@ -517,9 +663,95 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 버튼 클릭 시 URL 해시 변경 (뒤로 가기 지원을 위함)
-    function navigateTo(viewId) {
-      window.location.hash = viewId;
+    // 메뉴 이동 및 파티클 분기 처리
+    function navigateTo(viewId, event, isHeart = false) {
+      if(event) {
+        if(isHeart) {
+          // 하트 버튼 클릭 시 전용 하트 파티클 재생
+          createHeartParticles(event);
+        } else {
+          // 일반 메뉴 클릭 시 컬러에 맞춘 별 파티클 재생
+          let color = '#ffffff';
+          const currentTarget = event.currentTarget;
+          if(currentTarget.classList.contains('theme-orange')) color = '#fbbf24';
+          if(currentTarget.classList.contains('theme-green')) color = '#34d399';
+          if(currentTarget.classList.contains('theme-blue')) color = '#38bdf8';
+          createParticles(event, color);
+        }
+      }
+      
+      // 애니메이션을 볼 수 있도록 약간 지연 후 페이지 전환
+      setTimeout(() => {
+        window.location.hash = viewId;
+      }, 150);
+    }
+
+    // [별 모양] 솟구치며 사라지는 파티클 생성 함수
+    function createParticles(e, color = '#ffffff') {
+      const numParticles = 12;
+      for (let i = 0; i < numParticles; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.color = color; 
+
+        const x = e.pageX;
+        const y = e.pageY;
+        
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+
+        const angle = Math.random() * Math.PI; 
+        const distance = Math.random() * 60 + 30; 
+        
+        const tx = Math.cos(angle) * distance;
+        const ty = -Math.sin(angle) * distance - 20; 
+        
+        particle.style.setProperty('--x', `${tx}px`);
+        particle.style.setProperty('--y', `${ty}px`);
+        
+        document.body.appendChild(particle);
+
+        setTimeout(() => {
+          particle.remove();
+        }, 600);
+      }
+    }
+
+    // [하트 모양] 솟구치며 사라지는 특별 파티클 생성 함수
+    function createHeartParticles(e) {
+      const numParticles = 15; 
+      const hearts = ['❤️', '💖', '💕', '✨', '💗']; // 여러 하트 이모지 혼합
+      
+      for (let i = 0; i < numParticles; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('heart-particle');
+        particle.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+        
+        const x = e.pageX;
+        const y = e.pageY;
+        
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        // 하트 크기 랜덤하게
+        particle.style.fontSize = (Math.random() * 15 + 15) + 'px'; 
+
+        const angle = Math.random() * Math.PI; // 위쪽 반원 방향
+        const distance = Math.random() * 80 + 40; // 별보다 조금 더 멀리 퍼짐
+        
+        const tx = Math.cos(angle) * distance;
+        const ty = -Math.sin(angle) * distance - 40; 
+        const rot = (Math.random() - 0.5) * 90; // 자연스럽게 회전 (-45도 ~ 45도)
+        
+        particle.style.setProperty('--x', `${tx}px`);
+        particle.style.setProperty('--y', `${ty}px`);
+        particle.style.setProperty('--rot', `${rot}deg`);
+        
+        document.body.appendChild(particle);
+
+        setTimeout(() => {
+          particle.remove();
+        }, 800);
+      }
     }
 
     // 브라우저 뒤로가기/앞으로가기 및 해시 변경 감지
