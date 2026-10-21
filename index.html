@@ -3,207 +3,391 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>위험물산업기사 실기 대비 메인 메뉴</title>
+  <title>위험물산업기사 실기시험 대비</title>
+  
+  <!-- [수정됨] 1. 트렌디한 웹 폰트 Pretendard 로드 (HTML 표준 오류 해결) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" crossorigin="anonymous" />
+
   <style>
+    :root {
+      /* 테마 컬러 정의 (오렌지, 그린, 블루) */
+      --glow-orange: rgba(245, 158, 11, 0.8);
+      --glow-green: rgba(52, 211, 153, 0.8);
+      --glow-blue: rgba(56, 189, 248, 0.8);
+      --glass-bg: rgba(30, 41, 59, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
     body {
-      font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
-      background-color: #f4f7f9;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background-color: #020617; /* 깊고 다크한 배경 */
       margin: 0;
       padding: 40px 20px;
-      color: #333;
+      color: #f8fafc;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    /* 글래스모피즘 효과를 극대화하기 위한 배경 오라(Aura) 효과 */
+    .bg-blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #38bdf8; }
+    .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #10b981; }
+    .blob-3 { top: 40%; left: 50%; width: 400px; height: 400px; background: #f59e0b; transform: translate(-50%, -50%); opacity: 0.15; }
+
     .header {
       text-align: center;
-      margin-bottom: 50px;
+      margin-bottom: 60px;
+      position: relative;
+      z-index: 1;
     }
     .header h1 {
-      font-size: 2.2em;
-      color: #2c3e50;
-      margin-bottom: 10px;
+      font-size: 2.5em;
+      margin-bottom: 15px;
+      letter-spacing: -0.5px;
+      /* [수정됨] 2. 제목 그라데이션 표준 속성 추가 */
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      font-weight: 800;
     }
     .header p {
-      color: #666;
-      font-size: 1.1em;
+      color: #94a3b8;
+      font-size: 1.15em;
+      font-weight: 500;
     }
     
     .menu-container {
-      max-width: 1100px;
+      max-width: 900px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     /* 화면 전환용 클래스 */
     .view-section {
       display: none;
-      animation: fadeIn 0.3s ease-in-out;
+      animation: fadeInUp 0.4s ease-out forwards;
+      opacity: 0;
+      transform: translateY(15px);
     }
     .view-section.active {
       display: block;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+    /* [수정됨] 3. 애니메이션 초기값 명시 (일부 브라우저 경고 방지) */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 메인 메뉴(박스) 스타일 */
-    .main-menu-grid {
+    /* --- 메인 메뉴 글래스 카드 --- */
+    .glass-main-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 24px;
     }
-    .main-menu-btn {
-      padding: 25px;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 1.5em;
-      font-weight: bold;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .main-menu-btn:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-    }
-    .bg-blue { background-color: #1976d2; }
-    .bg-green { background-color: #2e7d32; }
-    .bg-grey { background-color: #607d8b; }
-
-    /* 서브 메뉴 상단 뒤로가기 버튼 */
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 20px;
-      padding: 10px 20px;
-      background-color: #e0e0e0;
-      color: #333;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    .back-btn:hover {
-      background-color: #ccc;
-    }
-
-    /* 서브 메뉴 제목 */
-    .sub-menu-title {
-      font-size: 1.8em;
-      color: #333;
-      margin-bottom: 30px;
-      border-bottom: 2px solid #ddd;
-      padding-bottom: 10px;
-    }
-
-    /* 카드 스타일 */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background-color: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 20px;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-      border-color: #d1d9e6;
-    }
-    .tag {
-      align-self: flex-start;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.85em;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-    .tag.exam { background-color: #e8f0fe; color: #1a73e8; }
-    .tag.single { background-color: #fff3e0; color: #e65100; }
-    .tag.blank { background-color: #e6f7ef; color: #00a65a; }
-
-    .card-title {
-      font-size: 1.15em;
-      font-weight: bold;
-      margin: 0 0 15px 0;
-      line-height: 1.4;
-      flex-grow: 1;
-    }
-    .card-footer {
-      border-top: 1px solid #f0f0f0;
-      padding-top: 12px;
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 30px 35px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      color: #777;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card-num {
+      font-size: 2.5em;
+      font-weight: 900;
+      margin-right: 30px;
+      font-family: 'Pretendard', sans-serif;
+    }
+    .card-body {
+      flex-grow: 1;
+    }
+    .card-sub-tag {
+      display: inline-block;
+      font-size: 0.85em;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+    }
+    .card-heading {
+      font-size: 1.4em;
+      font-weight: 800;
+      margin: 0;
+    }
+    .card-arrow {
+      font-size: 1.5em;
+      color: #64748b;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    /* --- 테마별 네온 글로우 및 그라데이션 --- */
+    /* [수정됨] 4. 각 테마 텍스트 그라데이션에 표준 속성 추가 */
+    
+    /* 1. 오렌지 테마 */
+    .theme-orange:hover {
+      transform: translateY(-5px);
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 0 10px 40px rgba(245, 158, 11, 0.25), inset 0 0 15px rgba(245, 158, 11, 0.1);
+      background: rgba(40, 50, 70, 0.6);
+    }
+    .theme-orange .card-num, .theme-orange .card-heading {
+      background: linear-gradient(135deg, #fcd34d, #f59e0b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .theme-orange:hover .card-arrow { transform: translateX(8px); color: #f59e0b; }
+
+    /* 2. 그린 테마 */
+    .theme-green:hover {
+      transform: translateY(-5px);
+      border-color: rgba(52, 211, 153, 0.5);
+      box-shadow: 0 10px 40px rgba(52, 211, 153, 0.25), inset 0 0 15px rgba(52, 211, 153, 0.1);
+      background: rgba(40, 50, 70, 0.6);
+    }
+    .theme-green .card-num, .theme-green .card-heading {
+      background: linear-gradient(135deg, #6ee7b7, #10b981);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .theme-green:hover .card-arrow { transform: translateX(8px); color: #10b981; }
+
+    /* 3. 블루 테마 */
+    .theme-blue:hover {
+      transform: translateY(-5px);
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 10px 40px rgba(56, 189, 248, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.1);
+      background: rgba(40, 50, 70, 0.6);
+    }
+    .theme-blue .card-num, .theme-blue .card-heading {
+      background: linear-gradient(135deg, #7dd3fc, #0ea5e9);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .theme-blue:hover .card-arrow { transform: translateX(8px); color: #0ea5e9; }
+
+
+    /* --- 서브 메뉴 공통 --- */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 25px;
+      padding: 10px 20px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      color: #e2e8f0;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .sub-menu-title {
+      font-size: 1.8em;
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* --- 서브 메뉴 내부 글래스 카드 --- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .sub-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+    
+    .tag {
+      align-self: flex-start;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.85em;
+      font-weight: 700;
+      margin-bottom: 18px;
+      border: 1px solid transparent;
+    }
+    .tag.single { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24; }
+    .tag.blank { background: rgba(52, 211, 153, 0.1); border-color: rgba(52, 211, 153, 0.3); color: #34d399; }
+    .tag.exam { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; }
+
+    .sub-card-title {
+      font-size: 1.2em;
+      font-weight: 700;
+      margin: 0 0 20px 0;
+      line-height: 1.4;
+      flex-grow: 1;
+      color: #f1f5f9;
+      transition: color 0.3s ease;
+    }
+    .card-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #94a3b8;
       font-size: 0.9em;
+      font-weight: 500;
     }
     .profile-icon {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       color: white;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.7em;
-      font-weight: bold;
+      font-size: 0.8em;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
-    .profile-icon.green { background-color: #00a65a; }
-    .profile-icon.orange { background-color: #e65100; }
-    .profile-icon.blue { background-color: #1a73e8; }
+    .profile-icon.orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .profile-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+    .profile-icon.blue { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+
+    /* 서브 카드 호버 (테마별 매칭) */
+    .sub-card.hover-orange:hover {
+      transform: translateY(-6px);
+      border-color: rgba(245, 158, 11, 0.4);
+      box-shadow: 0 8px 30px rgba(245, 158, 11, 0.2);
+    }
+    .sub-card.hover-orange:hover .sub-card-title { color: #fbbf24; }
+
+    .sub-card.hover-green:hover {
+      transform: translateY(-6px);
+      border-color: rgba(52, 211, 153, 0.4);
+      box-shadow: 0 8px 30px rgba(52, 211, 153, 0.2);
+    }
+    .sub-card.hover-green:hover .sub-card-title { color: #34d399; }
+
+    .sub-card.hover-blue:hover {
+      transform: translateY(-6px);
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 8px 30px rgba(56, 189, 248, 0.2);
+    }
+    .sub-card.hover-blue:hover .sub-card-title { color: #38bdf8; }
+
   </style>
 </head>
 <body>
 
+  <!-- 배경 엠비언트 효과 (글래스모피즘 극대화) -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
   <div class="header">
-    <h1>📚 위험물산업기사 실기시험 대비</h1>
-    <p>원하시는 학습 메뉴를 선택하세요.</p>
+    <h1>🔥 위험물산업기사 실기시험 대비</h1>
+    <p>안전관리 및 화학 전문 학습 시스템</p>
   </div>
 
   <div class="menu-container">
 
-    <!-- [메인 화면] 3개의 큰 메뉴 버튼 -->
+    <!-- [메인 화면] 글래스모피즘 & 네온 글로우 적용 -->
     <div id="view-main" class="view-section active">
-      <div class="main-menu-grid">
-        <div class="main-menu-btn bg-blue" onclick="navigateTo('section1')">
-          메뉴 1. 위험물 산업기사 각류별 위험물 화학식
+      <div class="glass-main-grid">
+        
+        <!-- 오렌지 테마 -->
+        <div onclick="navigateTo('section1')" class="glass-card theme-orange">
+          <div class="card-num">01</div>
+          <div class="card-body">
+            <span class="card-sub-tag">화학식 & 지정수량</span>
+            <h2 class="card-heading">위험물 산업기사 각류별 위험물 화학식</h2>
+          </div>
+          <div class="card-arrow">→</div>
         </div>
-        <div class="main-menu-btn bg-green" onclick="navigateTo('section2')">
-          메뉴 2. 위험물산업기사 실기 단원별 빈칸 암기장
+
+        <!-- 그린 테마 -->
+        <div onclick="navigateTo('section2')" class="glass-card theme-green">
+          <div class="card-num">02</div>
+          <div class="card-body">
+            <span class="card-sub-tag">실기 암기장</span>
+            <h2 class="card-heading">위험물산업기사 실기 단원별 빈칸 암기장</h2>
+          </div>
+          <div class="card-arrow">→</div>
         </div>
-        <div class="main-menu-btn bg-grey" onclick="navigateTo('section3')">
-          메뉴 3. 위험물산업기사 기출문제 모의고사
+
+        <!-- 블루 테마 -->
+        <div onclick="navigateTo('section3')" class="glass-card theme-blue">
+          <div class="card-num">03</div>
+          <div class="card-body">
+            <span class="card-sub-tag">실전 모의고사</span>
+            <h2 class="card-heading">위험물산업기사 기출문제 모의고사</h2>
+          </div>
+          <div class="card-arrow">→</div>
         </div>
+
       </div>
     </div>
 
-    <!-- [서브 화면 1] 메뉴 1 내용 -->
+    <!-- [서브 화면 1] 메뉴 1 내용 (오렌지 톤) -->
     <div id="view-section1" class="view-section">
       <div class="back-btn" onclick="navigateTo('main')">◀ 뒤로 가기</div>
-      <h2 class="sub-menu-title">메뉴 1. 위험물 산업기사 각류별 위험물 화학식</h2>
+      <h2 class="sub-menu-title">1. 위험물 산업기사 각류별 위험물 화학식</h2>
       
       <div class="card-grid">
-        <a href="80.html" class="card">
+        <a href="80.html" class="sub-card hover-orange">
           <div class="tag single">단답·서술형</div>
-          <h2 class="card-title">위험물산업기사 1~6류 화학식 및 지정수량</h2>
+          <h2 class="sub-card-title">위험물산업기사 1~6류 화학식 및 지정수량</h2>
           <div class="card-footer">
             <div class="profile-icon orange">화</div>
             <span>화학식 마스터 과정</span>
           </div>
         </a>
-        <a href="81.html" class="card">
+        <a href="81.html" class="sub-card hover-orange">
           <div class="tag single">단답·서술형</div>
-          <h2 class="card-title">반드시 암기해야 할 화학반응식 (총 87제 완벽대비)</h2>
+          <h2 class="sub-card-title">반드시 암기해야 할 화학반응식 (총 87제 완벽대비)</h2>
           <div class="card-footer">
             <div class="profile-icon orange">식</div>
             <span>화학반응식 마스터 과정</span>
@@ -212,34 +396,33 @@
       </div>
     </div>
 
-    <!-- [서브 화면 2] 메뉴 2 내용 -->
+    <!-- [서브 화면 2] 메뉴 2 내용 (그린 톤) -->
     <div id="view-section2" class="view-section">
       <div class="back-btn" onclick="navigateTo('main')">◀ 뒤로 가기</div>
-      <h2 class="sub-menu-title">메뉴 2. 위험물산업기사 실기 단원별 빈칸 암기장 — 기출 핵심 총정리</h2>
+      <h2 class="sub-menu-title">2. 위험물산업기사 실기 단원별 빈칸 암기장 — 기출 핵심 총정리</h2>
       
       <div class="card-grid">
-        <a href="90.html" class="card">
+        <a href="90.html" class="sub-card hover-green">
           <div class="tag blank">빈칸 암기장</div>
-          <h2 class="card-title">1. 위험물 분류·품명·지정수량 (총 55제 완벽대비)</h2>
+          <h2 class="sub-card-title">1. 위험물 분류·품명·지정수량 (총 55제 완벽대비)</h2>
           <div class="card-footer">
             <div class="profile-icon green">분</div>
             <span>분류 및 품명 완벽 암기</span>
           </div>
         </a>
         
-        <!-- ✅ 여기에 91.html 이 추가되었습니다! -->
-        <a href="91.html" class="card">
+        <a href="91.html" class="sub-card hover-green">
           <div class="tag blank">빈칸 암기장</div>
-          <h2 class="card-title">2. 위험물 성상·물성·식별 (총 65제 완벽대비)</h2>
+          <h2 class="sub-card-title">2. 위험물 성상·물성·식별 (총 65제 완벽대비)</h2>
           <div class="card-footer">
             <div class="profile-icon green">성</div>
             <span>성상 및 식별 완벽 암기</span>
           </div>
         </a>
 
-        <a href="92.html" class="card">
+        <a href="92.html" class="sub-card hover-green">
           <div class="tag blank">빈칸 암기장</div>
-          <h2 class="card-title">3. 화학반응식 (총 78제 완벽대비)</h2>
+          <h2 class="sub-card-title">3. 화학반응식 (총 78제 완벽대비)</h2>
           <div class="card-footer">
             <div class="profile-icon green">식</div>
             <span>화학반응식 완벽 암기</span>
@@ -248,64 +431,63 @@
       </div>
     </div>
 
-    <!-- [서브 화면 3] 메뉴 3 내용 -->
+    <!-- [서브 화면 3] 메뉴 3 내용 (블루 톤) -->
     <div id="view-section3" class="view-section">
       <div class="back-btn" onclick="navigateTo('main')">◀ 뒤로 가기</div>
-      <h2 class="sub-menu-title">메뉴 3. 위험물산업기사 기출문제 모의고사</h2>
+      <h2 class="sub-menu-title">3. 위험물산업기사 기출문제 모의고사</h2>
       
       <div class="card-grid">
-        <a href="3.html" class="card">
+        <a href="3.html" class="sub-card hover-blue">
           <div class="tag exam">기출 복원</div>
-          <h2 class="card-title">위험물산업기사 실기 2022년 3회 모의고사</h2>
+          <h2 class="sub-card-title">위험물산업기사 실기 2022년 3회 모의고사</h2>
           <div class="card-footer">
             <div class="profile-icon blue">기</div>
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="4.html" class="card">
+        <a href="4.html" class="sub-card hover-blue">
           <div class="tag exam">기출 복원</div>
-          <h2 class="card-title">위험물산업기사 실기 2022년 4회 모의고사</h2>
+          <h2 class="sub-card-title">위험물산업기사 실기 2022년 4회 모의고사</h2>
           <div class="card-footer">
             <div class="profile-icon blue">기</div>
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="5.html" class="card">
+        <a href="5.html" class="sub-card hover-blue">
           <div class="tag exam">기출 복원</div>
-          <h2 class="card-title">위험물산업기사 실기 2023년 1회 모의고사</h2>
+          <h2 class="sub-card-title">위험물산업기사 실기 2023년 1회 모의고사</h2>
           <div class="card-footer">
             <div class="profile-icon blue">기</div>
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="6.html" class="card">
+        <a href="6.html" class="sub-card hover-blue">
           <div class="tag exam">기출 복원</div>
-          <h2 class="card-title">위험물산업기사 실기 2023년 2회 모의고사</h2>
+          <h2 class="sub-card-title">위험물산업기사 실기 2023년 2회 모의고사</h2>
           <div class="card-footer">
             <div class="profile-icon blue">기</div>
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="7.html" class="card">
+        <a href="7.html" class="sub-card hover-blue">
           <div class="tag exam">기출 복원</div>
-          <h2 class="card-title">위험물산업기사 실기 2023년 4회 모의고사</h2>
+          <h2 class="sub-card-title">위험물산업기사 실기 2023년 4회 모의고사</h2>
           <div class="card-footer">
             <div class="profile-icon blue">기</div>
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <a href="8.html" class="card">
+        <a href="8.html" class="sub-card hover-blue">
           <div class="tag exam">기출 복원</div>
-          <h2 class="card-title">위험물산업기사 실기 2024년 1회 모의고사</h2>
+          <h2 class="sub-card-title">위험물산업기사 실기 2024년 1회 모의고사</h2>
           <div class="card-footer">
             <div class="profile-icon blue">기</div>
             <span>실전 기출 테스트</span>
           </div>
         </a>
-        <!-- ✅ 9.html 추가 (2024년 2회 기출 복원) -->
-        <a href="9.html" class="card">
+        <a href="9.html" class="sub-card hover-blue">
           <div class="tag exam">기출 복원</div>
-          <h2 class="card-title">위험물산업기사 실기 2024년 2회 모의고사</h2>
+          <h2 class="sub-card-title">위험물산업기사 실기 2024년 2회 모의고사</h2>
           <div class="card-footer">
             <div class="profile-icon blue">기</div>
             <span>실전 기출 테스트</span>
@@ -319,11 +501,20 @@
   <script>
     // 화면 전환 함수
     function showView(viewId) {
+      // [수정됨] 5. 예기치 못한 주소창 해시값 방어 로직 추가
+      const targetView = document.getElementById('view-' + viewId);
+      
+      // 타겟 ID가 존재하지 않으면 메인 화면으로 강제 이동
+      if (!targetView) {
+        window.location.hash = 'main';
+        return;
+      }
+
       document.querySelectorAll('.view-section').forEach(el => {
         el.classList.remove('active');
       });
-      document.getElementById('view-' + viewId).classList.add('active');
-      window.scrollTo(0, 0); // 화면 전환 시 스크롤 맨 위로
+      targetView.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // 버튼 클릭 시 URL 해시 변경 (뒤로 가기 지원을 위함)
