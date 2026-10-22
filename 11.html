@@ -209,11 +209,14 @@
         explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b> 비고에서는 산화성고체 정의에 나오는 액체·기체를 <b>1기압</b>에서의 상태로 정한다.<br><ul><li>액체 — 1기압·<b>20℃</b>에서 액상이거나, 20℃ 초과 <b>40℃ 이하</b>에서 액상인 것.</li><li>기체 — 1기압·<b>20℃</b>에서 기상인 것.</li></ul>외우는 요령: 기체는 20℃ 한 지점만 따지고, 액체는 여기에 40℃ 이하까지 범위를 넓혀 본다."
       },
       {
-        mainQuestion: "문제 7. 다음 위험물 중 물과 반응하여 산소를 생성하는 물질을 찾아 그 반응식을 모두 쓰시오. (없으면 해당없음)<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>ⓐ 과염소산칼륨<br>ⓑ 과산화나트륨<br>ⓒ 과산화바륨<br>ⓓ 질산칼륨<br>ⓔ 질산암모늄</span>",
+        mainQuestion: "문제 7. 다음 위험물 중 물과 반응하여 산소를 생성하는 물질을 모두 골라 그 반응식을 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>ⓐ 과염소산칼륨<br>ⓑ 과산화나트륨<br>ⓒ 과산화바륨<br>ⓓ 질산칼륨<br>ⓔ 질산암모늄<br><br><strong style='color:#1976d2;'>※ 작성 예시: f 또는 명칭 - 내용</strong></span>",
         score: 5,
+        isUnordered: true,
         subs: [
-          { label: "① 과산화나트륨 + 물", type: "equation", answers: ["2Na2O2 + 2H2O -> 4NaOH + O2"] },
-          { label: "② 과산화바륨 + 물", type: "equation", answers: ["2BaO2 + 2H2O -> 2Ba(OH)2 + O2"] }
+          { label: "① 반응식 1", type: "equation", answers: ["과산화나트륨 - 2Na2O2 + 2H2O -> 4NaOH + O2", "과산화바륨 - 2BaO2 + 2H2O -> 2Ba(OH)2 + O2", "b - 2Na2O2 + 2H2O -> 4NaOH + O2", "c - 2BaO2 + 2H2O -> 2Ba(OH)2 + O2"] },
+          { label: "② 반응식 2", type: "equation", answers: ["과산화나트륨 - 2Na2O2 + 2H2O -> 4NaOH + O2", "과산화바륨 - 2BaO2 + 2H2O -> 2Ba(OH)2 + O2", "b - 2Na2O2 + 2H2O -> 4NaOH + O2", "c - 2BaO2 + 2H2O -> 2Ba(OH)2 + O2"] },
+          { label: "③ 반응식 3", type: "equation", answers: ["채점 제외"], isExcluded: true },
+          { label: "④ 반응식 4", type: "equation", answers: ["채점 제외"], isExcluded: true }
         ],
         explanation: "[해설]<br>물과 반응해 산소를 내는 것은 제1류 중 <b>무기과산화물</b>인 과산화나트륨·과산화바륨이다. 과염소산칼륨·질산칼륨·질산암모늄은 물에 녹을 뿐 산소를 발생하지 않는다.<br>과산화나트륨은 물과 반응해 수산화나트륨과 산소를 생성한다.<br>2Na<sub>2</sub>O<sub>2</sub> + 2H<sub>2</sub>O → 4NaOH + O<sub>2</sub><br>과산화바륨은 물과 반응해 수산화바륨과 산소를 생성한다.<br>2BaO<sub>2</sub> + 2H<sub>2</sub>O → 2Ba(OH)<sub>2</sub> + O<sub>2</sub><br>혼동 주의: 과산화나트륨 같은 알칼리금속 과산화물은 물과 격렬히 반응하므로 <b>주수소화 금지</b>다. 건조사 등으로 소화한다."
       },
@@ -401,7 +404,8 @@
           } else if (sub.type === 'descriptive') {
             html += `<textarea id="ans-${qIndex}-${sIndex}" class="textarea-formula" placeholder="※ 연습장에 직접 풀거나 구조식을 그린 후, [✔️ 정답 확인 및 채점] 버튼을 눌러 스스로 비교해 보세요."></textarea>`;
           } else {
-            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-standard" autocomplete="off" placeholder="${sub.type === 'unordered_comma' ? '쉼표(,)로 구분하여 입력' : '정답 입력'}">`;
+            let placeholder = sub.placeholder || (sub.type === 'unordered_comma' ? '쉼표(,)로 구분하여 입력' : '정답 입력');
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-standard" autocomplete="off" placeholder="${placeholder}">`;
           }
           
           html += `<div id="fb-${qIndex}-${sIndex}" class="feedback-box"></div>`;
@@ -449,15 +453,27 @@
       }
     }
 
+    // 반응식 파싱 전처리 함수 (앞에 명칭이 붙어있을 경우 무시하고 반응식만 추출)
     function isEquationCorrect(userInput, ansList) {
-      let u = userInput.replace(/\s+/g, '').replace(/=/g, '->');
+      let sanitizeEq = (str) => {
+        let s = str.replace(/\s+/g, '').replace(/=/g, '->');
+        let dashIdx = s.indexOf('-');
+        let arrowIdx = s.indexOf('->');
+        // '->' 앞쪽에 '-' 가 있다면 앞쪽 텍스트(알파벳/한글 명칭 등) 무시
+        if (dashIdx !== -1 && arrowIdx !== -1 && dashIdx < arrowIdx) {
+          s = s.substring(dashIdx + 1);
+        }
+        return s;
+      };
+
+      let u = sanitizeEq(userInput);
       let uParts = u.split('->');
       if(uParts.length !== 2) return false;
       let uLeft = uParts[0].split('+').sort().join('+');
       let uRight = uParts[1].split('+').sort().join('+');
       
       for(let i=0; i<ansList.length; i++) {
-        let a = ansList[i].replace(/\s+/g, '').replace(/=/g, '->');
+        let a = sanitizeEq(ansList[i]);
         let aParts = a.split('->');
         if(aParts.length !== 2) continue;
         let aLeft = aParts[0].split('+').sort().join('+');
@@ -520,7 +536,13 @@
       const fbDiv = document.getElementById(`fb-${qIndex}-${sIndex}`);
       
       let html = "";
-      if (state.status === 1) {
+      if (sub.isExcluded) {
+        fbDiv.className = "feedback-box";
+        fbDiv.style.backgroundColor = "#f1f5f9";
+        fbDiv.style.border = "1px solid #cbd5e1";
+        fbDiv.style.color = "#64748b";
+        html += `➖ 채점 제외 항목입니다.`;
+      } else if (state.status === 1) {
         fbDiv.className = "feedback-box is-correct";
         html += `✅ 정답입니다!`;
       } else if (state.status === 0.5) {
@@ -528,7 +550,9 @@
         html += `⚠ 부분 점수 (0.5개 인정)`;
       } else {
         fbDiv.className = "feedback-box is-incorrect";
-        if (q.isUnordered || sub.type === 'unordered_comma') {
+        if (q.isUnordered) {
+          html += `❌ 오답입니다. (모범 답안 중 하나: ${sub.answers[0]})`;
+        } else if (q.isUnordered || sub.type === 'unordered_comma') {
           html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
         } else {
           html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
@@ -558,14 +582,21 @@
     function updateCardScore(qIndex) {
       const q = quizData[qIndex];
       let correctSubs = 0;
+      let gradableCount = 0;
+      
       q.subs.forEach((sub, sIndex) => {
-        correctSubs += gradingState[qIndex].subs[sIndex].status;
+        if (!sub.isExcluded) {
+          correctSubs += gradingState[qIndex].subs[sIndex].status;
+          gradableCount++;
+        }
       });
-      gradingState[qIndex].earnedScore = (correctSubs / q.subs.length) * q.score;
+      
+      // 채점 제외 대상을 빼고 유효한 문항 수로 배점 계산
+      gradingState[qIndex].earnedScore = gradableCount > 0 ? (correctSubs / gradableCount) * q.score : 0;
       
       const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
       if(cardTitle) {
-        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
         cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
         if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
         else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
@@ -577,8 +608,11 @@
       const q = quizData[qIndex];
 
       if (q.isUnordered) {
-        let answerPool = q.subs.map(sub => {
-           return sub.answers.map(a => sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase());
+        let answerPool = [];
+        q.subs.forEach(sub => {
+          if (!sub.isExcluded) {
+            answerPool.push(sub.answers);
+          }
         });
 
         q.subs.forEach((sub, sIndex) => {
@@ -586,15 +620,36 @@
           if (!inputEl || inputEl.disabled) return;
 
           let userVal = inputEl.value;
-          let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
           let isCorrect = false;
 
-          if (uClean !== "") {
+          if (sub.isExcluded) {
+            gradingState[qIndex].subs[sIndex].status = 0;
+            inputEl.disabled = true;
+            updateFeedbackUI(qIndex, sIndex);
+            return;
+          }
+
+          if (userVal.trim() !== "") {
             for (let i = 0; i < answerPool.length; i++) {
-              if (answerPool[i].includes(uClean)) {
-                isCorrect = true;
-                answerPool.splice(i, 1);
-                break;
+              let possibleAnswers = answerPool[i];
+              
+              if (sub.type === 'equation') {
+                if (isEquationCorrect(userVal, possibleAnswers)) {
+                  isCorrect = true;
+                  answerPool.splice(i, 1);
+                  break;
+                }
+              } else {
+                let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
+                let matched = possibleAnswers.some(a => {
+                  let aClean = sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase();
+                  return aClean === uClean;
+                });
+                if(matched) {
+                  isCorrect = true;
+                  answerPool.splice(i, 1);
+                  break;
+                }
               }
             }
           }
@@ -745,7 +800,7 @@
         if(!navBtn) return;
 
         if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
-          let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+          let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
           navBtn.className = 'q-nav-btn'; 
           if (qEarnedScore === q.score) navBtn.classList.add('correct');
           else if (qEarnedScore > 0) navBtn.classList.add('partial');
