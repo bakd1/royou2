@@ -261,7 +261,7 @@
         mainQuestion: "문제 4. 동식물유류에 대하여 다음 물음에 답하시오.",
         score: 5,
         subs: [
-          { label: "① 요오드가(아이오딘값)의 정의를 쓰시오.", type: "descriptive", keywords: ["100g", "흡수", "부가", "요오드", "아이오딘", "g"], answers: ["유지 100g에 흡수(부가)되는 아이오딘(요오드, I2)의 g수"] },
+          { label: "① 아이오딘가의 정의를 쓰시오.", type: "short", answers: ["유지 100g에 흡수되는 아이오딘의 g수", "유지 100g에 흡수되는 요오드의 g수", "유지 100g이 흡수하는 아이오딘의 g수", "유지 100g이 흡수하는 요오드의 g수", "유지 100g에 흡수되는 아이오딘의 양(g)", "유지 100g에 흡수되는 요오드의 양(g)", "유지 100g에 흡수(부가)되는 아이오딘(요오드, I2)의 g수", "유지 100g에 흡수되는 아이오딘의 g수", "유지 100g에 부가되는 아이오딘의 g수", "유지 100g에 부가되는 요오드의 g수"] },
           { label: "② 동·식물유류를 요오드값에 따라 구분하고 각각의 범위를 쓰시오.", type: "descriptive", keywords: ["건성유", "130", "반건성유", "100", "불건성유"], answers: ["건성유 - 요오드값 130 이상 / 반건성유 - 요오드값 100~130 / 불건성유 - 요오드값 100 이하"] }
         ],
         explanation: "[해설]<br><b>요오드값</b>(아이오딘값)은 유지 100g에 부가되는 아이오딘의 g수로, 유지 속 이중결합(불포화도)이 얼마나 많은지를 나타낸다.<br><ul><li>건성유 — 요오드값 <b>130 이상</b>이며, 공기 중에서 잘 굳고 자연발화 위험이 가장 크다(아마인유·들기름·동유).</li><li>반건성유 — 요오드값 100~130이다(참기름·콩기름·채종유).</li><li>불건성유 — 요오드값 <b>100 이하</b>이며, 잘 굳지 않는다(올리브유·피마자유·야자유).</li></ul>외우는 요령: 요오드값이 클수록 불포화도가 높아 산화열이 쌓이기 쉽고, 그만큼 자연발화 위험도 커진다."
@@ -416,10 +416,22 @@
         subs: [
           { label: "①", type: "short", answers: ["알킬알루미늄"] },
           { label: "②", type: "short", answers: ["아세트알데히드", "아세트알데하이드"] },
-          { label: "③", type: "short", answers: ["히드록실아민"] }
+          { label: "③", type: "short", answers: ["히드록실아민", "하이드록실아민"] }
         ],
         explanation: "[해설]<br><b>위험물제조소 기준의 특례</b>는 반응성이 특히 큰 위험물을 취급하는 설비에 강화된 기준을 추가로 둔다.<br><ul><li><b>알킬알루미늄</b>등 — 물·공기와 격렬히 반응하므로 누설범위를 국한하는 설비, 저장실로 유입시키는 설비, 불활성기체 봉입장치를 갖춘다.</li><li><b>아세트알데히드</b>등 — 은·수은·동·마그네슘과 반응해 폭발성 화합물을 만들므로 이 금속과 그 합금을 설비 재질로 쓰지 않는다.</li><li><b>히드록실아민</b>등 — 폭발 위험이 커서 별도 식으로 계산한 안전거리 이상을 둔다.</li></ul>히드록실아민등의 안전거리는 D = 51.1 × ³√N(N은 지정수량 배수)으로 구한다. 봉입 가스는 알킬알루미늄등이 불활성기체, 아세트알데히드등이 불활성기체 또는 수증기인 점도 구분한다."
-      }
+      },
+      {
+      mainQuestion: "문제 20. <span style='font-size:0.85em; color:gray;'>(추가문제)</span> 다음 위험물 중 물과 반응하여 산소를 생성하는 물질을 모두 골라 그 반응식을 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>ⓐ 과염소산칼륨<br>ⓑ 과산화나트륨<br>ⓒ 과산화바륨<br>ⓓ 질산칼륨<br>ⓔ 질산암모늄<br><br><strong style='color:#1976d2;'>※ 작성 예시: f 또는 명칭 - 내용</strong></span>",
+      score: 5,
+      isUnordered: true,
+      subs: [
+        { label: "① 반응식 1", type: "equation", answers: ["과산화나트륨 - 2Na2O2 + 2H2O -> 4NaOH + O2", "과산화바륨 - 2BaO2 + 2H2O -> 2Ba(OH)2 + O2", "b - 2Na2O2 + 2H2O -> 4NaOH + O2", "c - 2BaO2 + 2H2O -> 2Ba(OH)2 + O2"] },
+        { label: "② 반응식 2", type: "equation", answers: ["과산화나트륨 - 2Na2O2 + 2H2O -> 4NaOH + O2", "과산화바륨 - 2BaO2 + 2H2O -> 2Ba(OH)2 + O2", "b - 2Na2O2 + 2H2O -> 4NaOH + O2", "c - 2BaO2 + 2H2O -> 2Ba(OH)2 + O2"] },
+        { label: "③ 반응식 3", type: "equation", answers: ["채점 제외"], isExcluded: true },
+        { label: "④ 반응식 4", type: "equation", answers: ["채점 제외"], isExcluded: true }
+      ],
+      explanation: "[해설]<br>물과 반응해 산소를 내는 것은 제1류 중 <b>무기과산화물</b>인 과산화나트륨·과산화바륨이다. 과염소산칼륨·질산칼륨·질산암모늄은 물에 녹을 뿐 산소를 발생하지 않는다.<br>과산화나트륨은 물과 반응해 수산화나트륨과 산소를 생성한다.<br>2Na<sub>2</sub>O<sub>2</sub> + 2H<sub>2</sub>O → 4NaOH + O<sub>2</sub><br>과산화바륨은 물과 반응해 수산화바륨과 산소를 생성한다.<br>2BaO<sub>2</sub> + 2H<sub>2</sub>O → 2Ba(OH)<sub>2</sub> + O<sub>2</sub><br>혼동 주의: 과산화나트륨 같은 알칼리금속 과산화물은 물과 격렬히 반응하므로 <b>주수소화 금지</b>다. 건조사 등으로 소화한다."
+    }
     ];
 
 // 특정 문제 해설 열기/닫기 토글 함수
@@ -519,15 +531,25 @@ function toggleExplanation(qIndex) {
       }
     }
 
-    function isEquationCorrect(userInput, ansList) {
-      let u = userInput.replace(/\s+/g, '').replace(/=/g, '->');
+function isEquationCorrect(userInput, ansList) {
+      let sanitizeEq = (str) => {
+        let s = str.replace(/\s+/g, '').replace(/=/g, '->');
+        let dashIdx = s.indexOf('-');
+        let arrowIdx = s.indexOf('->');
+        if (dashIdx !== -1 && arrowIdx !== -1 && dashIdx < arrowIdx) {
+          s = s.substring(dashIdx + 1);
+        }
+        return s;
+      };
+
+      let u = sanitizeEq(userInput);
       let uParts = u.split('->');
       if(uParts.length !== 2) return false;
       let uLeft = uParts[0].split('+').sort().join('+');
       let uRight = uParts[1].split('+').sort().join('+');
       
       for(let i=0; i<ansList.length; i++) {
-        let a = ansList[i].replace(/\s+/g, '').replace(/=/g, '->');
+        let a = sanitizeEq(ansList[i]);
         let aParts = a.split('->');
         if(aParts.length !== 2) continue;
         let aLeft = aParts[0].split('+').sort().join('+');
@@ -576,7 +598,6 @@ function toggleExplanation(qIndex) {
       }
 
       gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
-      
       inputEl.disabled = true;
       const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
       if (calcEl) calcEl.disabled = true;
@@ -591,7 +612,13 @@ function toggleExplanation(qIndex) {
       const fbDiv = document.getElementById(`fb-${qIndex}-${sIndex}`);
       
       let html = "";
-      if (state.status === 1) {
+      if (sub.isExcluded) {
+        fbDiv.className = "feedback-box";
+        fbDiv.style.backgroundColor = "#f1f5f9";
+        fbDiv.style.border = "1px solid #cbd5e1";
+        fbDiv.style.color = "#64748b";
+        html += `➖ 채점 제외 항목입니다.`;
+      } else if (state.status === 1) {
         fbDiv.className = "feedback-box is-correct";
         html += `✅ 정답입니다!`;
       } else if (state.status === 0.5) {
@@ -599,16 +626,15 @@ function toggleExplanation(qIndex) {
         html += `⚠ 부분 점수 (0.5개 인정)`;
       } else {
         fbDiv.className = "feedback-box is-incorrect";
-        
-        if (q.isUnordered || sub.type === 'unordered_comma') {
-          let allAnswers = q.subs.map(s => s.answers[0]).join(", ");
+        if (q.isUnordered) {
+          html += `❌ 오답입니다. (모범 답안 중 하나: ${sub.answers[0]})`;
+        } else if (q.isUnordered || sub.type === 'unordered_comma') {
           html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
         } else {
           html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
         }
       }
 
-      // 정답용 이미지 렌더링에 확대 기능(onclick) 적용
       if (sub.answerImage) {
         html += `<div style="margin-top: 15px; text-align: center;">
                    <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px; cursor: zoom-in;" alt="정답 해설 이미지" onclick="openImageModal(this.src)" title="클릭하여 확대">
@@ -632,14 +658,20 @@ function toggleExplanation(qIndex) {
     function updateCardScore(qIndex) {
       const q = quizData[qIndex];
       let correctSubs = 0;
+      let gradableCount = 0;
+      
       q.subs.forEach((sub, sIndex) => {
-        correctSubs += gradingState[qIndex].subs[sIndex].status;
+        if (!sub.isExcluded) {
+          correctSubs += gradingState[qIndex].subs[sIndex].status;
+          gradableCount++;
+        }
       });
-      gradingState[qIndex].earnedScore = (correctSubs / q.subs.length) * q.score;
+      
+      gradingState[qIndex].earnedScore = gradableCount > 0 ? (correctSubs / gradableCount) * q.score : 0;
       
       const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
       if(cardTitle) {
-        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore);
+        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
         cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
         if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
         else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
@@ -651,8 +683,11 @@ function toggleExplanation(qIndex) {
       const q = quizData[qIndex];
 
       if (q.isUnordered) {
-        let answerPool = q.subs.map(sub => {
-           return sub.answers.map(a => sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase());
+        let answerPool = [];
+        q.subs.forEach(sub => {
+          if (!sub.isExcluded) {
+            answerPool.push(sub.answers);
+          }
         });
 
         q.subs.forEach((sub, sIndex) => {
@@ -660,15 +695,36 @@ function toggleExplanation(qIndex) {
           if (!inputEl || inputEl.disabled) return;
 
           let userVal = inputEl.value;
-          let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
           let isCorrect = false;
 
-          if (uClean !== "") {
+          if (sub.isExcluded) {
+            gradingState[qIndex].subs[sIndex].status = 0;
+            inputEl.disabled = true;
+            updateFeedbackUI(qIndex, sIndex);
+            return;
+          }
+
+          if (userVal.trim() !== "") {
             for (let i = 0; i < answerPool.length; i++) {
-              if (answerPool[i].includes(uClean)) {
-                isCorrect = true;
-                answerPool.splice(i, 1);
-                break;
+              let possibleAnswers = answerPool[i];
+              
+              if (sub.type === 'equation') {
+                if (isEquationCorrect(userVal, possibleAnswers)) {
+                  isCorrect = true;
+                  answerPool.splice(i, 1);
+                  break;
+                }
+              } else {
+                let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
+                let matched = possibleAnswers.some(a => {
+                  let aClean = sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase();
+                  return aClean === uClean;
+                });
+                if(matched) {
+                  isCorrect = true;
+                  answerPool.splice(i, 1);
+                  break;
+                }
               }
             }
           }
@@ -678,8 +734,22 @@ function toggleExplanation(qIndex) {
           updateFeedbackUI(qIndex, sIndex);
         });
       } else {
+        const poolUsed = {};
+        const normPool = v => v.replace(/\s+/g, '').toLowerCase();
         q.subs.forEach((sub, sIndex) => {
-          evaluateSub(qIndex, sIndex);
+          if (sub.type === 'pool') {
+            const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+            if (!inputEl || inputEl.disabled) return;
+            const u = normPool(inputEl.value);
+            const used = poolUsed[sub.poolId] = poolUsed[sub.poolId] || [];
+            let ok = false;
+            if (u !== '' && sub.answers.some(a => normPool(a) === u) && !used.includes(u)) { ok = true; used.push(u); }
+            gradingState[qIndex].subs[sIndex].status = ok ? 1 : 0;
+            inputEl.disabled = true;
+            updateFeedbackUI(qIndex, sIndex);
+          } else {
+            evaluateSub(qIndex, sIndex);
+          }
         });
       }
 
@@ -698,7 +768,6 @@ function toggleExplanation(qIndex) {
       
       const btnEl = document.getElementById(`btn-grade-single-${qIndex}`);
       if (btnEl) btnEl.style.display = 'none';
-      
       if (isTestSubmitted) calculateFinalTotal();
     }
 
