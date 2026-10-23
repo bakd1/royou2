@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2025년 위험물산업기사실기 2회 기출복원</title>
+  <title>위험물산업기사 실기(필답형) 기출복원</title>
   <style>
     /* ================== 기본 공통 스타일 ================== */
     body { font-family: 'Malgun Gothic', sans-serif; margin: 30px; max-width: 900px; background-color: #f4f6f9; color: #333; }
@@ -100,21 +100,86 @@
     .modal-zoom-controls .modal-close-btn { background-color: #f44336; }
     .modal-zoom-controls .modal-close-btn:hover { background-color: #d32f2f; }
 
-    /* ================== 플로팅 연습장 스타일 ================== */
-    #sp-toggle-btn { position: fixed; bottom: 20px; right: 20px; z-index: 9999; background-color: #ff9800; color: white; border: none; border-radius: 50px; padding: 15px 20px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: background-color 0.2s; }
-    #sp-toggle-btn:hover { background-color: #f57c00; }
-    #sp-panel { position: fixed; bottom: 80px; right: 20px; z-index: 9998; width: 95vw; max-width: 720px; height: 630px; background-color: #fff; border: 2px solid #ccc; border-radius: 10px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); display: none; flex-direction: column; overflow: hidden; }
-    #sp-header { background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
-    .sp-title { font-weight: bold; color: #333; font-size: 14px; }
-    .sp-tools button { background-color: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 10px; cursor: pointer; font-size: 13px; margin-left: 4px; }
-    .sp-tools button.active { background-color: #e3f2fd; border-color: #1976d2; font-weight: bold; color: #1976d2; }
-    #sp-canvas { flex-grow: 1; cursor: crosshair; background-color: #fff; touch-action: none; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+/* ================== 전체화면 필기 모드 (MEMO) 스타일 ================== */
+    #overlay-canvas { position: absolute; top: 0; left: 0; z-index: 9997; pointer-events: none; touch-action: none; }
+    body.drawing-mode #overlay-canvas { pointer-events: auto; cursor: crosshair; }
+    
+    /* 우측 상단 네비게이션 패널 근처에 배치할 툴바 래퍼 (이건 화면에 고정) */
+    #memo-wrapper { 
+      position: fixed; 
+      top: 50px; 
+      right: 200px; 
+      z-index: 9999; 
+      background: rgba(255, 255, 255, 0.95); 
+      border: 2px solid #f44336; 
+      border-radius: 8px; 
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
+      display: flex; 
+      flex-direction: column;
+      width: 250px; 
+    }
+    
+    #memo-header {
+      background: #f44336;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    
+    #memo-toggle-btn {
+      background: #fff;
+      color: #f44336;
+      border: none;
+      border-radius: 12px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #memo-toggle-btn.active {
+      background: #333;
+      color: #fff;
+    }
+
+    #memo-tools-panel { 
+      padding: 15px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 15px; 
+    }
+    
+    .memo-tool-row { display: flex; align-items: center; gap: 10px; }
+    .memo-tool-label { font-size: 13px; font-weight: bold; color: #555; width: 40px; }
+    
+    .memo-btn { background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+    .memo-btn:hover { background: #f5f5f5; }
+    .memo-btn.active { background: #e3f2fd; border-color: #1976d2; color: #1976d2; font-weight: bold; }
+    
+    .color-btn { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; transition: transform 0.2s; padding: 0; }
+    .color-btn.active { transform: scale(1.2); border-color: #333; }
+    .color-red { background-color: #f44336; }
+    .color-black { background-color: #333; }
+    .color-blue { background-color: #2196f3; }
+    .color-yellow { background-color: #ffeb3b; }
+    
+    .memo-slider { width: 100px; cursor: pointer; }
+    
+    @media (max-width: 1150px) {
+      #memo-wrapper { top: 20px; right: 20px; } 
+    }
   </style>
 </head>
 <body>
 <div style="margin-bottom:15px;"><a href="index.html#section3" style="display:inline-block;padding:8px 16px;background:#e0e0e0;color:#333;text-decoration:none;border-radius:8px;font-weight:bold;font-family:'Malgun Gothic',sans-serif;">◀ 메인 메뉴로</a></div>
 
-  <h1>📝 2025년 위험물산업기사실기 2회 기출복원 (통합본 20제)</h1>
+  <h1>📝 위험물산업기사 실기(필답형) 2025년 2회</h1>
   <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.</p>
   
   <div class="mode-selection" id="mode-selection">
@@ -131,18 +196,41 @@
     <div id="final-result"></div>
   </div>
 
-  <!-- ================== 우측 하단 플로팅 연습장 UI ================== -->
-  <button id="sp-toggle-btn" onclick="toggleScratchpad()">📝 연습장</button>
-  <div id="sp-panel">
-    <div id="sp-header">
-      <span class="sp-title">연습장 (구조식/계산식)</span>
-      <div class="sp-tools">
-        <button id="sp-pen" class="active" onclick="setSpTool('pen')">✏️ 펜</button>
-        <button id="sp-eraser" onclick="setSpTool('eraser')">🧽 지우개</button>
-        <button onclick="clearSpCanvas()">🗑️ 비우기</button>
+ <!-- ================== 전체화면 필기 모드 (MEMO) UI ================== -->
+  <canvas id="overlay-canvas"></canvas>
+  <div id="memo-wrapper">
+    <div id="memo-header">
+      <span>🖍 MEMO</span>
+      <button id="memo-toggle-btn" onclick="toggleMemoMode()">필기 켜기</button>
+    </div>
+    <div id="memo-tools-panel">
+      <!-- 도구 선택 -->
+      <div class="memo-tool-row">
+        <span class="memo-tool-label">도구:</span>
+        <button id="memo-pen" class="memo-btn active" onclick="setMemoTool('pen')">✏️ 펜</button>
+        <button id="memo-eraser" class="memo-btn" onclick="setMemoTool('eraser')">🧽 지우개</button>
+      </div>
+      
+      <!-- 색상 선택 -->
+      <div class="memo-tool-row" id="memo-color-row">
+        <span class="memo-tool-label">색상:</span>
+        <button class="color-btn color-red active" onclick="setMemoColor('#f44336', this)" title="빨강"></button>
+        <button class="color-btn color-black" onclick="setMemoColor('#333333', this)" title="검정"></button>
+        <button class="color-btn color-blue" onclick="setMemoColor('#2196f3', this)" title="파랑"></button>
+        <button class="color-btn color-yellow" onclick="setMemoColor('#ffeb3b', this)" title="노랑"></button>
+      </div>
+      
+      <!-- 굵기 조절 -->
+      <div class="memo-tool-row">
+        <span class="memo-tool-label">굵기:</span>
+        <input type="range" id="memo-width-slider" class="memo-slider" min="1" max="50" value="3" onchange="updateMemoWidth(this.value)">
+      </div>
+      
+      <!-- 기능 버튼 -->
+      <div class="memo-tool-row" style="justify-content: flex-end; margin-top: 5px; border-top: 1px dashed #ccc; padding-top: 10px;">
+        <button class="memo-btn" onclick="clearMemoCanvas()">🗑️ 화면 지우기</button>
       </div>
     </div>
-    <canvas id="sp-canvas"></canvas>
   </div>
 
   <!-- ================== 이미지 확대 및 PAN(드래그) 모달 UI ================== -->
@@ -184,11 +272,16 @@
         ],
         explanation: "[해설]<br>벤젠 증기를 <b>이상기체</b>로 보고 <b>PV = nRT</b>를 부피에 대해 풀어 구한다.<br>벤젠 분자량은 12×6 + 1×6 = <b>78</b>이고, 온도는 절대온도 273 + 90 = 363K로 바꾼다.<br>V = nRT/P = (w/M)RT/P<br>= (16 / 78) × 0.082 × (273 + 90) / 1<br>= <b>6.11L</b><br>혼동 주의: R = 0.082의 단위가 atm·L/(mol·K)이므로 압력은 atm, 온도는 K로 넣어야 부피가 L로 나온다."
       },
-      {
+{
         mainQuestion: "문제 3. 트라이나이트로페놀에 대하여 다음을 쓰시오.",
         score: 5,
         subs: [
-          { label: "① 구조식", type: "formula", answers: ["C6H2(OH)(NO2)3", "C6H2OH(NO2)3"] },
+          { 
+            label: "① 구조식", 
+            type: "descriptive", 
+            answerImage: "data:image/png;base64,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fiNb/XfE9rokd1eW91IPLF3FbFgCkKnCID6E9K/Qtoo2+8gNI1tA33olP1FNOSepLpq2h85f8EpfDE/gL9iDwd4Mvfhv4m8MT2MMyXFh4ugSK+lkMhZp3RGYJvJLBc8ZxX0hTFghT7kYH0FPoKiuWNgooooKP//R/fyiiigAooooAKKKKACiiigD/9kAAKENEQAAAENhcHR1cmVkX0FwcF9JbmZvY29tLnNlYy5hbmRyb2lkLmFwcC5teWZpbGVzAABRDBQAAABTYW1zdW5nX0NhcHR1cmVfSW5mb1NjcmVlbnNob3QAAKELGAAAAFBob3RvRWRpdG9yX1JlX0VkaXRfRGF0YXsib3JpZ2luYWxQYXRoIjoiXC9kYXRhXC9zZWNcL3Bob3RvZWRpdG9yXC8wXC80ODE1NjYxYTMyNjI4MDJiODYzNjQ3ZDEzYjhjZDlkODU0Yzg2NzliOWExOWRkZTc3M2M3YTlkZmM5MjY0MTJkXzM5NzM3Ni5qcGciLCJyZXByZXNlbnRhdGl2ZUZyYW1lTG9jIjotMSwic3RhcnRNb3Rpb25WaWRlbyI6LTEsImVuZE1vdGlvblZpZGVvIjotMSwiaXNNb3Rpb25WaWRlb011dGUiOmZhbHNlLCJpc1RyaW1Nb3Rpb25WaWRlbyI6ZmFsc2UsImNsaXBJbmZvVmFsdWUiOiJ7XCJtQ2VudGVyWFwiOjAuMjY5MDY2MjQ0MzYzNzg0OCxcIm1DZW50ZXJZXCI6MC44MDI0OTQxMDg2NzY5MTA0LFwibVdpZHRoXCI6MC4yOTQyNzI2NjEyMDkxMDY0NSxcIm1IZWlnaHRcIjowLjE4NzE4OTA0MjU2ODIwNjgsXCJtUm90YXRpb25cIjowLFwibVJvdGF0ZVwiOjAsXCJtSEZsaXBcIjowLFwibVZGbGlwXCI6MCxcIm1Sb3RhdGlvbkVmZmVjdFwiOjAsXCJtUm90YXRlRWZmZWN0XCI6MCxcIm1IRmxpcEVmZmVjdFwiOjAsXCJtVkZsaXBFZmZlY3RcIjowLFwibUhvelBlcnNwZWN0aXZlXCI6MCxcIm1WZXJQZXJzcGVjdGl2ZVwiOjB9IiwidG9uZVZhbHVlIjoie1wiYnJpZ2h0bmVzc1wiOjEwMCxcImV4cG9zdXJlXCI6MTAwLFwiY29udHJhc3RcIjoxMDAsXCJzYXR1cmF0aW9uXCI6MTAwLFwiaHVlXCI6MTAwLFwid2JNb2RlXCI6LTEsXCJ3YlRlbXBlcmF0dXJlXCI6MTAwLFwidGludFwiOjEwMCxcInNoYWRvd1wiOjEwMCxcImhpZ2hsaWdodFwiOjEwMCxcImxpZ2h0YmFsYW5jZVwiOjEwMCxcInNoYXJwbmVzc1wiOjEwMCxcImRlZmluaXRpb25cIjoxMDAsXCJpc0JyaWdodG5lc3NJUEVcIjpmYWxzZSxcImlzRXhwb3N1cmVJUEVcIjpmYWxzZSxcImlzQ29udHJhc3RJUEVcIjpmYWxzZSxcImlzU2F0dXJhdGlvbklQRVwiOmZhbHNlfSIsImVmZmVjdFZhbHVlIjoie1wiZmlsdGVySW5kaWNhdGlvblwiOjQwOTcsXCJhbHBoYVZhbHVlXCI6MTAwLFwiZmlsdGVyVHlwZVwiOjB9IiwicG9ydHJhaXRFZmZlY3RWYWx1ZSI6IntcImVmZmVjdElkXCI6LTEsXCJlZmZlY3RMZXZlbFwiOi0xLFwiZXhpZlJvdGF0aW9uXCI6MCxcImxpZ2h0TGV2ZWxcIjowLFwidG91Y2hYXCI6MCxcInRvdWNoWVwiOjAsXCJyZWZvY3VzWFwiOi0xLFwicmVmb2N1c1lcIjotMSxcImVmZmVjdElkT3JpZ2luYWxcIjotMSxcImVmZmVjdExldmVsT3JpZ2luYWxcIjotMSxcImxpZ2h0TGV2ZWxPcmlnaW5hbFwiOi0xLFwidG91Y2hYT3JpZ2luYWxcIjowLFwidG91Y2hZT3JpZ2luYWxcIjowLFwicmVmb2N1c1hPcmlnaW5hbFwiOi0xLFwicmVmb2N1c1lPcmlnaW5hbFwiOi0xLFwid2F0ZXJNYXJrUmVtb3ZlZFwiOmZhbHNlLFwid2F0ZXJNYXJrUmVtb3ZlZE9yaWdpbmFsXCI6ZmFsc2V9IiwiaXNCbGVuZGluZyI6dHJ1ZSwiaXNOb3RSZUVkaXQiOmZhbHNlLCJzZXBWZXJzaW9uIjoiMTgwMDAwIiwibmRlVmVyc2lvbiI6MSwicmVTaXplIjoyLCJpc1NjYWxlQUkiOmZhbHNlLCJyb3RhdGlvbiI6MSwiYWRqdXN0bWVudFZhbHVlIjoie1wibUNyb3BTdGF0ZVwiOjEzMTA3Nn0iLCJpc0FwcGx5U2hhcGVDb3JyZWN0aW9uIjpmYWxzZSwiaXNOZXdSZUVkaXRPbmx5IjpmYWxzZSwiaXNEZWNvUmVFZGl0T25seSI6ZmFsc2UsImlzQUlGaWx0ZXJSZUVkaXRPbmx5IjpmYWxzZSwiaXNTUGVuU0RLT25seSI6ZmFsc2UsImlzQWxwaGFJbWFnZSI6ZmFsc2V9AAChCxYAAABPcmlnaW5hbF9QYXRoX0hhc2hfS2V5OTdmMTk4YmY1N2M0MmVhZjdkZjhlY2ZiMjc5OWEwZTdlNzM3ZjQ4OTdiYjdlZTRiNTNiMmM3MzRkNTgwMjk3ZS8zOTczNzYAAFELHAAAAEludGVsbGlnZW50X1Bob3RvRWRpdG9yX0RhdGFJUEVfSXNfTm90X0FwcGxpZWRTRUZIawAAAAUAAAAAAKENrQcAADQAAAAAAFEMeQcAACYAAAAAAKELUwcAALgGAAAAAKELmwAAAGUAAAAAAFELNgAAADYAAABIAAAAU0VGVA==", 
+            answers: ["자율 채점 요망 (페놀의 벤젠고리 2, 4, 6번 위치에 니트로기(-NO2) 3개 결합)"] 
+          },
           { label: "② 품명", type: "short", answers: ["나이트로화합물", "니트로화합물"] },
           { label: "③ 지정수량(제1종)", type: "short", answers: ["10kg", "10"] }
         ],
@@ -931,93 +1024,148 @@
       else zoomImage(-0.1);
     }, { passive: false });
 
-    // ================== 플로팅 연습장 스크립트 ==================
-    let spCanvas, spCtx;
-    let spIsDrawing = false;
-    let spCurrentTool = 'pen';
+// ================== 전체화면 필기 모드 (MEMO) 스크립트 ==================
+    let memoCanvas, memoCtx;
+    let isMemoDrawing = false;
+    let memoCurrentTool = 'pen';
+    let isMemoMode = false;
+    let memoCurrentColor = '#333333'; // 기본 검정
+    let memoPenWidth = 3;
+    let memoEraserWidth = 30;
 
-    function toggleScratchpad() {
-      const panel = document.getElementById('sp-panel');
-      const btn = document.getElementById('sp-toggle-btn');
-      if (panel.style.display === 'flex') {
-        panel.style.display = 'none';
-        btn.innerText = "📝 연습장";
-        btn.style.backgroundColor = "#ff9800";
-      } else {
-        panel.style.display = 'flex';
-        btn.innerText = "❌ 닫기";
-        btn.style.backgroundColor = "#757575";
-        if (!spCanvas) initScratchpad();
-      }
-    }
-
-    function initScratchpad() {
-      spCanvas = document.getElementById('sp-canvas');
-      spCtx = spCanvas.getContext('2d');
-      function resizeCanvas() {
-        const rect = spCanvas.parentElement.getBoundingClientRect();
-        const headerHeight = document.getElementById('sp-header').offsetHeight;
-        spCanvas.width = rect.width;
-        spCanvas.height = rect.height - headerHeight;
-      }
-      resizeCanvas();
+    function toggleMemoMode() {
+      isMemoMode = !isMemoMode;
+      const btn = document.getElementById('memo-toggle-btn');
       
-      spCanvas.addEventListener('mousedown', startSpDraw);
-      spCanvas.addEventListener('mousemove', drawSp);
-      spCanvas.addEventListener('mouseup', stopSpDraw);
-      spCanvas.addEventListener('mouseout', stopSpDraw);
-      spCanvas.addEventListener('touchstart', startSpDraw, { passive: false });
-      spCanvas.addEventListener('touchmove', drawSp, { passive: false });
-      spCanvas.addEventListener('touchend', stopSpDraw);
-    }
-
-    function getSpCoordinates(e) {
-      const rect = spCanvas.getBoundingClientRect();
-      if (e.touches && e.touches.length > 0) {
-        return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
-      }
-      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    }
-
-    function startSpDraw(e) {
-      e.preventDefault(); 
-      spIsDrawing = true;
-      const pos = getSpCoordinates(e);
-      spCtx.beginPath();
-      spCtx.moveTo(pos.x, pos.y);
-    }
-
-    function drawSp(e) {
-      if (!spIsDrawing) return;
-      e.preventDefault(); 
-      const pos = getSpCoordinates(e);
-      spCtx.lineTo(pos.x, pos.y);
-      if (spCurrentTool === 'eraser') {
-        spCtx.strokeStyle = '#fff'; 
-        spCtx.lineWidth = 20;       
+      if (isMemoMode) {
+        document.body.classList.add('drawing-mode');
+        btn.innerHTML = "필기 끄기";
+        btn.classList.add('active');
+        if (!memoCanvas) initMemoCanvas();
+        else updateCanvasSize(); // 필기 모드를 켤 때마다 문서 크기에 맞게 캔버스 크기 조정
       } else {
-        spCtx.strokeStyle = '#333'; 
-        spCtx.lineWidth = 2;        
+        document.body.classList.remove('drawing-mode');
+        btn.innerHTML = "필기 켜기";
+        btn.classList.remove('active');
       }
-      spCtx.lineCap = 'round';
-      spCtx.lineJoin = 'round';
-      spCtx.stroke();
     }
 
-    function stopSpDraw() {
-      spIsDrawing = false;
-      spCtx.closePath();
+    function updateCanvasSize() {
+      if (!memoCanvas) return;
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = memoCanvas.width;
+      tempCanvas.height = memoCanvas.height;
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCtx.drawImage(memoCanvas, 0, 0);
+
+      // 문서 전체의 스크롤 높이/너비로 캔버스 크기 설정
+      memoCanvas.width = Math.max(document.documentElement.scrollWidth, window.innerWidth);
+      memoCanvas.height = Math.max(document.documentElement.scrollHeight, window.innerHeight);
+
+      memoCtx.drawImage(tempCanvas, 0, 0);
     }
 
-    function setSpTool(tool) {
-      spCurrentTool = tool;
-      document.getElementById('sp-pen').classList.remove('active');
-      document.getElementById('sp-eraser').classList.remove('active');
-      document.getElementById('sp-' + tool).classList.add('active');
+    function initMemoCanvas() {
+      memoCanvas = document.getElementById('overlay-canvas');
+      memoCtx = memoCanvas.getContext('2d');
+      
+      updateCanvasSize();
+      window.addEventListener('resize', updateCanvasSize);
+      
+      memoCanvas.addEventListener('mousedown', startMemoDraw);
+      memoCanvas.addEventListener('mousemove', drawMemo);
+      memoCanvas.addEventListener('mouseup', stopMemoDraw);
+      memoCanvas.addEventListener('mouseout', stopMemoDraw);
+      memoCanvas.addEventListener('touchstart', startMemoDraw, { passive: false });
+      memoCanvas.addEventListener('touchmove', drawMemo, { passive: false });
+      memoCanvas.addEventListener('touchend', stopMemoDraw);
+      
+      document.getElementById('memo-width-slider').value = memoPenWidth;
     }
 
-    function clearSpCanvas() {
-      spCtx.clearRect(0, 0, spCanvas.width, spCanvas.height);
+    function getMemoCoordinates(e) {
+      const rect = memoCanvas.getBoundingClientRect();
+      if (e.touches && e.touches.length > 0) {
+        return { 
+          x: e.touches[0].clientX - rect.left, 
+          y: e.touches[0].clientY - rect.top 
+        };
+      }
+      return { 
+        x: e.clientX - rect.left, 
+        y: e.clientY - rect.top 
+      };
+    }
+
+    function startMemoDraw(e) {
+      if (!isMemoMode) return;
+      if (e.target.closest('#memo-wrapper') || e.target.closest('#q-nav-panel')) return;
+      
+      e.preventDefault(); 
+      isMemoDrawing = true;
+      const pos = getMemoCoordinates(e);
+      memoCtx.beginPath();
+      memoCtx.moveTo(pos.x, pos.y);
+    }
+
+    function drawMemo(e) {
+      if (!isMemoDrawing || !isMemoMode) return;
+      e.preventDefault(); 
+      const pos = getMemoCoordinates(e);
+      memoCtx.lineTo(pos.x, pos.y);
+      
+      if (memoCurrentTool === 'eraser') {
+        memoCtx.globalCompositeOperation = 'destination-out';
+        memoCtx.lineWidth = memoEraserWidth;       
+      } else {
+        memoCtx.globalCompositeOperation = 'source-over';
+        memoCtx.strokeStyle = memoCurrentColor;
+        memoCtx.lineWidth = memoPenWidth;        
+      }
+      memoCtx.lineCap = 'round';
+      memoCtx.lineJoin = 'round';
+      memoCtx.stroke();
+    }
+
+    function stopMemoDraw() {
+      if (!isMemoDrawing) return;
+      isMemoDrawing = false;
+      memoCtx.closePath();
+    }
+
+    function setMemoTool(tool) {
+      memoCurrentTool = tool;
+      document.getElementById('memo-pen').classList.remove('active');
+      document.getElementById('memo-eraser').classList.remove('active');
+      document.getElementById('memo-' + tool).classList.add('active');
+      
+      const slider = document.getElementById('memo-width-slider');
+      if (tool === 'eraser') {
+        slider.value = memoEraserWidth;
+      } else {
+        slider.value = memoPenWidth;
+      }
+    }
+
+    function setMemoColor(color, btnElement) {
+      memoCurrentColor = color;
+      setMemoTool('pen'); 
+      
+      const colorBtns = document.querySelectorAll('.color-btn');
+      colorBtns.forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+    }
+
+    function updateMemoWidth(val) {
+      if (memoCurrentTool === 'eraser') {
+        memoEraserWidth = parseInt(val);
+      } else {
+        memoPenWidth = parseInt(val);
+      }
+    }
+
+    function clearMemoCanvas() {
+      if(memoCtx) memoCtx.clearRect(0, 0, memoCanvas.width, memoCanvas.height);
     }
 
     // 초기 실행
