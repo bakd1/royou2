@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>위험물산업기사 실기(필답형) 기출복원</title>
+  <style>
+
+    /* ================== 기본 공통 스타일 ================== */
+    body { font-family: 'Malgun Gothic', sans-serif; margin: 30px; max-width: 900px; background-color: #f4f6f9; color: #333; }
+    h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+    .instruction { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 0.95em; }
+    
+    .mode-selection { text-align: center; margin-bottom: 30px; }
+    .mode-selection label {
+      display: inline-block; margin: 0 10px; padding: 10px 20px;
+      font-size: 1.05em; font-weight: bold; border-radius: 8px; cursor: pointer;
+      border: 2px solid #ced4da; transition: all 0.2s; background-color: #fff; color: #666;
+    }
+    .mode-selection label.active { border-color: #1976d2; background-color: #e3f2fd; color: #1976d2; }
+
+    .question-card { background-color: #fff; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .main-q-title { font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #1976d2; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; line-height: 1.4; }
+    
+    .sub-q-container { margin-top: 15px; padding-left: 10px; }
+    .sub-q-label { font-weight: bold; margin-bottom: 8px; font-size: 1.05em; line-height: 1.4; }
+    
+    .input-standard, .input-calc { 
+      width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; transition: border-color 0.2s;
+    }
+    .input-standard:focus, .input-calc:focus, .textarea-formula:focus { outline: none; border-color: #1976d2; box-shadow: 0 0 0 3px rgba(25,118,210,0.15); }
+    
+    .textarea-formula {
+      width: 100%; padding: 12px; font-size: 15px; border: 1px dashed #adb5bd; border-radius: 6px; box-sizing: border-box; margin-bottom: 5px; resize: vertical; min-height: 80px; background-color: #f8f9fa; line-height: 1.4;
+    }
+    .calc-label { font-size: 0.85em; color: #6c757d; font-weight: bold; margin-bottom: 3px; display: block; }
+    
+    .feedback-box { margin-top: 5px; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 0.95em; display: none; line-height: 1.5; }
+    .is-correct { background-color: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; }
+    .is-incorrect { background-color: #ffebee; border: 1px solid #ffcdd2; color: #c62828; }
+    .is-partial { background-color: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; }
+    
+    .override-btns { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc; }
+    .btn-override { padding: 6px 12px; font-size: 0.85em; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px; color: #fff; transition: opacity 0.2s; }
+    .btn-override:hover { opacity: 0.8; }
+    .btn-correct { background-color: #4caf50; }
+    .btn-partial { background-color: #ff9800; }
+    .btn-incorrect { background-color: #f44336; }
+    
+    .btn-grade-single { margin-top: 15px; padding: 10px 20px; font-size: 0.95em; background-color: #607d8b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; float: right; transition: background-color 0.2s; }
+    .btn-grade-single:hover { background-color: #455a64; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+
+    .submit-section { text-align: center; margin-top: 40px; margin-bottom: 50px; }
+    .btn-submit { padding: 15px 40px; font-size: 1.2em; background-color: #1976d2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(25,118,210,0.3); }
+    .btn-submit:hover { background-color: #1565c0; }
+    .btn-submit:disabled { background-color: #9e9e9e; cursor: not-allowed; box-shadow: none; }
+    
+    #final-result { margin-top: 25px; font-size: 1.4em; font-weight: bold; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; display: none; line-height: 1.5; }
+    .q-score-badge { float: right; font-size: 0.8em; background-color: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 20px; margin-left: 10px; }
+
+    /* ================== 전체화면 필기 모드 (MEMO) 스타일 ================== */
+    #overlay-canvas { position: absolute; top: 0; left: 0; z-index: 9997; pointer-events: none; touch-action: none; }
+    body.drawing-mode #overlay-canvas { pointer-events: auto; cursor: crosshair; }
+    
+    #memo-wrapper { 
+      position: fixed; 
+      top: 50px; 
+      right: 200px; 
+      z-index: 9999; 
+      background: rgba(255, 255, 255, 0.95); 
+      border: 2px solid #f44336; 
+      border-radius: 8px; 
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
+      display: flex; 
+      flex-direction: column;
+      width: 250px; 
+    }
+    
+    #memo-header {
+      background: #f44336;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    
+    #memo-toggle-btn {
+      background: #fff;
+      color: #f44336;
+      border: none;
+      border-radius: 12px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #memo-toggle-btn.active {
+      background: #333;
+      color: #fff;
+    }
+
+    #memo-tools-panel { 
+      padding: 15px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 15px; 
+    }
+    
+    .memo-tool-row { display: flex; align-items: center; gap: 10px; }
+    .memo-tool-label { font-size: 13px; font-weight: bold; color: #555; width: 40px; }
+    
+    .memo-btn { background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+    .memo-btn:hover { background: #f5f5f5; }
+    .memo-btn.active { background: #e3f2fd; border-color: #1976d2; color: #1976d2; font-weight: bold; }
+    
+    .color-btn { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; transition: transform 0.2s; padding: 0; }
+    .color-btn.active { transform: scale(1.2); border-color: #333; }
+    .color-red { background-color: #f44336; }
+    .color-black { background-color: #333; }
+    .color-blue { background-color: #2196f3; }
+    .color-yellow { background-color: #ffeb3b; }
+    
+    .memo-slider { width: 100px; cursor: pointer; }
+    
+    @media (max-width: 1150px) {
+      #memo-wrapper { top: 20px; right: 20px; } 
+    }
+
+    /* ================== 우측 문항 내비게이션 패널 스타일 ================== */
+    #q-nav-panel {
+      position: fixed; top: 50px; right: 20px; width: 170px; background-color: #fff;
+      border: 2px solid #ced4da; border-radius: 10px; box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      z-index: 999; display: flex; flex-direction: column; max-height: calc(100vh - 120px);
+    }
+    .q-nav-header { background-color: #f8f9fa; padding: 12px; text-align: center; font-weight: bold; font-size: 0.95em; border-bottom: 1px solid #ced4da; border-top-left-radius: 8px; border-top-right-radius: 8px; color: #1976d2; }
+    .q-nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 12px; overflow-y: auto; }
+    .q-nav-btn { padding: 8px 0; font-size: 0.9em; font-weight: bold; border: 1px solid #dee2e6; border-radius: 6px; background-color: #fff; color: #6c757d; cursor: pointer; transition: all 0.2s; }
+    .q-nav-btn:hover { background-color: #e9ecef; color: #495057; }
+    .q-nav-btn.answered { background-color: #e3f2fd; border-color: #90caf9; color: #1976d2; } 
+    .q-nav-btn.correct { background-color: #e8f5e9; border-color: #81c784; color: #2e7d32; }  
+    .q-nav-btn.partial { background-color: #fff3e0; border-color: #ffb74d; color: #e65100; }  
+    .q-nav-btn.incorrect { background-color: #ffebee; border-color: #e57373; color: #c62828; } 
+    .q-nav-legend { font-size: 0.75em; padding: 10px; border-top: 1px solid #ced4da; background-color: #f8f9fa; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; color: #666; line-height: 1.6; }
+    .q-nav-legend .box { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+    @media (max-width: 1150px) { #q-nav-panel { display: none; } }
+
+    /* ================== 이미지 확대 모달 스타일 ================== */
+    #image-modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); flex-direction: column; }
+    #image-modal-content { position: relative; width: 100%; height: calc(100% - 60px); overflow: hidden; display: flex; justify-content: center; align-items: center; }
+    #modal-img { position: absolute; max-width: 100%; max-height: 100%; cursor: grab; transform-origin: center center; transition: transform 0.05s linear; user-select: none; }
+    #modal-img:active { cursor: grabbing; }
+    .modal-zoom-controls { height: 60px; display: flex; justify-content: center; align-items: center; gap: 10px; background-color: rgba(34, 34, 34, 0.9); z-index: 10001; }
+    .modal-zoom-controls button { padding: 10px 15px; font-size: 1em; font-weight: bold; cursor: pointer; border: none; border-radius: 5px; background-color: #1976d2; color: white; transition: background-color 0.2s; }
+    .modal-zoom-controls button:hover { background-color: #1565c0; }
+    .modal-zoom-controls .modal-close-btn { background-color: #f44336; }
+    .modal-zoom-controls .modal-close-btn:hover { background-color: #d32f2f; }
+    
+    .question-card img { 
+      max-width: 100%; 
+      border: 1px solid #ced4da; 
+      border-radius: 5px; 
+      cursor: zoom-in; 
+      transition: opacity 0.2s, box-shadow 0.2s;
+    }
+    .question-card img:hover { 
+      opacity: 0.85; 
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+  </style>
+</head>
+<body>
+<div style="margin-bottom:15px;"><a href="index.html#section3" style="display:inline-block;padding:8px 16px;background:#e0e0e0;color:#333;text-decoration:none;border-radius:8px;font-weight:bold;font-family:'Malgun Gothic',sans-serif;">◀ 메인 메뉴로</a></div>
+  <h1>📝 위험물산업기사 실기(필답형) 2022년 2회</h1>
+  <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.</p>
+  <div class="mode-selection" id="mode-selection">
+    <label class="active" id="label-basic" onclick="setMode('basic')">📝 시험 모드 (실전 테스트)</label>
+    <label id="label-study" onclick="setMode('study')">📖 해설 모드 (해설 펼쳐보기)</label>
+  </div>
+  <div id="quiz-container"></div>
+  <div class="submit-section">
+    <button id="submit-btn" class="btn-submit" onclick="gradeAll()">전체 제출 및 채점하기</button>
+    <div id="final-result"></div>
+  </div>
+
+ <canvas id="overlay-canvas"></canvas>
+  <div id="memo-wrapper">
+    <div id="memo-header">
+      <span>🖍 MEMO</span>
+      <button id="memo-toggle-btn" onclick="toggleMemoMode()">필기 켜기</button>
+    </div>
+    <div id="memo-tools-panel">
+      <!-- 도구 선택 -->
+      <div class="memo-tool-row">
+        <span class="memo-tool-label">도구:</span>
+        <button id="memo-pen" class="memo-btn active" onclick="setMemoTool('pen')">✏️ 펜</button>
+        <button id="memo-eraser" class="memo-btn" onclick="setMemoTool('eraser')">🧽 지우개</button>
+      </div>
+      
+      <!-- 색상 선택 -->
+      <div class="memo-tool-row" id="memo-color-row">
+        <span class="memo-tool-label">색상:</span>
+        <button class="color-btn color-red active" onclick="setMemoColor('#f44336', this)" title="빨강"></button>
+        <button class="color-btn color-black" onclick="setMemoColor('#333333', this)" title="검정"></button>
+        <button class="color-btn color-blue" onclick="setMemoColor('#2196f3', this)" title="파랑"></button>
+        <button class="color-btn color-yellow" onclick="setMemoColor('#ffeb3b', this)" title="노랑"></button>
+      </div>
+      
+      <!-- 굵기 조절 -->
+      <div class="memo-tool-row">
+        <span class="memo-tool-label">굵기:</span>
+        <input type="range" id="memo-width-slider" class="memo-slider" min="1" max="50" value="3" onchange="updateMemoWidth(this.value)">
+      </div>
+      
+      <!-- 기능 버튼 -->
+      <div class="memo-tool-row" style="justify-content: flex-end; margin-top: 5px; border-top: 1px dashed #ccc; padding-top: 10px;">
+        <button class="memo-btn" onclick="clearMemoCanvas()">🗑️ 화면 지우기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== 이미지 확대 및 PAN(드래그) 모달 UI ================== -->
+  <div id="image-modal">
+    <div id="image-modal-content" onclick="if(event.target === this) closeImageModal()">
+      <img id="modal-img" src="" alt="확대된 이미지" draggable="false">
+    </div>
+    <div class="modal-zoom-controls">
+      <button onclick="zoomImage(0.25)">확대 ➕</button>
+      <button onclick="zoomImage(-0.25)">축소 ➖</button>
+      <button onclick="resetZoom()">원래 크기 🔄</button>
+      <button class="modal-close-btn" onclick="closeImageModal()">닫기 ❌</button>
+    </div>
+  </div>
+  <script>
+
+    const quizData = [
+      {
+        mainQuestion: "문제 1. 다음은 기타 소화설비의 능력단위를 정리한 표이다. 빈칸 ( ① ) ~ ( ⑤ )에 알맞은 답을 쓰시오.<br><table style='width:100%; border-collapse: collapse; margin-top: 15px; text-align: center; font-size: 0.9em; background-color: #fff;'><tr style='background-color: #f8f9fa;'><th style='border: 1px solid #ccc; padding: 10px;'>소화설비</th><th style='border: 1px solid #ccc; padding: 10px;'>용량</th><th style='border: 1px solid #ccc; padding: 10px;'>능력단위</th></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>소화전용 물통</td><td style='border: 1px solid #ccc; padding: 10px;'>( ① ) L</td><td style='border: 1px solid #ccc; padding: 10px;'>0.3</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>수조(소화전용 물통 3개 포함)</td><td style='border: 1px solid #ccc; padding: 10px;'>80L</td><td style='border: 1px solid #ccc; padding: 10px;'>( ② )</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>수조(소화전용 물통 6개 포함)</td><td style='border: 1px solid #ccc; padding: 10px;'>190L</td><td style='border: 1px solid #ccc; padding: 10px;'>( ③ )</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>마른 모래(삽 1개 포함)</td><td style='border: 1px solid #ccc; padding: 10px;'>( ④ ) L</td><td style='border: 1px solid #ccc; padding: 10px;'>0.5</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>팽창질석 또는 팽창진주암(삽 1개 포함)</td><td style='border: 1px solid #ccc; padding: 10px;'>( ⑤ ) L</td><td style='border: 1px solid #ccc; padding: 10px;'>1.0</td></tr></table>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["8"] },
+          { label: "②", type: "short", answers: ["1.5"] },
+          { label: "③", type: "short", answers: ["2.5"] },
+          { label: "④", type: "short", answers: ["50"] },
+          { label: "⑤", type: "short", answers: ["160"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 17</b>의 기타 소화설비 능력단위는 용구와 용량별로 정해진 고정값이다.<br><ul><li>소화전용 물통 — 8L가 0.3단위다.</li><li>수조(물통 3개 포함) — 80L가 1.5단위다.</li><li>수조(물통 6개 포함) — 190L가 2.5단위다.</li><li>마른 모래(삽 1개 포함) — <b>50L</b>가 0.5단위다.</li><li>팽창질석·팽창진주암(삽 1개 포함) — <b>160L</b>가 1.0단위다.</li></ul>외우는 요령: 물통 8L, 모래 50L, 질석 160L을 먼저 잡고 수조는 80L-1.5, 190L-2.5로 짝지어 외운다."
+      },
+      {
+        mainQuestion: "문제 2. 다음은 지정과산화물 옥내저장소 저장창고의 지붕에 관한 기준이다. 빈칸 ( ① ) ~ ( ⑤ )에 알맞은 답을 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 중도리 또는 서까래의 간격은 ( ① )cm 이하로 할 것<br>② 지붕의 아래쪽 면에는 한 변의 길이가 ( ② )cm 이하의 환강·경량형강 등으로 강제의 격자를 설치할 것<br>③ 지붕의 아래쪽 면에 ( ③ )을 쳐서 불연재료의 도리·보 또는 서까래에 단단히 결합할 것<br>④ 두께 ( ④ )cm 이상, 너비 ( ⑤ )cm 이상의 목재로 만든 받침대를 설치할 것</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["30"] },
+          { label: "②", type: "short", answers: ["45"] },
+          { label: "③", type: "short", answers: ["철망"] },
+          { label: "④", type: "short", answers: ["5"] },
+          { label: "⑤", type: "short", answers: ["30"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 5</b>의 지정과산화물 옥내저장소 지붕 기준이다. 폭발 압력은 위로 빠지게 하면서, 지붕이 날아가거나 무너지지 않도록 보강하는 규정이다.<br><ul><li>중도리·서까래 간격은 <b>30cm 이하</b>로 촘촘히 배치한다.</li><li>지붕 아래쪽 면에 한 변 <b>45cm 이하</b>의 환강·경량형강으로 강제 격자를 설치한다.</li><li>지붕 아래쪽 면에 <b>철망</b>을 쳐서 불연재료의 도리·보·서까래에 단단히 결합한다.</li><li>두께 <b>5cm 이상</b>, 너비 <b>30cm 이상</b>의 목재로 받침대를 설치한다.</li></ul>외우는 요령: 간격 30, 격자 45, 받침대 5×30으로 30이 두 번 나온다."
+      },
+      {
+        mainQuestion: "문제 3. 트리에틸알루미늄에 대하여 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 트리에틸알루미늄이 메탄올과 반응하는 화학반응식을 쓰시오.", type: "equation", answers: ["(C2H5)3Al + 3CH3OH -> Al(CH3O)3 + 3C2H6"] },
+          { label: "② ①에서 생성된 물질 중 상온에서 기체 상태인 것의 연소반응식을 쓰시오.", type: "equation", answers: ["2C2H6 + 7O2 -> 4CO2 + 6H2O"] }
+        ],
+        explanation: "[해설]<br><b>트리에틸알루미늄</b>은 알코올과 만나면 알루미늄-탄소 결합이 끊어지고 알루미늄-산소 결합으로 치환되면서 <b>에탄(C<sub>2</sub>H<sub>6</sub>)</b>을 발생시키는 반응이 핵심이다.<br>① (C<sub>2</sub>H<sub>5</sub>)<sub>3</sub>Al + 3CH<sub>3</sub>OH → Al(CH<sub>3</sub>O)<sub>3</sub> + 3C<sub>2</sub>H<sub>6</sub>↑<br>생성물 중 알루미늄 화합물은 고체이고 에탄만 상온에서 기체인 가연성 물질이므로, ②는 에탄의 <b>완전연소반응식</b>을 쓰면 된다.<br>② 2C<sub>2</sub>H<sub>6</sub> + 7O<sub>2</sub> → 4CO<sub>2</sub> + 6H<sub>2</sub>O"
+      },
+      {
+        mainQuestion: "문제 4. 탄화알루미늄에 대하여 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 탄화알루미늄이 물과 반응하는 화학반응식을 쓰시오.", type: "equation", answers: ["Al4C3 + 12H2O -> 4Al(OH)3 + 3CH4"] },
+          { label: "② 탄화알루미늄이 염산과 반응하는 화학반응식을 쓰시오.", type: "equation", answers: ["Al4C3 + 12HCl -> 4AlCl3 + 3CH4"] }
+        ],
+        explanation: "[해설]<br><b>탄화알루미늄(Al<sub>4</sub>C<sub>3</sub>)</b>은 제3류 금수성 물질이다. 물이나 산과 반응하면 가연성 가스인 <b>메탄(CH<sub>4</sub>)</b>이 나온다.<br>물과 반응하면 수산화알루미늄과 메탄이 생긴다.<br>Al<sub>4</sub>C<sub>3</sub> + 12H<sub>2</sub>O → 4Al(OH)<sub>3</sub> + 3CH<sub>4</sub>↑<br>염산과 반응해도 메탄이 나오는 것은 같지만, 알루미늄은 <b>염화알루미늄</b>이 된다.<br>Al<sub>4</sub>C<sub>3</sub> + 12HCl → 4AlCl<sub>3</sub> + 3CH<sub>4</sub>↑<br>혼동 주의: 탄화칼슘(CaC<sub>2</sub>)은 물과 반응하면 메탄이 아니라 아세틸렌(C<sub>2</sub>H<sub>2</sub>)을 낸다."
+      },
+      {
+        mainQuestion: "문제 5. 삼황화인과 오황화인이 연소할 때 공통으로 생성되는 물질의 명칭을 모두 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "정답 (쉼표로 구분)", type: "unordered_comma", answers: ["오산화인, 이산화황", "이산화황, 오산화인", "오산화인,이산화황", "이산화황,오산화인"] }
+        ],
+        explanation: "[해설]<br><b>삼황화인(P<sub>4</sub>S<sub>3</sub>)</b>과 <b>오황화인(P<sub>2</sub>S<sub>5</sub>)</b>은 인(P)과 황(S)으로만 이루어진 제2류 위험물이라 연소 생성물이 같다.<br><ul><li><b>오산화인</b>(P<sub>2</sub>O<sub>5</sub>) — 인이 산화된 것으로 흰 연기로 보인다.</li><li><b>이산화황</b>(SO<sub>2</sub>) — 황이 산화된 것으로 자극성 유독가스다.</li></ul>반응식<br>P<sub>4</sub>S<sub>3</sub> + 8O<sub>2</sub> → 2P<sub>2</sub>O<sub>5</sub> + 3SO<sub>2</sub><br>2P<sub>2</sub>S<sub>5</sub> + 15O<sub>2</sub> → 2P<sub>2</sub>O<sub>5</sub> + 10SO<sub>2</sub><br>혼동 주의: 오황화인이 물과 반응할 때는 황화수소(H<sub>2</sub>S)가 생기므로 연소 생성물과 구분한다."
+      },
+      {
+        mainQuestion: "문제 6. 다음 위험물의 정의를 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "① 인화성 고체", type: "descriptive", keywords: ["고형알코올", "40"], answers: ["고형알코올, 그 밖에 1기압에서 인화점이 섭씨 40도 미만인 고체"] },
+          { label: "② 철분", type: "descriptive", keywords: ["철의 분말", "53", "50", "제외"], answers: ["철의 분말로서, 53마이크로미터 표준체를 통과하는 것이 50중량퍼센트 미만인 것은 제외"] },
+          { label: "③ 제2석유류", type: "descriptive", keywords: ["등유", "경유", "21", "70"], answers: ["등유, 경유, 그 밖에 1기압에서 인화점이 섭씨 21도 이상 70도 미만인 것"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>의 품명 정의다. 인화성 고체와 철분은 제2류, 제2석유류는 제4류에 속한다.<br><ul><li><b>인화성 고체</b>는 고형알코올, 그 밖에 1기압에서 인화점이 섭씨 40도 미만인 고체를 말한다.</li><li><b>철분</b>은 철의 분말이며, <b>53마이크로미터 표준체</b>를 통과하는 것이 50중량퍼센트 미만이면 위험물에서 제외한다.</li><li><b>제2석유류</b>는 등유·경유, 그 밖에 1기압에서 인화점이 섭씨 <b>21도 이상 70도 미만</b>인 것을 말한다.</li></ul>혼동 주의: 도료류 등으로 가연성 액체량이 40중량퍼센트 이하이면서 인화점 40도 이상·연소점 60도 이상인 것은 제2석유류에서 제외된다."
+      },
+      {
+        mainQuestion: "문제 7. 다음은 불활성가스 소화약제의 구성성분이다. 빈칸 ( ① ) ~ ( ⑤ )에 알맞은 답을 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>IG-55: ( ① ) 50%, ( ② ) 50%<br>IG-541: ( ③ ) 8%, ( ④ ) 40%, ( ⑤ ) 52%</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["N2", "질소", "질소(N2)"] },
+          { label: "②", type: "short", answers: ["Ar", "아르곤", "아르곤(Ar)"] },
+          { label: "③", type: "short", answers: ["CO2", "이산화탄소", "이산화탄소(CO2)"] },
+          { label: "④", type: "short", answers: ["Ar", "아르곤", "아르곤(Ar)"] },
+          { label: "⑤", type: "short", answers: ["N2", "질소", "질소(N2)"] }
+        ],
+        explanation: "[해설]<br><b>불활성가스소화약제</b>는 질소·아르곤·이산화탄소로 산소 농도를 낮춰 질식 소화하며, 이름의 숫자가 성분 비율을 나타낸다.<br>· IG-55 — 질소(N<sub>2</sub>) 50%와 아르곤(Ar) 50%로 된 2성분계다.<br>· IG-541 — 이산화탄소(CO<sub>2</sub>) 8%, 아르곤(Ar) 40%, 질소(N<sub>2</sub>) 52%로 된 3성분계다.<br>외우는 요령: 숫자는 앞자리부터 <b>N<sub>2</sub>·Ar·CO<sub>2</sub></b> 순서로 각 성분 비율의 첫 자리를 뜻한다(IG-541 = N<sub>2</sub> 52·Ar 40·CO<sub>2</sub> 8≒10)."
+      },
+      {
+        mainQuestion: "문제 8. 다음 제조소와 저장소의 소요단위를 각각 구하시오.",
+        score: 5,
+        subs: [
+          { label: "① 면적이 300m²이고 외벽이 내화구조인 제조소", type: "short", answers: ["3소요단위", "3", "3단위"] },
+          { label: "② 면적이 300m²이고 내화구조가 아닌 제조소", type: "short", answers: ["6소요단위", "6", "6단위"] },
+          { label: "③ 면적이 300m²이고 외벽이 내화구조인 저장소", type: "short", answers: ["2소요단위", "2", "2단위"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>의 소요단위 기준에서는 제조소·취급소인지 저장소인지, 외벽이 내화구조인지에 따라 1소요단위 면적이 달라진다.<br>· 제조소·취급소는 외벽이 내화구조이면 <b>100m²</b>, 내화구조가 아니면 <b>50m²</b>가 1소요단위다.<br>· 저장소는 외벽이 내화구조이면 <b>150m²</b>, 내화구조가 아니면 75m²가 1소요단위다.<br>외벽이 내화구조인 제조소<br>300 ÷ 100 = <b>3소요단위</b><br>내화구조가 아닌 제조소<br>300 ÷ 50 = <b>6소요단위</b><br>외벽이 내화구조인 저장소<br>300 ÷ 150 = <b>2소요단위</b>"
+      },
+      {
+        mainQuestion: "문제 9. 제1류 위험물인 염소산칼륨에 대하여 다음 물음에 답하시오. (단, K = 39, Cl = 35.5)",
+        score: 5,
+        subs: [
+          { label: "① 염소산칼륨의 완전분해반응식을 쓰시오.", type: "equation", answers: ["2KClO3 -> 2KCl + 3O2"] },
+          { label: "② 염소산칼륨 24.5kg이 표준상태에서 완전분해될 때 생성되는 산소의 부피(m³)를 구하시오.", type: "calc", answers: ["6.72", "6.72m3", "6.72m³"] }
+        ],
+        explanation: "[해설]<br>염소산칼륨은 가열하면 염화칼륨과 산소로 완전분해된다.<br>2KClO<sub>3</sub> → 2KCl + 3O<sub>2</sub><br>분자량 = 39 + 35.5 + 16 × 3 = 122.5<br>몰수 = 24,500 g ÷ 122.5 = 200 mol<br>O<sub>2</sub> = 200 × 3/2 = 300 mol<br>부피 = 300 × 22.4 L = 6,720 L = <b>6.72 m³</b><br>표준상태에서 기체 1mol은 <b>22.4 L</b>이고, 1 m³ = 1,000 L로 환산한다."
+      },
+      {
+        mainQuestion: "문제 10. 위험물의 위험등급에 대하여 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 제1류 위험물 중 위험등급 I에 해당하는 품명을 3가지 쓰시오.", type: "unordered_comma", answers: ["아염소산염류, 염소산염류, 과염소산염류, 무기과산화물", "아염소산염류, 염소산염류, 과염소산염류", "아염소산염류, 염소산염류, 무기과산화물", "아염소산염류, 과염소산염류, 무기과산화물", "염소산염류, 과염소산염류, 무기과산화물"] },
+          { label: "② 제1류 위험물 중 위험등급 II에 해당하는 품명을 2가지 쓰시오.", type: "unordered_comma", answers: ["브롬산염류, 아이오딘산염류, 질산염류", "브롬산염류, 아이오딘산염류", "브롬산염류, 질산염류", "아이오딘산염류, 질산염류", "브로민산염류, 아이오딘산염류", "브로민산염류, 질산염류"] },
+          { label: "③ 제2류 위험물 중 위험등급 II에 해당하는 품명을 2가지 쓰시오.", type: "unordered_comma", answers: ["황화인, 적린, 황", "황화인, 적린", "황화인, 황", "적린, 황"] },
+          { label: "④ 제4류 위험물 중 위험등급 II에 해당하는 품명을 모두 쓰시오.", type: "unordered_comma", answers: ["제1석유류, 알코올류"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 19</b>의 위험등급 구분이다. 대체로 지정수량이 작을수록 위험등급이 높다.<br>· 제1류 위험등급 I은 아염소산염류·염소산염류·과염소산염류·무기과산화물이다(지정수량 <b>50kg</b>).<br>· 제1류 위험등급 II는 브로민산염류·아이오딘산염류·질산염류이다(지정수량 <b>300kg</b>).<br>· 제2류 위험등급 II는 황화인·적린·황이다(지정수량 <b>100kg</b>).<br>· 제4류 위험등급 II는 제1석유류·알코올류이다.<br>혼동 주의: 제4류 중 특수인화물은 위험등급 I이고, 제2석유류 이하는 위험등급 III이다."
+      },
+      {
+        mainQuestion: "문제 11. 다음 위험물이 물과 반응할 때 생성되는 기체의 명칭을 각각 쓰시오. (해당 없으면 해당없음으로 표기)",
+        score: 5,
+        subs: [
+          { label: "① 인화칼슘", type: "short", answers: ["포스핀(PH3)", "포스핀", "PH3"] },
+          { label: "② 질산암모늄", type: "short", answers: ["해당없음", "없음"] },
+          { label: "③ 과산화칼륨", type: "short", answers: ["산소(O2)", "산소", "O2"] },
+          { label: "④ 금속리튬", type: "short", answers: ["수소(H2)", "수소", "H2"] },
+          { label: "⑤ 염소산칼륨", type: "short", answers: ["해당없음", "없음"] }
+        ],
+        explanation: "[해설]<br>물과 반응해 기체를 내는 것은 <b>인화물·무기과산화물·알칼리금속</b>이다. 일반 산화성 고체 염류는 물에 녹기만 한다.<br>· 인화칼슘 — 유독성 기체인 포스핀이 발생한다.<br>Ca<sub>3</sub>P<sub>2</sub> + 6H<sub>2</sub>O → 3Ca(OH)<sub>2</sub> + 2PH<sub>3</sub><br>· 질산암모늄 — 물에 녹으면서 열을 흡수할 뿐 기체는 나오지 않는다.<br>· 과산화칼륨 — 알칼리금속 과산화물이라 산소를 낸다.<br>2K<sub>2</sub>O<sub>2</sub> + 2H<sub>2</sub>O → 4KOH + O<sub>2</sub><br>· 금속리튬 — 알칼리금속이라 수소를 낸다.<br>2Li + 2H<sub>2</sub>O → 2LiOH + H<sub>2</sub><br>· 염소산칼륨 — 물에 녹을 뿐 기체를 내지 않는다.<br>혼동 주의: 같은 제1류라도 <b>무기과산화물(과산화칼륨)</b>만 물과 반응해 산소를 내므로 물을 뿌려 끄는 주수소화를 하면 안 된다."
+      },
+      {
+        mainQuestion: "문제 12. 나이트로셀룰로오스에 대하여 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 제조 방법을 쓰시오.", type: "short", answers: ["셀룰로오스에 진한 황산과 진한 질산을 혼합하여 제조", "셀룰로오스를 진한 질산과 반응시켜 제조", "셀룰로오스에 진한 질산과 진한 황산을 반응", "셀룰로오스에 질산과 황산을 반응"] },
+          { label: "② 품명을 쓰시오.", type: "short", answers: ["질산에스터류", "질산에스테르류"] },
+          { label: "③ 지정수량을 쓰시오.", type: "short", answers: ["10kg", "10"] },
+          { label: "④ 운반용기 외부에 표시할 주의사항을 모두 쓰시오.", type: "short", answers: ["화기엄금, 충격주의", "화기엄금,충격주의", "충격주의, 화기엄금", "충격주의,화기엄금"] }
+        ],
+        explanation: "[해설]<br>나이트로셀룰로오스는 셀룰로오스를 <b>진한 질산</b>과 반응시켜 질산에스터로 만든 물질이다. 함께 넣는 진한 황산은 반응에서 생기는 물을 빼앗는 탈수제 역할을 한다.<br>· 품명은 질산과 에스터 결합을 이루므로 제5류 <b>질산에스터류</b>다.<br>· 지정수량은 폭발 위험이 커 <b>10kg</b>으로 적다.<br>· 제5류 자기반응성물질이므로 운반용기 외부에 <b>화기엄금·충격주의</b>를 표시한다.<br>분자 안에 산소가 있어 외부 산소 없이도 연소한다. 그래서 물이나 알코올로 적셔 안정하게 저장한다."
+      },
+      {
+        mainQuestion: "문제 13. 제4류 위험물인 산화프로필렌에 대하여 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 증기비중을 구하시오.", type: "calc", answers: ["2.01", "2"] },
+          { label: "② 위험등급을 쓰시오.", type: "short", answers: ["I등급", "1등급", "I", "1", "제I등급", "제1등급"] },
+          { label: "③ 보냉장치가 없는 이동탱크저장소에 저장할 경우 유지해야 하는 온도(℃ 이하)를 쓰시오.", type: "short", answers: ["40℃ 이하", "40", "40℃", "40 이하"] }
+        ],
+        explanation: "[해설]<br>산화프로필렌(C<sub>3</sub>H<sub>6</sub>O)은 제4류 <b>특수인화물</b>로 아세트알데하이드등에 속한다.<br>분자량 = 12 × 3 + 1 × 6 + 16 = 58<br>증기비중 = 58 ÷ 28.84 ≒ <b>2.01</b><br>· 위험등급 ㅡ 특수인화물은 제4류 중 가장 위험해 <b>I등급</b>이다.<br>· 이동저장탱크 온도 ㅡ 보냉장치가 없으면 아세트알데하이드등·디에틸에테르등을 <b>40℃ 이하</b>로 유지한다.<br>혼동 주의: 보냉장치가 있으면 40℃가 아니라 해당 위험물의 비점 이하로 유지한다."
+      },
+      {
+        mainQuestion: "문제 14. 금속칼륨에 대하여 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 금속칼륨이 이산화탄소와 반응하는 화학반응식을 쓰시오.", type: "equation", answers: ["4K + 3CO2 -> 2K2CO3 + C"] },
+          { label: "② 금속칼륨이 에탄올과 반응하는 화학반응식을 쓰시오.", type: "equation", answers: ["2K + 2C2H5OH -> 2C2H5OK + H2"] }
+        ],
+        explanation: "[해설]<br>금속칼륨은 제3류 위험물 중 <b>금수성·자연발화성 물질</b>이다. 반응성이 매우 커서 이산화탄소나 알코올과도 격렬히 반응한다.<br>이산화탄소와의 반응:<br>4K + 3CO<sub>2</sub> → 2K<sub>2</sub>CO<sub>3</sub> + C<br>칼륨이 CO<sub>2</sub>를 환원시켜 탄소를 유리시키므로 <b>CO<sub>2</sub> 소화기</b>는 칼륨 화재에 쓸 수 없다.<br>에탄올과의 반응:<br>2K + 2C<sub>2</sub>H<sub>5</sub>OH → 2C<sub>2</sub>H<sub>5</sub>OK + H<sub>2</sub>↑<br>에탄올과 반응하면 칼륨에틸레이트(C<sub>2</sub>H<sub>5</sub>OK)가 생기고 가연성인 <b>수소</b>가 발생한다. 물과 반응할 때보다는 완만하다."
+      },
+      {
+        mainQuestion: "문제 15. 다음은 위험물의 유별·성질·품명·지정수량을 정리한 표이다. 빈칸 ( ① )~( ⑥ )에 알맞은 답을 쓰시오.<br><table style='width:100%; border-collapse: collapse; margin-top: 15px; text-align: center; font-size: 0.9em; background-color: #fff;'><tr style='background-color: #f8f9fa;'><th style='border: 1px solid #ccc; padding: 10px;'>유별</th><th style='border: 1px solid #ccc; padding: 10px;'>성질</th><th style='border: 1px solid #ccc; padding: 10px;'>품명</th><th style='border: 1px solid #ccc; padding: 10px;'>지정수량</th></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제1류</td><td style='border: 1px solid #ccc; padding: 10px;'>산화성고체</td><td style='border: 1px solid #ccc; padding: 10px;'>질산염류</td><td style='border: 1px solid #ccc; padding: 10px;'>300kg</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제1류</td><td style='border: 1px solid #ccc; padding: 10px;'>산화성고체</td><td style='border: 1px solid #ccc; padding: 10px;'>아이오딘산염류</td><td style='border: 1px solid #ccc; padding: 10px;'>( ④ )</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제1류</td><td style='border: 1px solid #ccc; padding: 10px;'>산화성고체</td><td style='border: 1px solid #ccc; padding: 10px;'>과망간산염류</td><td style='border: 1px solid #ccc; padding: 10px;'>1,000kg</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제1류</td><td style='border: 1px solid #ccc; padding: 10px;'>산화성고체</td><td style='border: 1px solid #ccc; padding: 10px;'>( ② )</td><td style='border: 1px solid #ccc; padding: 10px;'>1,000kg</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제2류</td><td style='border: 1px solid #ccc; padding: 10px;'>( ① )</td><td style='border: 1px solid #ccc; padding: 10px;'>철분</td><td style='border: 1px solid #ccc; padding: 10px;'>500kg</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제2류</td><td style='border: 1px solid #ccc; padding: 10px;'>( ① )</td><td style='border: 1px solid #ccc; padding: 10px;'>금속분</td><td style='border: 1px solid #ccc; padding: 10px;'>500kg</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제2류</td><td style='border: 1px solid #ccc; padding: 10px;'>( ① )</td><td style='border: 1px solid #ccc; padding: 10px;'>마그네슘</td><td style='border: 1px solid #ccc; padding: 10px;'>500kg</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제2류</td><td style='border: 1px solid #ccc; padding: 10px;'>( ① )</td><td style='border: 1px solid #ccc; padding: 10px;'>( ③ )</td><td style='border: 1px solid #ccc; padding: 10px;'>1,000kg</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제4류</td><td style='border: 1px solid #ccc; padding: 10px;'>인화성액체</td><td style='border: 1px solid #ccc; padding: 10px;'>제2석유류 비수용성</td><td style='border: 1px solid #ccc; padding: 10px;'>( ⑤ )L</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제4류</td><td style='border: 1px solid #ccc; padding: 10px;'>인화성액체</td><td style='border: 1px solid #ccc; padding: 10px;'>제2석유류 수용성</td><td style='border: 1px solid #ccc; padding: 10px;'>2,000L</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제4류</td><td style='border: 1px solid #ccc; padding: 10px;'>인화성액체</td><td style='border: 1px solid #ccc; padding: 10px;'>제3석유류 비수용성</td><td style='border: 1px solid #ccc; padding: 10px;'>2,000L</td></tr><tr><td style='border: 1px solid #ccc; padding: 10px;'>제4류</td><td style='border: 1px solid #ccc; padding: 10px;'>인화성액체</td><td style='border: 1px solid #ccc; padding: 10px;'>제3석유류 수용성</td><td style='border: 1px solid #ccc; padding: 10px;'>( ⑥ )L</td></tr></table>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["가연성고체", "가연성 고체"] },
+          { label: "②", type: "short", answers: ["다이크로뮴산염류", "중크롬산염류"] },
+          { label: "③", type: "short", answers: ["인화성고체", "인화성 고체"] },
+          { label: "④", type: "short", answers: ["300", "300kg"] },
+          { label: "⑤", type: "short", answers: ["1000", "1,000", "1000L", "1,000L"] },
+          { label: "⑥", type: "short", answers: ["4000", "4,000", "4000L", "4,000L"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>은 같은 유별 안에서도 품명별 위험도에 따라 지정수량을 다르게 정한다.<br>· 제2류의 성질은 <b>가연성고체</b>로, 불에 잘 타는 고체라는 뜻이다.<br>· 제1류 중 과망간산염류와 같은 1,000kg 그룹에 드는 품명이 <b>다이크로뮴산염류</b>(구 중크롬산염류)다.<br>· 제2류 중 1,000kg인 품명은 <b>인화성고체</b>로, 철분·금속분·마그네슘(500kg)보다 지정수량이 크다.<br>· 아이오딘산염류는 질산염류·브로민산염류와 같은 <b>300kg</b> 그룹이다.<br>· 제2석유류 비수용성은 <b>1,000L</b>로, 수용성(2,000L)의 절반이다.<br>· 제3석유류 수용성은 비수용성(2,000L)의 두 배인 <b>4,000L</b>다."
+      },
+      {
+        mainQuestion: "문제 16. 아세트알데하이드가 산화되어 생성되는 제4류 위험물에 대하여 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 시성식을 쓰시오.", type: "formula", answers: ["CH3COOH"] },
+          { label: "② 완전연소반응식을 쓰시오.", type: "equation", answers: ["CH3COOH + 2O2 -> 2CO2 + 2H2O"] },
+          { label: "③ 옥내저장소에 저장할 경우 바닥면적(몇 m² 이하)을 쓰시오.", type: "short", answers: ["2000", "2,000", "2000m2", "2,000m2", "2000m²", "2,000m²"] }
+        ],
+        explanation: "[해설]<br>아세트알데하이드(CH<sub>3</sub>CHO)가 산화되면 알데하이드기(-CHO)가 카복실기(-COOH)로 바뀌어 <b>아세트산(초산)</b>이 된다.<br>시성식은 작용기를 드러내 쓰므로 CH<sub>3</sub>COOH로 쓴다.<br>완전연소하면 탄소는 CO<sub>2</sub>, 수소는 H<sub>2</sub>O가 된다.<br>CH<sub>3</sub>COOH + 2O<sub>2</sub> → 2CO<sub>2</sub> + 2H<sub>2</sub>O<br>아세트산은 <b>제2석유류(수용성)</b>이므로 옥내저장소 바닥면적은 <b>2,000m²</b> 이하이다.<br>혼동 주의: 제4류 중 특수인화물·제1석유류·알코올류는 1,000m² 이하다."
+      },      {
+        mainQuestion: "문제 17. 다음 설명에 해당하는 위험물에 대하여 다음 물음에 답하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 분자량 100.5, 비중 1.76<br>② 무색의 유동성 있는 액체<br>③ 물과 반응하면 발열</span>",
+        score: 5,
+        subs: [
+          { label: "① 시성식을 쓰시오.", type: "formula", answers: ["HClO4"] },
+          { label: "② 위험물의 유별을 쓰시오.", type: "short", answers: ["제6류", "6류", "제6류 위험물", "6류 위험물", "제6류위험물"] },
+          { label: "③ 제조소와 병원 사이의 안전거리(m)를 쓰시오. (해당사항이 없으면 '해당 없음'으로 쓸 것)", type: "short", answers: ["해당없음", "해당 없음", "없음"] },
+          { label: "④ 제조소에서 5,000kg 취급 시 보유공지의 너비를 쓰시오.", type: "short", answers: ["5m 이상", "5m", "5", "5 이상", "5m이상"] }
+        ],
+        explanation: "[해설]<br>분자량 100.5·비중 1.76의 무색 유동성 액체로 물과 닿으면 발열하는 물질은 <b>과염소산(HClO<sub>4</sub>)</b>이며, 산화성 액체인 <b>제6류 위험물</b>(지정수량 300kg)이다.<br><b>위험물안전관리법 시행규칙 별표 4</b>는 제6류 위험물을 취급하는 제조소를 안전거리 적용 대상에서 제외하므로 병원과의 안전거리는 <b>해당없음</b>이다.<br>보유공지 너비는 지정수량 배수로 정한다.<br>5,000kg ÷ 300kg ≒ 16.7배<br>지정수량 10배 초과 구간이므로 너비 <b>5m 이상</b>(10배 이하는 3m 이상)이다."
+      },
+          {
+        mainQuestion: "문제 18. 다음은 옥내저장소의 저장 기준이다. 빈칸 ( ① ) ~ ( ⑥ )에 알맞은 답을 쓰시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px; line-height:1.6;'>① 동일 품명의 위험물이라도 자연발화 우려가 있거나 재해가 현저히 증대할 우려가 있는 위험물을 다량 저장하는 경우에는 지정수량의 ( ① ) 이하마다 구분하여 상호간 ( ② ) 이상의 간격을 둘 것<br>② 기계에 의하여 하역하는 구조로 된 용기만을 겹쳐 쌓는 경우: ( ③ ) 높이를 초과하지 말 것<br>③ 제4류 위험물 중 제3석유류, 제4석유류 및 동식물유류를 수납하는 용기만을 겹쳐 쌓는 경우: ( ④ ) 높이를 초과하지 말 것<br>④ 그 밖의 경우: ( ⑤ ) 높이를 초과하지 말 것<br>⑤ 용기에 수납하여 저장하는 위험물의 온도가 ( ⑥ )를 넘지 않도록 할 것</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["10배", "10"] },
+          { label: "②", type: "short", answers: ["0.3m", "0.3"] },
+          { label: "③", type: "short", answers: ["6m", "6"] },
+          { label: "④", type: "short", answers: ["4m", "4"] },
+          { label: "⑤", type: "short", answers: ["3m", "3"] },
+          { label: "⑥", type: "short", answers: ["55℃", "55", "55도"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 18</b>의 옥내저장소 저장기준에서 나오는 수치다.<br>· 자연발화 우려 위험물을 다량 저장할 때는 지정수량 <b>10배</b> 이하마다 구분하고 상호간 <b>0.3m</b> 이상 간격을 둔다.<br>· 기계로 하역하는 구조의 용기만 겹쳐 쌓을 때는 <b>6m</b>를 넘지 않는다.<br>· 제3석유류·제4석유류·동식물유류 용기만 겹쳐 쌓을 때는 <b>4m</b>를 넘지 않는다.<br>· 그 밖의 경우에는 <b>3m</b>를 넘지 않는다.<br>· 용기에 수납해 저장하는 위험물의 온도는 <b>55℃</b>를 넘지 않게 한다.<br>외우는 요령: 겹쳐 쌓기 높이는 기계 하역 6 → 고인화점 기름 4 → 나머지 3 순으로 줄어든다."
+      },
+           {
+        mainQuestion: "문제 19. 제4류 위험물(이황화탄소 제외)을 취급하는 제조소의 옥외취급탱크에 다음과 같이 저장탱크를 설치한다. 방유제 전체의 최소용량 합계(L)를 구하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 탱크 용량: 100만L 1기, 50만L 2기, 10만L 3기<br>② 50만L 탱크 1기만 별도 방유제 하나에 설치하고, 나머지 탱크는 하나의 방유제에 설치</span>",
+        score: 5,
+        subs: [
+          { label: "① 계산식을 쓰시오.", type: "descriptive", keywords: ["0.5", "0.1"], answers: ["(500,000 × 0.5) + {(1,000,000 × 0.5) + (800,000 × 0.1)} = 830,000", "(50 × 0.5) + {(100 × 0.5) + (80 × 0.1)} = 83 (단위: 만L)"] },
+          { label: "② 정답을 구하시오.", type: "short", answers: ["83만L", "83만", "830000", "830,000", "830000L", "830,000L", "83만 L", "830,000 L"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에 따라 제조소 옥외 위험물취급탱크의 방유제 용량은 탱크가 1기면 그 용량의 <b>50%</b>, 2기 이상이면 최대 탱크의 50%에 나머지 탱크 합계의 <b>10%</b>를 더한 값 이상이다.<br>50만L 1기만 둔 방유제: <br>50 × 0.5 = 25만L<br>나머지 탱크(100만L, 50만L, 10만L×3)를 둔 방유제는 나머지 합이 50 + 30 = 80만L이다.<br>100 × 0.5 + 80 × 0.1 = 58만L<br>전체 최소용량 합계: <br>25 + 58 = <b>83만L</b><br>혼동 주의: 옥외탱크저장소 방유제는 최대 탱크 용량의 110% 이상으로, 제조소 기준과 산식이 다르다."
+      },
+            {
+        mainQuestion: "문제 20. 다음 위험물 저장탱크에 위험물을 저장할 때 탱크 용량(m³)을 최대값과 최소값으로 구분하여 구하시오. (단, a는 2m, b는 1.5m, l은 3m, l<sub>1</sub>, l<sub>2</sub>는 0.3m)<br><img src= 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA28AAAFXCAIAAAC6G+FCAAAQAElEQVR4AeydCZxO1f/Hs8xihhlmGMa+72tkyRJJRWQLSciWkCWSbJF9TQtlrSQlJUkklV12yr5mH/syZsxm8H/n/nt+E2Z/1vt85nV63Ofcc8/yvud8z+d8v0xp7+pHBERABERABERABERABFJKIO0j+hEBERABEXANAuqlCIiACDgjAalJZ3wr6pMIiIAIiIAIiIAIuAoBqcmHvSnliYAIiIAIiIAIiIAIJI2A1GTSOKmUCIiACIiAcxJQr0RABBxNQGrS0W9A7YuACIiACIiACIiAKxOQmnTlt2ffvqs1ERABERABERABEXiQgNTkg0yUIwIiIAIiIAKuTUC9FwF7EpCatCdttSUCIiACIiACIiACZiMgNWm2N6rx2JeAWhMBERABERABdycgNenuM0DjFwEREAEREAH3IKBR2oqA1KStyKpeERABERABERABEXAHAlKT7vCWNUYRsC8BtSYCIiACIuBOBKQm3elta6wiIAIiIAIiIAIiEJeANa6lJq1BUXWIgAiIgAiIgAiIgLsSkJp01zevcYuACNiXgFoTAREQAbMSkJo065vVuERABERABERABETAHgTMpybtQU1tiIAIiIAIiIAIiIAIGASkJg0O+hQBERABEbA/AbUoAiJgBgJSk2Z4ixqDCIiACIiACIiACDiKgNSko8jbt121JgIiIAIiIAIiIAK2ISA1aRuuqlUEREAEREAEUkZAT4mAqxGQmnS1N6b+ioAIiIAIiIAIiIAzEZCadKa3ob7Yl4BaEwEREAEREAERSD0BqcnUM1QNIiACIiACIiACtiWg2p2ZgNSkM78d9U0EREAEREAEREAEnJ2A1KSzvyH1TwTsS0CtiYAIiIAIiEDyCEhNJo+XSouACIiACIiACIiAcxBwll5ITTrLm1A/REAEREAEREAERMAVCUhNuuJbU59FQATsS0CtiYAIiIAIxE9AajJ+NrojAiIgAiIgAiIgAiKQGAHnUpOJ9Vb3RUAEREAEREAEREAEnIuA1KRzvQ/1RgREQARchYD6KQIiIAIGAalJg4M+RUAEREAEREAEREAEUkJAajIl1Oz7jFoTAREQAREQAREQAeclIDXpvO9GPRMBERABEXA1AuqvCLgjAalJd3zrGrMIiIAIiIAIiIAIWIuA1KS1SKoe+xJQayIgAiIgAiIgAs5BQGrSOd6DeiECIiACIiACZiWgcZmdgNSk2d+wxicCIiACIiACIiACtiQgNWlLuqpbBOxLQK2JgAiIgAiIgP0JSE3an7laFAEREAEREAERcHcCZhq/1KRLvs27d+9GRkbGxMRwkegAbt26FRUVFRsbm2jJuAWomQcjIiLiZsZ3fefOneh7P5YC5NAiNRiJ2oxbt2/fptuUNb7qUwREQARsRwCDczPOD+bIYosSbZRnsVTYq0RL3lcA04d95vH78pPyle7xOP00EobUeIp8eoIlt+QY+Yl+0o2UjSLRmlVABOISkJqMS8O5rg3zgSGwJKwJJoZecjF69OhVq1ZRhq98kmMpxgVfMUncIoWEhIwcOZJPri2JuyQME7aGwvclMrm1adOmd955h8rjPnXt2rXjx48fOnTo1KlTaE1KchcbN2bMmBUrVty9e5evpEuXLi1evPjbez+LFi2iNjJJ9H/cuHErV67kmky+8sm1kgjYjIAqdl8CGKixY8diLY30xx9/3McCM4j1w2ZaEl8NO8YFz65bty7uI1TII1gtyvB5XyKTdODAgREjRty4ccN4kByewkjGl7hLGaMwlf/666/3DOe333333dmzZ418Gvrpp5+mTZtGYSPnvk96i9U9duzY4cOHT58+jXE26iQfk7tmzRpL+YMHD/4Vz8/+/fspT0ma48Koga9KIpAoAanJRBE5rADrefr06TNnzpwV5wcFSYe4heEICwvjgq/Yl6+++mrmzP8vOXPmzBkzZixdupR8bFN4ePjFixc5K1PSSDy1du3ar7/+mgLbt2+fP38+j/PVktCL2BGs4fnz541H+ET5bdiwYfDgwVjYSZMmYZ25vnDhApXQytWrV69fv04xKudraGjojh07tt372blzJ4aJTOrkkzopTEkE7ieffEIr5PNVSQREQASsQgArhL3C7KARK1SoUPHfn6CgIHK4hdUyGuJki7XEZhpWlot58+bxIJaKkhgrw6wZhbFUJ0+epAw1YH45VFsSEg0Zx2GbMjhDeZBKLE9xd/zDftB5GFLsKh3mQXqF4ty7d+89w/nPx+XLl+kJd0lUjtmnjFFt3E/a4tDO4Z9GJk6cOGrUKD7pIU/RVew/z1rKY71J77///ocP/GCQ6QA9OXLkyOeff07TXFse1IUIJEDAemoy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vvjii0h5fJMc+6pVq/b111+j9TNnzoyfJv4KdEcEHEMA65EhQ4bx48fXrVuXOTxy5Mjt27djLhzTG7UqAiJgSwLR0dHohLVr16ZPn75v374vvPCCyTYmqUnrTB/8lF27dmWuEGN98sknmSXXrl17880327Vrh8qJiooi9o3usU5jquUeAYQ7Wy+x7M8++6x169bjxo0LDQ3lRTRs2HD+/Pm8C3wzyMp7ZfUhAs5IAEHJcXTYsGEcRDl5crFp0yZshVX6ygKhKpkdq8BUJe5GgIXDCiKlfuBUxVY1ffr0L774giXZvXt3nE1sVamv2alqkJq05uvInj175cqVcWXPmzfvqaeeQlPi0x49enSrVq2+/fbbvXv3WrMx964rNjaWfbdXr141a9YE+PHjx4kbNmrUaMGCBZMmTSpdujTnP/cmpNG7BgEEZVBQ0Lvvvps1a9aQkBAutm3blvqus2n99ttv33zzDdtY6mtTDSJgfQLOXeP58+dxSVjl902yBj/++GM8TYQgateu3b59e/NJSV6m1CQQrJnYG9AxFStWnDJlCiFvguAEs9A648aN69ixI9HwAwcOXL582SonHmv220XqgtuZM2emTZtWo0aNnj17bty4EVmJiH/uuecWLlw4duzYUqVK8QpILjIgdVME/iFQtmxZ9pvg4OCLFy/26dNn8+bN/+Sm7j88IqTU1aGnRcBNCbB2jJTK8YeHh0+dOpUAGgc89MCoUaMIR6SyTud8XGrSJu8FryQx1sKFC3/66adLliwhCO7v788BZf369WhKXJWffPLJlStXiIDbpHlzVcqSZh1GRESsXr2aiHabNm1mz57NEkVZFixYEJKLFi1CrBcqVMjT0xPy5hp9akej512CQLp06TgIffjhhwEBAZGRkf3792dWR0dHM/ldov/qpAiIwH0E2KFu3LgxePDg+fPns5Br1qzJbpUlSxazblJSk/dNAGt+ZdIQfs2fPz9etB9//HHkyJH169enAdwPOL1btmyJE4KL06dP37x5k9nGLSULAYCgv69fv/7XX3+NGDGie/fub7311v79+0NDQzNnzvzqq6/i/Z07d+6TTz6JbxLO7MeWZ3UhAi5HgOBXmTJlvv32Wz7DwsLee+89pj2znT3J5caiDouAmxNg89q+ffvrr7+OC4m9jP1rwoQJOJUS3adcl5vUpM3fHZoSPyWK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gmQZFCtWLEuWLC1atEBiNm/enALJr1VPiEA8BJQdD4HSpUs///zzwcHB165d69evX58+fXLkyIFvI57iynZhAqjJ+vXr16tXT+/Xhd9i/F1/5plncM2wjR4+fLhbt26zZs3Knj17/MXNcEdq0gxvMfVjwKJ5eHgQdvH29rZ4InHUc262fE19K6pBBEQgKQT8/PwIEfj7+z/++OM6yyWFmMqIgHMSyJ8//8iRI728vMqVK8eW6pydTKRXSbstNZk0TiolAiIgAnYhwNEOBckpjots2bKZeweyC1E1IgKOIcASxkETFhaWJ0+eTJky8dUx/bBLq1KTdsGsRkRABEQgQQJxb969e/fQoUNISff59SJxh69rETANgdjY2A0bNlSoUMHcUpL3JTUJBCUREAERcCICd+7c2bNnT3BwMAEyJ+qWuiICIpBMArdu3Vq7dm3p0qWlJpNJztmLq38iIAIi4OwE2HjYhJ577jlP/YNfZ39X6p8IJESAk2HGjBnxTZr+r6zIN5nQPNA9ERABEbA/ATaeHj16vPDCC+nc/f/gbH/2alEErEnA19d3xowZ5cqV44hozXqdry6pSed7J+qRCIiAexNg4yHGnT59ei7cm4RGLwKuTYCTIWvZHY6FUpOuPVOt03vVIgIiIAIiIAIiIAIpJSA1mVJyek4EREAEREAE7E9ALYqA8xGQmnS+d6IeiYAIiIAIiIAIiIDrEJCadJ13pZ7al4BaEwEREAEREAERSAoBqcmkUFIZERABERABERAB5yWgnjmWgNSkY/mrdREQAREQAREQARFwbQJSk679/tR7EbAvAbUmAiIgAiIgAvcTkJq8n4i+i4AIiIAIiIAIiIDrE7DfCKQm7cdaLYmACIiACIiACIiA+QhITZrvnWpEIiAC9iWg1kRABETAvQlITbr3+9foRUAEREAEREAERCB1BFxJTaZupHpaBERABERABERABETA+gSkJq3PVDWKgAiIgAiIgAiIgPsQkJp0n3etkYqACIiACIiACIiA9QlITVqfqX1rVGsiIAIiIAIiIAIi4EgCUpOOpK+2RUAEREAE3ImAxioC5iQgNWnO96pRiYAIiIAIiIAIiIB9CEhN2oezWrEvAbUmAiIgAiIgAiJgLwJSk/YirXZEQAREQAREQAQeJKAc1ycgNen671AjEAEREAEREAEREAHHEZCadBx7tSwC9iWg1kRABERABETAFgSkJm1BVXWKgAiIgAiIgAiIQMoJuNaTUpOu9b7UWxEQAREQAREQARFwLgJSk871PtQbERAB+xJQayIgAiIgAqklIDWZWoJ6XgREQAREQAREQATcmYC91KQ7M9bYRUAEREAEREAERMC8BKQmzftuNTIREAERSBkBPSUCIiACySEgNZkcWiorAiIgAiIgAiIgAiLwXwL/BwAA//+sSCCFAAAABklEQVQDAFFPtKjmsYkyAAAAAElFTkSuQmCC' style='max-width: 100%; border: 1px solid #ddd; border-radius: 5px;' alt='탱크 이미지'></div>",
+        score: 5,
+        subs: [
+          { label: "① 최대값을 구하시오.", type: "calc", answers: ["7.16", "7.16m3", "7.16m³"] },
+          { label: "② 최소값을 구하시오.", type: "calc", answers: ["6.79", "6.79m3", "6.79m³"] }
+        ],
+        explanation: "[탱크 형상] 가로형 원통형 탱크 ㅡ 단면 가로 a=2m, 세로 b=1.5m(타원형 단면), 중앙 원통부 길이 l=3m, 양쪽 경판 길이 l<sub>1</sub>=l<sub>2</sub>=0.3m.<br><br>[해설]<br>탱크 용량은 <b>내용적에서 공간용적을 뺀 값</b>이고, 위험물안전관리법령상 공간용적은 내용적의 <b>5/100 이상 10/100 이하</b>이다. 따라서 공간용적을 5%로 잡으면 최대 용량, 10%로 잡으면 최소 용량이 된다.<br>타원형 단면 가로형 탱크의 내용적은 다음과 같다.<br>V = πab/4 × (l + (l<sub>1</sub>+l<sub>2</sub>)/3)<br>= π × 2 × 1.5 / 4 × (3 + 0.6 / 3)<br>= 7.540 m³<br>최대 용량 = 7.540 × 0.95 = <b>7.16 m³</b><br>최소 용량 = 7.540 × 0.90 = <b>6.79 m³</b>"
+      }
+       ];
+    
+
+    // ================== 메인 렌더링 및 채점 로직 ==================
+    let gradingState = [];
+    let isTestSubmitted = false;
+
+    function toggleExplanation(qIndex) {
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (!expEl) return;
+      if (expEl.style.display === 'none' || expEl.style.display === '') {
+        expEl.style.display = 'block';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 닫기';
+      } else {
+        expEl.style.display = 'none';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 열기';
+      }
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      let html = '';
+
+      quizData.forEach((q, qIndex) => {
+        gradingState[qIndex] = { subs: [], earnedScore: 0, isGraded: false };
+        
+        html += `<div class="question-card clearfix" id="qCard-${qIndex}">`;
+        html += `<div class="main-q-title">${q.mainQuestion} <span class="q-score-badge">배점: ${q.score}점</span></div>`;
+        
+        q.subs.forEach((sub, sIndex) => {
+          gradingState[qIndex].subs[sIndex] = { status: 0 }; 
+          
+          html += `<div class="sub-q-container">`;
+          html += `<div class="sub-q-label">${sub.label}</div>`;
+          
+          if (sub.image) {
+            html += `<div style="margin-bottom: 15px; text-align: center;">
+                       <img src="${sub.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px; cursor: zoom-in;" alt="문제 이미지" onclick="openImageModal(this.src)" title="클릭하여 확대">
+                       <div style="font-size:0.85em; color:#7f8c8d; margin-top:5px;">[이미지를 클릭하면 확대됩니다]</div>
+                     </div>`;
+          }
+
+          if (sub.type === 'calc') {
+            html += `<span class="calc-label">▶ 계산 과정 (채점 제외)</span>`;
+            html += `<textarea id="calc-${qIndex}-${sIndex}" class="textarea-formula" placeholder="필요시 계산식을 자유롭게 적어보세요."></textarea>`;
+            html += `<span class="calc-label">▶ 최종 정답 (채점 대상)</span>`;
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-calc" autocomplete="off" placeholder="최종 정답 입력">`;
+          } else if (sub.type === 'descriptive') {
+            html += `<textarea id="ans-${qIndex}-${sIndex}" class="textarea-formula" placeholder="※ 연습장에 직접 풀거나 구조식을 그린 후, [✔️ 정답 확인 및 채점] 버튼을 눌러 스스로 비교해 보세요."></textarea>`;
+          } else {
+            let placeholder = sub.placeholder || (sub.type === 'unordered_comma' ? '쉼표(,)로 구분하여 입력' : '정답 입력');
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-standard" autocomplete="off" placeholder="${placeholder}">`;
+          }
+          
+          html += `<div id="fb-${qIndex}-${sIndex}" class="feedback-box"></div>`;
+          html += `</div>`;
+        });
+        
+        html += `<div style="text-align: right; margin-top: 15px; margin-bottom: 10px; clear: both;">`;
+        html += `  <button id="btn-toggle-exp-${qIndex}" class="btn-grade-single" style="float: none; background-color: #8d6e63; margin-right: 8px; display: none;" onclick="toggleExplanation(${qIndex})">📖 해설 열기</button>`;
+        html += `  <button id="btn-grade-single-${qIndex}" class="btn-grade-single" style="float: none;" onclick="gradeSingleQuestion(${qIndex})">✔️ 정답 확인 및 채점</button>`;
+        html += `</div>`;
+        
+        if(q.explanation) {
+            html += `<div style="clear:both;"></div>`;
+            html += `<div id="exp-${qIndex}" class="feedback-box" style="background-color:#f8f9fa; border:1px solid #dee2e6; color:#495057; font-weight:normal; margin-top:10px; display:none;">💡 <strong>문제 핵심 해설:</strong><br>${q.explanation}</div>`;
+        }
+        html += `</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function setMode(mode) {
+      const labelBasic = document.getElementById('label-basic');
+      const labelStudy = document.getElementById('label-study');
+      
+      if (mode === 'study') {
+        if(labelStudy.classList.contains('active')) return; 
+        labelBasic.classList.remove('active');
+        labelStudy.classList.add('active');
+        
+        quizData.forEach((q, qIndex) => {
+          const expEl = document.getElementById(`exp-${qIndex}`);
+          const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+          if (expEl) {
+            expEl.style.display = 'block';
+            if(toggleBtn) {
+              toggleBtn.style.display = 'inline-block';
+              toggleBtn.innerHTML = '📖 해설 닫기';
+            }
+          }
+        });
+      } else if (mode === 'basic') {
+        if(confirm("기본 모드로 전환하면 현재 입력된 내용이 초기화됩니다. 전환하시겠습니까?")) {
+          location.reload();
+        }
+      }
+    }
+
+    function isEquationCorrect(userInput, ansList) {
+      let sanitizeEq = (str) => {
+        let s = str.replace(/\s+/g, '').replace(/=/g, '->');
+        let dashIdx = s.indexOf('-');
+        let arrowIdx = s.indexOf('->');
+        if (dashIdx !== -1 && arrowIdx !== -1 && dashIdx < arrowIdx) {
+          s = s.substring(dashIdx + 1);
+        }
+        return s;
+      };
+
+      let u = sanitizeEq(userInput);
+      let uParts = u.split('->');
+      if(uParts.length !== 2) return false;
+      let uLeft = uParts[0].split('+').sort().join('+');
+      let uRight = uParts[1].split('+').sort().join('+');
+      
+      for(let i=0; i<ansList.length; i++) {
+        let a = sanitizeEq(ansList[i]);
+        let aParts = a.split('->');
+        if(aParts.length !== 2) continue;
+        let aLeft = aParts[0].split('+').sort().join('+');
+        let aRight = aParts[1].split('+').sort().join('+');
+        if (uLeft === aLeft && uRight === aRight) return true;
+      }
+      return false;
+    }
+
+    function evaluateSub(qIndex, sIndex) {
+      const sub = quizData[qIndex].subs[sIndex];
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      if (inputEl.disabled) return; 
+
+      let userVal = inputEl.value;
+      let isCorrect = false;
+
+      if (userVal.trim() === "") {
+         isCorrect = false;
+      } else if (sub.type === 'short' || sub.type === 'calc') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '').toLowerCase() === uClean);
+      } else if (sub.type === 'formula') {
+        let uClean = userVal.replace(/\s+/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '') === uClean);
+      } else if (sub.type === 'order') {
+        let uClean = userVal.replace(/[^0-9]/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/[^0-9]/g, '') === uClean);
+      } else if (sub.type === 'unordered_comma') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => {
+            let aClean = a.replace(/\s+/g, '').toLowerCase();
+            let uArr = uClean.split(',').filter(Boolean).sort();
+            let aArr = aClean.split(',').filter(Boolean).sort();
+            return uArr.length === aArr.length && uArr.every((val, index) => val === aArr[index]);
+        });
+      } else if (sub.type === 'equation') {
+        isCorrect = isEquationCorrect(userVal, sub.answers);
+      } else if (sub.type === 'descriptive') {
+        if (sub.keywords) {
+          let hasAllKeys = sub.keywords.every(kw => userVal.includes(kw));
+          isCorrect = hasAllKeys;
+        } else {
+          isCorrect = false; 
+        }
+      }
+
+      gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+      inputEl.disabled = true;
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (calcEl) calcEl.disabled = true;
+
+      updateFeedbackUI(qIndex, sIndex);
+    }
+
+    function updateFeedbackUI(qIndex, sIndex) {
+      const q = quizData[qIndex];
+      const sub = q.subs[sIndex];
+      const state = gradingState[qIndex].subs[sIndex];
+      const fbDiv = document.getElementById(`fb-${qIndex}-${sIndex}`);
+      
+      let html = "";
+      if (sub.isExcluded) {
+        fbDiv.className = "feedback-box";
+        fbDiv.style.backgroundColor = "#f1f5f9";
+        fbDiv.style.border = "1px solid #cbd5e1";
+        fbDiv.style.color = "#64748b";
+        html += `➖ 채점 제외 항목입니다.`;
+      } else if (state.status === 1) {
+        fbDiv.className = "feedback-box is-correct";
+        html += `✅ 정답입니다!`;
+      } else if (state.status === 0.5) {
+        fbDiv.className = "feedback-box is-partial";
+        html += `⚠ 부분 점수 (0.5개 인정)`;
+      } else {
+        fbDiv.className = "feedback-box is-incorrect";
+        if (q.isUnordered) {
+          html += `❌ 오답입니다. (모범 답안 중 하나: ${sub.answers[0]})`;
+        } else if (q.isUnordered || sub.type === 'unordered_comma') {
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        } else {
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        }
+      }
+
+      if (sub.answerImage) {
+        html += `<div style="margin-top: 15px; text-align: center;">
+                   <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px; cursor: zoom-in;" alt="정답 해설 이미지" onclick="openImageModal(this.src)" title="클릭하여 확대">
+                   <div style="font-size:0.85em; color:#1976d2; margin-top:5px;">[정답 참고 이미지 - 클릭 시 확대]</div>
+                 </div>`;
+      }
+
+      if (sub.type === 'descriptive') {
+        html += `<div class="override-btns">
+                  <span style="font-size:0.85em; color:#666; font-weight:normal; margin-right:8px;">▶ 서술/그림 자율 채점:</span><br><br>
+                  <button class="btn-override btn-correct" onclick="overrideScore(${qIndex}, ${sIndex}, 1)">정답 인정</button>
+                  <button class="btn-override btn-partial" onclick="overrideScore(${qIndex}, ${sIndex}, 0.5)">부분 점수</button>
+                  <button class="btn-override btn-incorrect" onclick="overrideScore(${qIndex}, ${sIndex}, 0)">오답 처리</button>
+                 </div>`;
+      }
+
+      fbDiv.innerHTML = html;
+      fbDiv.style.display = "block";
+    }
+
+    function updateCardScore(qIndex) {
+      const q = quizData[qIndex];
+      let correctSubs = 0;
+      let gradableCount = 0;
+      
+      q.subs.forEach((sub, sIndex) => {
+        if (!sub.isExcluded) {
+          correctSubs += gradingState[qIndex].subs[sIndex].status;
+          gradableCount++;
+        }
+      });
+      
+      gradingState[qIndex].earnedScore = gradableCount > 0 ? (correctSubs / gradableCount) * q.score : 0;
+      
+      const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
+      if(cardTitle) {
+        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
+        cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
+        if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
+        else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
+        else cardTitle.style.backgroundColor = "#ffebee";
+      }
+    }
+
+    function gradeSingleQuestion(qIndex) {
+      const q = quizData[qIndex];
+
+      if (q.isUnordered) {
+        let answerPool = [];
+        q.subs.forEach(sub => {
+          if (!sub.isExcluded) {
+            answerPool.push(sub.answers);
+          }
+        });
+
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          if (!inputEl || inputEl.disabled) return;
+
+          let userVal = inputEl.value;
+          let isCorrect = false;
+
+          if (sub.isExcluded) {
+            gradingState[qIndex].subs[sIndex].status = 0;
+            inputEl.disabled = true;
+            updateFeedbackUI(qIndex, sIndex);
+            return;
+          }
+
+          if (userVal.trim() !== "") {
+            for (let i = 0; i < answerPool.length; i++) {
+              let possibleAnswers = answerPool[i];
+              
+              if (sub.type === 'equation') {
+                if (isEquationCorrect(userVal, possibleAnswers)) {
+                  isCorrect = true;
+                  answerPool.splice(i, 1);
+                  break;
+                }
+              } else {
+                let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
+                let matched = possibleAnswers.some(a => {
+                  let aClean = sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase();
+                  return aClean === uClean;
+                });
+                if(matched) {
+                  isCorrect = true;
+                  answerPool.splice(i, 1);
+                  break;
+                }
+              }
+            }
+          }
+
+          gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+          inputEl.disabled = true;
+          updateFeedbackUI(qIndex, sIndex);
+        });
+      } else {
+        const poolUsed = {};
+        const normPool = v => v.replace(/\s+/g, '').toLowerCase();
+        q.subs.forEach((sub, sIndex) => {
+          if (sub.type === 'pool') {
+            const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+            if (!inputEl || inputEl.disabled) return;
+            const u = normPool(inputEl.value);
+            const used = poolUsed[sub.poolId] = poolUsed[sub.poolId] || [];
+            let ok = false;
+            if (u !== '' && sub.answers.some(a => normPool(a) === u) && !used.includes(u)) { ok = true; used.push(u); }
+            gradingState[qIndex].subs[sIndex].status = ok ? 1 : 0;
+            inputEl.disabled = true;
+            updateFeedbackUI(qIndex, sIndex);
+          } else {
+            evaluateSub(qIndex, sIndex);
+          }
+        });
+      }
+
+      updateCardScore(qIndex);
+      gradingState[qIndex].isGraded = true;
+
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (expEl) {
+          expEl.style.display = 'block';
+          if(toggleBtn) {
+            toggleBtn.style.display = 'inline-block';
+            toggleBtn.innerHTML = '📖 해설 닫기';
+          }
+      }
+      
+      const btnEl = document.getElementById(`btn-grade-single-${qIndex}`);
+      if (btnEl) btnEl.style.display = 'none';
+      if (isTestSubmitted) calculateFinalTotal();
+    }
+
+    function gradeAll() {
+      isTestSubmitted = true;
+      quizData.forEach((q, qIndex) => {
+        if (!gradingState[qIndex].isGraded) {
+          gradeSingleQuestion(qIndex);
+        }
+      });
+      document.getElementById('submit-btn').style.display = 'none';
+      calculateFinalTotal();
+    }
+
+    function overrideScore(qIndex, sIndex, newStatus) {
+      gradingState[qIndex].subs[sIndex].status = newStatus;
+      updateFeedbackUI(qIndex, sIndex);
+      updateCardScore(qIndex);
+      if (isTestSubmitted) calculateFinalTotal(); 
+    }
+
+    function calculateFinalTotal() {
+      let totalEarned = 0;
+      let totalMax = 0;
+
+      quizData.forEach((q, qIndex) => {
+        totalMax += q.score;
+        totalEarned += gradingState[qIndex].earnedScore;
+      });
+
+      const resDiv = document.getElementById('final-result');
+      resDiv.style.display = "block";
+      
+      totalEarned = Math.round(totalEarned * 10) / 10;
+      let percent = Math.round((totalEarned / totalMax) * 100);
+      let passMsg = percent >= 60 
+        ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
+        : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
+
+      resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
+    }
+
+    renderQuiz();
+
+    // ================== 이미지 클릭(확대) 자동 연결 ==================
+    document.getElementById('quiz-container').addEventListener('click', function(e) {
+      if (e.target && e.target.tagName === 'IMG') {
+        openImageModal(e.target.src);
+      }
+    });
+
+    // ================== 우측 문항 내비게이션 ==================
+    function initNavPanel() {
+      const navHtml = `
+        <div id="q-nav-panel">
+          <div class="q-nav-header">📌 문항 이동</div>
+          <div class="q-nav-grid" id="q-nav-grid"></div>
+          <div class="q-nav-legend">
+            <div><span class="box" style="background:#fff; border:1px solid #dee2e6;"></span>미작성</div>
+            <div><span class="box" style="background:#e3f2fd; border:1px solid #90caf9;"></span>답안 입력됨</div>
+            <div><span class="box" style="background:#e8f5e9; border:1px solid #81c784;"></span>정답 / 채점완료</div>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', navHtml);
+
+      const navGrid = document.getElementById('q-nav-grid');
+      let gridHtml = '';
+      quizData.forEach((q, qIndex) => {
+        let displayNum = qIndex + 1;
+        gridHtml += `<button class="q-nav-btn" id="nav-btn-${qIndex}" onclick="scrollToQuestion(${qIndex})">${displayNum}</button>`;
+      });
+      navGrid.innerHTML = gridHtml;
+
+      document.getElementById('quiz-container').addEventListener('input', updateNavStatus);
+
+      if (typeof gradeSingleQuestion === 'function') {
+        const originalGradeSingle = gradeSingleQuestion;
+        gradeSingleQuestion = function(qIndex) {
+          originalGradeSingle(qIndex);
+          updateNavStatus();
+        };
+      }
+
+      if (typeof overrideScore === 'function') {
+        const originalOverrideScore = overrideScore;
+        overrideScore = function(qIndex, sIndex, newStatus) {
+          originalOverrideScore(qIndex, sIndex, newStatus);
+          updateNavStatus();
+        };
+      }
+
+      if (typeof gradeAll === 'function') {
+        const originalGradeAll = gradeAll;
+        gradeAll = function() {
+          originalGradeAll();
+          updateNavStatus();
+        };
+      }
+      updateNavStatus();
+    }
+
+    function scrollToQuestion(qIndex) {
+      const target = document.getElementById(`qCard-${qIndex}`);
+      if(target) {
+        const topPos = target.getBoundingClientRect().top + window.pageYOffset - 20;
+        window.scrollTo({ top: topPos, behavior: 'smooth' });
+      }
+    }
+
+    function updateNavStatus() {
+      quizData.forEach((q, qIndex) => {
+        const navBtn = document.getElementById(`nav-btn-${qIndex}`);
+        if(!navBtn) return;
+
+        if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
+          let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
+          navBtn.className = 'q-nav-btn'; 
+          if (qEarnedScore === q.score) navBtn.classList.add('correct');
+          else if (qEarnedScore > 0) navBtn.classList.add('partial');
+          else navBtn.classList.add('incorrect');
+          return;
+        }
+
+        let hasAnswer = false;
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+          if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
+          if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
+        });
+
+        if (hasAnswer) {
+          navBtn.classList.add('answered'); 
+        } else {
+          navBtn.classList.remove('answered'); 
+        }
+      });
+    }
+
+    // ================== 이미지 확대 및 PAN(드래그) 모달 스크립트 ==================
+    let currentZoom = 1;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let translateX = 0, translateY = 0;
+
+    function openImageModal(src) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      modalImg.src = src;
+      currentZoom = 1;
+      translateX = 0;
+      translateY = 0;
+      updateImageTransform();
+      modal.style.display = 'flex';
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      modal.style.display = 'none';
+    }
+
+    function zoomImage(step) {
+      currentZoom += step;
+      if (currentZoom < 0.5) currentZoom = 0.5;
+      if (currentZoom > 5) currentZoom = 5; 
+      updateImageTransform();
+    }
+
+    function resetZoom() {
+      currentZoom = 1;
+      translateX = 0;
+      translateY = 0;
+      updateImageTransform();
+    }
+
+    function updateImageTransform() {
+      const modalImg = document.getElementById('modal-img');
+      modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+    }
+
+    const modalImg = document.getElementById('modal-img');
+    modalImg.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      modalImg.style.cursor = 'grabbing';
+      modalImg.style.transition = 'none'; 
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      updateImageTransform();
+    });
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        modalImg.style.cursor = 'grab';
+        modalImg.style.transition = 'transform 0.05s linear'; 
+      }
+    });
+
+    modalImg.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX - translateX;
+        startY = e.touches[0].clientY - translateY;
+        modalImg.style.transition = 'none';
+      }
+    }, { passive: false });
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault(); 
+      translateX = e.touches[0].clientX - startX;
+      translateY = e.touches[0].clientY - startY;
+      updateImageTransform();
+    }, { passive: false });
+    document.addEventListener('touchend', () => {
+      if (isDragging) {
+        isDragging = false;
+        modalImg.style.transition = 'transform 0.05s linear';
+      }
+    });
+    modalImg.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) zoomImage(0.1);
+      else zoomImage(-0.1);
+    }, { passive: false });
+
+// ================== 전체화면 필기 모드 (MEMO) 스크립트 ==================
+    let memoCanvas, memoCtx;
+    let isMemoDrawing = false;
+    let memoCurrentTool = 'pen';
+    let isMemoMode = false;
+    let memoCurrentColor = '#333333'; // 기본 검정
+    let memoPenWidth = 3;
+    let memoEraserWidth = 30;
+
+    function toggleMemoMode() {
+      isMemoMode = !isMemoMode;
+      const btn = document.getElementById('memo-toggle-btn');
+      
+      if (isMemoMode) {
+        document.body.classList.add('drawing-mode');
+        btn.innerHTML = "필기 끄기";
+        btn.classList.add('active');
+        if (!memoCanvas) initMemoCanvas();
+        else updateCanvasSize(); // 필기 모드를 켤 때마다 문서 크기에 맞게 캔버스 크기 조정
+      } else {
+        document.body.classList.remove('drawing-mode');
+        btn.innerHTML = "필기 켜기";
+        btn.classList.remove('active');
+      }
+    }
+
+    function updateCanvasSize() {
+      if (!memoCanvas) return;
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = memoCanvas.width;
+      tempCanvas.height = memoCanvas.height;
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCtx.drawImage(memoCanvas, 0, 0);
+
+      // 문서 전체의 스크롤 높이/너비로 캔버스 크기 설정
+      memoCanvas.width = Math.max(document.documentElement.scrollWidth, window.innerWidth);
+      memoCanvas.height = Math.max(document.documentElement.scrollHeight, window.innerHeight);
+
+      memoCtx.drawImage(tempCanvas, 0, 0);
+    }
+
+    function initMemoCanvas() {
+      memoCanvas = document.getElementById('overlay-canvas');
+      memoCtx = memoCanvas.getContext('2d');
+      
+      updateCanvasSize();
+      window.addEventListener('resize', updateCanvasSize);
+      
+      memoCanvas.addEventListener('mousedown', startMemoDraw);
+      memoCanvas.addEventListener('mousemove', drawMemo);
+      memoCanvas.addEventListener('mouseup', stopMemoDraw);
+      memoCanvas.addEventListener('mouseout', stopMemoDraw);
+      memoCanvas.addEventListener('touchstart', startMemoDraw, { passive: false });
+      memoCanvas.addEventListener('touchmove', drawMemo, { passive: false });
+      memoCanvas.addEventListener('touchend', stopMemoDraw);
+      
+      document.getElementById('memo-width-slider').value = memoPenWidth;
+    }
+
+    function getMemoCoordinates(e) {
+      const rect = memoCanvas.getBoundingClientRect();
+      if (e.touches && e.touches.length > 0) {
+        return { 
+          x: e.touches[0].clientX - rect.left, 
+          y: e.touches[0].clientY - rect.top 
+        };
+      }
+      return { 
+        x: e.clientX - rect.left, 
+        y: e.clientY - rect.top 
+      };
+    }
+
+    function startMemoDraw(e) {
+      if (!isMemoMode) return;
+      if (e.target.closest('#memo-wrapper') || e.target.closest('#q-nav-panel')) return;
+      
+      e.preventDefault(); 
+      isMemoDrawing = true;
+      const pos = getMemoCoordinates(e);
+      memoCtx.beginPath();
+      memoCtx.moveTo(pos.x, pos.y);
+    }
+
+    function drawMemo(e) {
+      if (!isMemoDrawing || !isMemoMode) return;
+      e.preventDefault(); 
+      const pos = getMemoCoordinates(e);
+      memoCtx.lineTo(pos.x, pos.y);
+      
+      if (memoCurrentTool === 'eraser') {
+        memoCtx.globalCompositeOperation = 'destination-out';
+        memoCtx.lineWidth = memoEraserWidth;       
+      } else {
+        memoCtx.globalCompositeOperation = 'source-over';
+        memoCtx.strokeStyle = memoCurrentColor;
+        memoCtx.lineWidth = memoPenWidth;        
+      }
+      memoCtx.lineCap = 'round';
+      memoCtx.lineJoin = 'round';
+      memoCtx.stroke();
+    }
+
+    function stopMemoDraw() {
+      if (!isMemoDrawing) return;
+      isMemoDrawing = false;
+      memoCtx.closePath();
+    }
+
+    function setMemoTool(tool) {
+      memoCurrentTool = tool;
+      document.getElementById('memo-pen').classList.remove('active');
+      document.getElementById('memo-eraser').classList.remove('active');
+      document.getElementById('memo-' + tool).classList.add('active');
+      
+      const slider = document.getElementById('memo-width-slider');
+      if (tool === 'eraser') {
+        slider.value = memoEraserWidth;
+      } else {
+        slider.value = memoPenWidth;
+      }
+    }
+
+    function setMemoColor(color, btnElement) {
+      memoCurrentColor = color;
+      setMemoTool('pen'); 
+      
+      const colorBtns = document.querySelectorAll('.color-btn');
+      colorBtns.forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+    }
+
+    function updateMemoWidth(val) {
+      if (memoCurrentTool === 'eraser') {
+        memoEraserWidth = parseInt(val);
+      } else {
+        memoPenWidth = parseInt(val);
+      }
+    }
+
+    function clearMemoCanvas() {
+      if(memoCtx) memoCtx.clearRect(0, 0, memoCanvas.width, memoCanvas.height);
+    }
+
+    // 초기 실행
+    renderQuiz();
+    setTimeout(initNavPanel, 100);
+  </script>
+</body>
+</html>
+
+  </script>
+</body>
+</html>
