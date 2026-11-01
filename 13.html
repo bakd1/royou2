@@ -444,14 +444,14 @@
         explanation: "[해설]<br>염소산칼륨은 <b>제1류 위험물(산화성 고체)</b> 중 염소산염류이며, 지정수량은 <b>50kg</b>이다.<br><ul><li>화학식 — 칼륨(K)과 염소산 이온(ClO<sub>3</sub><sup>-</sup>)으로 이루어진 KClO<sub>3</sub>이다.</li><li>분해 기체 — 가열하면 분자 속 산소를 내놓아 <b>산소</b>가 발생한다.</li></ul>완전분해반응식은 다음과 같다.<br>2KClO<sub>3</sub> → 2KCl + 3O<sub>2</sub><br>혼동 주의: 이산화망가니즈(MnO<sub>2</sub>)는 분해를 빠르게 하는 촉매일 뿐 반응식에는 들어가지 않는다."
       },
       {
-        mainQuestion: "문제 20. 다음 각 위험물에 적응성이 있는 소화설비를 [보기]에서 모두 고르시오. (단, 없으면 '없음'으로 표기)<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>- 옥내소화전설비<br>- 옥외소화전설비<br>- 불활성가스소화설비<br>- 스프링클러소화설비</span>",
+        mainQuestion: "문제 20. 다음 각 위험물에 적응성이 있는 소화설비를 [보기]에서 모두 고르시오. (단, 없으면 '없음'으로 표기)<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기]<br>ㄱ - 옥내소화전설비<br>ㄴ - 옥외소화전설비<br>ㄷ - 불활성가스소화설비<br>ㄹ - 스프링클러소화설비</span>",
         score: 5,
         subs: [
           { label: "① 탄화칼슘", type: "short", answers: ["없음", "해당없음"] },
           { label: "② 과산화나트륨", type: "short", answers: ["없음", "해당없음"] },
-          { label: "③ 인화성고체", type: "unordered_comma", answers: ["옥내소화전설비, 옥외소화전설비, 불활성가스소화설비, 스프링클러소화설비", "옥내소화전설비,옥외소화전설비,불활성가스소화설비,스프링클러소화설비"] },
+          { label: "③ 인화성고체", type: "unordered_comma", answers: ["옥내소화전설비, 옥외소화전설비, 불활성가스소화설비, 스프링클러소화설비", "옥내소화전설비,옥외소화전설비,불활성가스소화설비,스프링클러소화설비", "ㄱ,ㄴ,ㄷ,ㄹ", "ㄱ, ㄴ, ㄷ, ㄹ"] },
           { label: "④ 철분", type: "short", answers: ["없음", "해당없음"] },
-          { label: "⑤ 과산화수소", type: "unordered_comma", answers: ["옥내소화전설비, 옥외소화전설비, 스프링클러소화설비", "옥내소화전설비,옥외소화전설비,스프링클러소화설비"] }
+          { label: "⑤ 과산화수소", type: "unordered_comma", answers: ["옥내소화전설비, 옥외소화전설비, 스프링클러소화설비", "옥내소화전설비,옥외소화전설비,스프링클러소화설비", "ㄱ,ㄴ,ㄹ", "ㄱ, ㄴ, ㄹ"] }
         ],
         explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 17</b>의 소화설비 적응성 표에 따른다.<br><ul><li>탄화칼슘 — 제3류 금수성물질이라 물과 반응하면 아세틸렌이 생기므로, 보기의 설비 모두 적응성이 없다.</li><li>과산화나트륨 — 제1류 알칼리금속의 과산화물이라 물과 반응하면 산소와 열이 나므로 적응성이 없다.</li><li>인화성고체 — 제2류이지만 금수성이 아니어서 물을 쓰는 설비와 불활성가스소화설비 모두 적응성이 있다.</li><li>철분 — 물과 반응하면 수소가 생기는 제2류 철분·금속분·마그네슘 등이라 적응성이 없다.</li><li>과산화수소 — 제6류로 물을 뿌려 끌 수 있어 옥내·옥외소화전설비와 스프링클러소화설비는 적응성이 있다.</li></ul>혼동 주의: 제6류는 산소를 차단해 끄는 방식이 효과가 없으므로 <b>불활성가스소화설비</b>는 적응성이 없다."
       }
@@ -677,29 +677,31 @@
       fbDiv.style.display = "block";
     }
 
-    function updateCardScore(qIndex) {
-      const q = quizData[qIndex];
-      let correctSubs = 0;
-      let gradableCount = 0;
-      
-      q.subs.forEach((sub, sIndex) => {
-        if (!sub.isExcluded) {
-          correctSubs += gradingState[qIndex].subs[sIndex].status;
-          gradableCount++;
-        }
-      });
-      
-      // 채점 제외 대상을 빼고 유효한 문항 수로 배점 계산
-      gradingState[qIndex].earnedScore = gradableCount > 0 ? (correctSubs / gradableCount) * q.score : 0;
-      
-      const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
-      if(cardTitle) {
-        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
-        cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
-        if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
-        else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
-        else cardTitle.style.backgroundColor = "#ffebee";
-      }
+function updateCardScore(qIndex) {
+  const q = quizData[qIndex];
+  let correctSubs = 0;
+  let gradableCount = 0;
+  
+  q.subs.forEach((sub, sIndex) => {
+    if (!sub.isExcluded) {
+      correctSubs += gradingState[qIndex].subs[sIndex].status;
+      gradableCount++;
+    }
+  });
+  
+  // 변경: 획득 점수 자체를 1의 자리에서 반올림(Math.round)하여 정수로 저장
+  gradingState[qIndex].earnedScore = gradableCount > 0 ? Math.round((correctSubs / gradableCount) * q.score) : 0;
+  
+  const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
+  if(cardTitle) {
+    // 변경: 소수점 계산 로직 삭제, 반올림된 정수 바로 사용
+    let qEarnedScore = gradingState[qIndex].earnedScore;
+    cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
+    
+    if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
+    else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
+    else cardTitle.style.backgroundColor = "#ffebee";
+  }
     }
 
     function gradeSingleQuestion(qIndex) {
@@ -812,26 +814,27 @@
       if (isTestSubmitted) calculateFinalTotal(); 
     }
 
-    function calculateFinalTotal() {
-      let totalEarned = 0;
-      let totalMax = 0;
+function calculateFinalTotal() {
+  let totalEarned = 0;
+  let totalMax = 0;
 
-      quizData.forEach((q, qIndex) => {
-        totalMax += q.score;
-        totalEarned += gradingState[qIndex].earnedScore;
-      });
+  quizData.forEach((q, qIndex) => {
+    totalMax += q.score;
+    totalEarned += gradingState[qIndex].earnedScore;
+  });
 
-      const resDiv = document.getElementById('final-result');
-      resDiv.style.display = "block";
-      
-      totalEarned = Math.round(totalEarned * 10) / 10;
-      let percent = Math.round((totalEarned / totalMax) * 100);
-      let passMsg = percent >= 60 
-        ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
-        : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
+  const resDiv = document.getElementById('final-result');
+  resDiv.style.display = "block";
+  
+  // 변경: 전체 점수도 깔끔하게 정수로 처리
+  totalEarned = Math.round(totalEarned);
+  let percent = Math.round((totalEarned / totalMax) * 100);
+  let passMsg = percent >= 60 
+    ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
+    : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
 
-      resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
-    }
+  resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
+}
 
     // ================== 우측 문항 내비게이션 ==================
     function initNavPanel() {
@@ -892,34 +895,35 @@
       }
     }
 
-    function updateNavStatus() {
-      quizData.forEach((q, qIndex) => {
-        const navBtn = document.getElementById(`nav-btn-${qIndex}`);
-        if(!navBtn) return;
+function updateNavStatus() {
+  quizData.forEach((q, qIndex) => {
+    const navBtn = document.getElementById(`nav-btn-${qIndex}`);
+    if(!navBtn) return;
 
-        if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
-          let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
-          navBtn.className = 'q-nav-btn'; 
-          if (qEarnedScore === q.score) navBtn.classList.add('correct');
-          else if (qEarnedScore > 0) navBtn.classList.add('partial');
-          else navBtn.classList.add('incorrect');
-          return;
-        }
+    if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
+      // 변경: 소수점 계산식 삭제하고 정수화된 earnedScore 그대로 가져옴
+      let qEarnedScore = gradingState[qIndex].earnedScore;
+      navBtn.className = 'q-nav-btn'; 
+      if (qEarnedScore === q.score) navBtn.classList.add('correct');
+      else if (qEarnedScore > 0) navBtn.classList.add('partial');
+      else navBtn.classList.add('incorrect');
+      return;
+    }
 
-        let hasAnswer = false;
-        q.subs.forEach((sub, sIndex) => {
-          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
-          const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
-          if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
-          if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
-        });
+    let hasAnswer = false;
+    q.subs.forEach((sub, sIndex) => {
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
+      if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
+    });
 
-        if (hasAnswer) {
-          navBtn.classList.add('answered'); 
-        } else {
-          navBtn.classList.remove('answered'); 
-        }
-      });
+    if (hasAnswer) {
+      navBtn.classList.add('answered'); 
+    } else {
+      navBtn.classList.remove('answered'); 
+    }
+  });
     }
 
     // ================== 이미지 확대 및 PAN(드래그) 모달 스크립트 ==================
