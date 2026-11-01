@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>위험물산업기사 실기 단원별 빈칸 암기장 - 5. 제조소등 시설기준</title>
+  <style>
+    /* ================== 기본 공통 스타일 ================== */
+    body { font-family: 'Malgun Gothic', sans-serif; margin: 30px; max-width: 900px; background-color: #f4f6f9; color: #333; }
+    h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+    .instruction { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 0.95em; }
+    
+    .mode-selection { text-align: center; margin-bottom: 30px; }
+    .mode-selection label {
+      display: inline-block; margin: 0 10px; padding: 10px 20px;
+      font-size: 1.05em; font-weight: bold; border-radius: 8px; cursor: pointer;
+      border: 2px solid #ced4da; transition: all 0.2s; background-color: #fff; color: #666;
+    }
+    .mode-selection label.active { border-color: #1976d2; background-color: #e3f2fd; color: #1976d2; }
+
+    .question-card { background-color: #fff; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .main-q-title { font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #1976d2; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; line-height: 1.4; }
+    
+    .question-card img { 
+      max-width: 100%; 
+      border: 1px solid #ced4da; 
+      border-radius: 5px; 
+      cursor: zoom-in; 
+      transition: opacity 0.2s, box-shadow 0.2s;
+    }
+    .question-card img:hover { 
+      opacity: 0.85; 
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .sub-q-container { margin-top: 15px; padding-left: 10px; }
+    .sub-q-label { font-weight: bold; margin-bottom: 8px; font-size: 1.05em; line-height: 1.4; }
+    
+    .input-standard, .input-calc { 
+      width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; transition: border-color 0.2s;
+    }
+    .input-standard:focus, .input-calc:focus, .textarea-formula:focus { outline: none; border-color: #1976d2; box-shadow: 0 0 0 3px rgba(25,118,210,0.15); }
+    
+    .textarea-formula {
+      width: 100%; padding: 12px; font-size: 15px; border: 1px dashed #adb5bd; border-radius: 6px; box-sizing: border-box; margin-bottom: 5px; resize: vertical; min-height: 80px; background-color: #f8f9fa; line-height: 1.4;
+    }
+    .calc-label { font-size: 0.85em; color: #6c757d; font-weight: bold; margin-bottom: 3px; display: block; }
+    
+    .feedback-box { margin-top: 5px; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 0.95em; display: none; line-height: 1.5; }
+    .is-correct { background-color: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; }
+    .is-incorrect { background-color: #ffebee; border: 1px solid #ffcdd2; color: #c62828; }
+    .is-partial { background-color: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; }
+    
+    .override-btns { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc; }
+    .btn-override { padding: 6px 12px; font-size: 0.85em; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px; color: #fff; transition: opacity 0.2s; }
+    .btn-override:hover { opacity: 0.8; }
+    .btn-correct { background-color: #4caf50; }
+    .btn-partial { background-color: #ff9800; }
+    .btn-incorrect { background-color: #f44336; }
+    
+    .btn-grade-single { margin-top: 15px; padding: 10px 20px; font-size: 0.95em; background-color: #607d8b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; float: right; transition: background-color 0.2s; }
+    .btn-grade-single:hover { background-color: #455a64; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+
+    .submit-section { text-align: center; margin-top: 40px; margin-bottom: 50px; }
+    .btn-submit { padding: 15px 40px; font-size: 1.2em; background-color: #1976d2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(25,118,210,0.3); }
+    .btn-submit:hover { background-color: #1565c0; }
+    .btn-submit:disabled { background-color: #9e9e9e; cursor: not-allowed; box-shadow: none; }
+    
+    #final-result { margin-top: 25px; font-size: 1.4em; font-weight: bold; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; display: none; line-height: 1.5; }
+    .q-score-badge { float: right; font-size: 0.8em; background-color: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 20px; margin-left: 10px; }
+
+    /* ================== 우측 문항 내비게이션 패널 스타일 ================== */
+    #q-nav-panel {
+      position: fixed; top: 50px; right: 20px; width: 170px; background-color: #fff;
+      border: 2px solid #ced4da; border-radius: 10px; box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      z-index: 999; display: flex; flex-direction: column; max-height: calc(100vh - 120px);
+    }
+    .q-nav-header { background-color: #f8f9fa; padding: 12px; text-align: center; font-weight: bold; font-size: 0.95em; border-bottom: 1px solid #ced4da; border-top-left-radius: 8px; border-top-right-radius: 8px; color: #1976d2; }
+    .q-nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 12px; overflow-y: auto; }
+    .q-nav-btn { padding: 8px 0; font-size: 0.9em; font-weight: bold; border: 1px solid #dee2e6; border-radius: 6px; background-color: #fff; color: #6c757d; cursor: pointer; transition: all 0.2s; }
+    .q-nav-btn:hover { background-color: #e9ecef; color: #495057; }
+    .q-nav-btn.answered { background-color: #e3f2fd; border-color: #90caf9; color: #1976d2; } 
+    .q-nav-btn.correct { background-color: #e8f5e9; border-color: #81c784; color: #2e7d32; }  
+    .q-nav-btn.partial { background-color: #fff3e0; border-color: #ffb74d; color: #e65100; }  
+    .q-nav-btn.incorrect { background-color: #ffebee; border-color: #e57373; color: #c62828; } 
+    .q-nav-legend { font-size: 0.75em; padding: 10px; border-top: 1px solid #ced4da; background-color: #f8f9fa; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; color: #666; line-height: 1.6; }
+    .q-nav-legend .box { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+    @media (max-width: 1150px) { #q-nav-panel { display: none; } }
+
+    /* ================== 이미지 확대 모달 스타일 ================== */
+    #image-modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); flex-direction: column; }
+    #image-modal-content { position: relative; width: 100%; height: calc(100% - 60px); overflow: hidden; display: flex; justify-content: center; align-items: center; }
+    #modal-img { position: absolute; max-width: 100%; max-height: 100%; cursor: grab; transform-origin: center center; transition: transform 0.05s linear; user-select: none; }
+    #modal-img:active { cursor: grabbing; }
+    .modal-zoom-controls { height: 60px; display: flex; justify-content: center; align-items: center; gap: 10px; background-color: rgba(34, 34, 34, 0.9); z-index: 10001; }
+    .modal-zoom-controls button { padding: 10px 15px; font-size: 1em; font-weight: bold; cursor: pointer; border: none; border-radius: 5px; background-color: #1976d2; color: white; transition: background-color 0.2s; }
+    .modal-zoom-controls button:hover { background-color: #1565c0; }
+    .modal-zoom-controls .modal-close-btn { background-color: #f44336; }
+    .modal-zoom-controls .modal-close-btn:hover { background-color: #d32f2f; }
+
+    /* ================== 전체화면 필기 모드 (MEMO) 스타일 ================== */
+    #overlay-canvas { position: absolute; top: 0; left: 0; z-index: 9997; pointer-events: none; touch-action: none; }
+    body.drawing-mode #overlay-canvas { pointer-events: auto; cursor: crosshair; }
+    
+    #memo-wrapper { 
+      position: fixed; 
+      top: 50px; 
+      right: 200px; 
+      z-index: 9999; 
+      background: rgba(255, 255, 255, 0.95); 
+      border: 2px solid #f44336; 
+      border-radius: 8px; 
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
+      display: flex; 
+      flex-direction: column;
+      width: 250px; 
+    }
+    
+    #memo-header {
+      background: #f44336;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    
+    #memo-toggle-btn {
+      background: #fff;
+      color: #f44336;
+      border: none;
+      border-radius: 12px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #memo-toggle-btn.active {
+      background: #333;
+      color: #fff;
+    }
+
+    #memo-tools-panel { 
+      padding: 15px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 15px; 
+    }
+    
+    .memo-tool-row { display: flex; align-items: center; gap: 10px; }
+    .memo-tool-label { font-size: 13px; font-weight: bold; color: #555; width: 40px; }
+    
+    .memo-btn { background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+    .memo-btn:hover { background: #f5f5f5; }
+    .memo-btn.active { background: #e3f2fd; border-color: #1976d2; color: #1976d2; font-weight: bold; }
+    
+    .color-btn { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; transition: transform 0.2s; padding: 0; }
+    .color-btn.active { transform: scale(1.2); border-color: #333; }
+    .color-red { background-color: #f44336; }
+    .color-black { background-color: #333; }
+    .color-blue { background-color: #2196f3; }
+    .color-yellow { background-color: #ffeb3b; }
+    
+    .memo-slider { width: 100px; cursor: pointer; }
+    
+    @media (max-width: 1150px) {
+      #memo-wrapper { top: 20px; right: 20px; } 
+    }
+  </style>
+</head>
+<body>
+<div style="margin-bottom:15px;"><a href="index.html#section0" style="display:inline-block;padding:8px 16px;background:#e0e0e0;color:#333;text-decoration:none;border-radius:8px;font-weight:bold;font-family:'Malgun Gothic',sans-serif;">◀ 메인 메뉴로</a></div>
+<div style="margin-bottom:15px;"><a href="index.html#section3" style="display:inline-block;padding:8px 16px;background:#e0e0e0;color:#333;text-decoration:none;border-radius:8px;font-weight:bold;font-family:'Malgun Gothic',sans-serif;">◀ 뒤로가기</a></div>
+
+  <h1>📝 5. 제조소등 시설기준</h1>
+  <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.</p>
+  
+  <div class="mode-selection" id="mode-selection">
+    <label class="active" id="label-basic" onclick="setMode('basic')">📝 시험 모드 (실전 테스트)</label>
+    <label id="label-study" onclick="setMode('study')">📖 해설 모드 (해설 펼쳐보기)</label>
+  </div>
+  
+  <!-- 문제 출력 영역 -->
+  <div id="quiz-container"></div>
+
+  <!-- 전체 제출 버튼 -->
+  <div class="submit-section">
+    <button id="submit-btn" class="btn-submit" onclick="gradeAll()">전체 제출 및 채점하기</button>
+    <div id="final-result"></div>
+  </div>
+
+ <!-- ================== 전체화면 필기 모드 (MEMO) UI ================== -->
+  <canvas id="overlay-canvas"></canvas>
+  <div id="memo-wrapper">
+    <div id="memo-header">
+      <span>🖍 MEMO</span>
+      <button id="memo-toggle-btn" onclick="toggleMemoMode()">필기 켜기</button>
+    </div>
+    <div id="memo-tools-panel">
+      <!-- 도구 선택 -->
+      <div class="memo-tool-row">
+        <span class="memo-tool-label">도구:</span>
+        <button id="memo-pen" class="memo-btn active" onclick="setMemoTool('pen')">✏️ 펜</button>
+        <button id="memo-eraser" class="memo-btn" onclick="setMemoTool('eraser')">🧽 지우개</button>
+      </div>
+      
+      <!-- 색상 선택 -->
+      <div class="memo-tool-row" id="memo-color-row">
+        <span class="memo-tool-label">색상:</span>
+        <button class="color-btn color-red active" onclick="setMemoColor('#f44336', this)" title="빨강"></button>
+        <button class="color-btn color-black" onclick="setMemoColor('#333333', this)" title="검정"></button>
+        <button class="color-btn color-blue" onclick="setMemoColor('#2196f3', this)" title="파랑"></button>
+        <button class="color-btn color-yellow" onclick="setMemoColor('#ffeb3b', this)" title="노랑"></button>
+      </div>
+      
+      <!-- 굵기 조절 -->
+      <div class="memo-tool-row">
+        <span class="memo-tool-label">굵기:</span>
+        <input type="range" id="memo-width-slider" class="memo-slider" min="1" max="50" value="3" onchange="updateMemoWidth(this.value)">
+      </div>
+      
+      <!-- 기능 버튼 -->
+      <div class="memo-tool-row" style="justify-content: flex-end; margin-top: 5px; border-top: 1px dashed #ccc; padding-top: 10px;">
+        <button class="memo-btn" onclick="clearMemoCanvas()">🗑️ 화면 지우기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== 이미지 확대 및 PAN(드래그) 모달 UI ================== -->
+  <div id="image-modal">
+    <div id="image-modal-content" onclick="if(event.target === this) closeImageModal()">
+      <img id="modal-img" src="" alt="확대된 이미지" draggable="false">
+    </div>
+    <div class="modal-zoom-controls">
+      <button onclick="zoomImage(0.25)">확대 ➕</button>
+      <button onclick="zoomImage(-0.25)">축소 ➖</button>
+      <button onclick="resetZoom()">원래 크기 🔄</button>
+      <button class="modal-close-btn" onclick="closeImageModal()">닫기 ❌</button>
+    </div>
+  </div>
+
+  <script>
+    let gradingState = [];
+    let isTestSubmitted = false;
+ 
+    const quizData = [
+      {
+        mainQuestion: "문제 1. [출제 22-1]<br>옥외저장소의 최소 보유공지 기준이다. 빈칸을 채우시오.<br><br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[지정수량 10배 이하]<br>제1석유류: ( ① ) m<br>제2석유류: ( ② ) m<br><br>[지정수량 20배 초과 50배 이하]<br>제2석유류: ( ③ ) m<br>제3석유류: ( ④ ) m<br>제4석유류: ( ⑤ ) m</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["3", "3m"] },
+          { label: "②", type: "short", answers: ["3", "3m"] },
+          { label: "③", type: "short", answers: ["9", "9m"] },
+          { label: "④", type: "short", answers: ["9", "9m"] },
+          { label: "⑤", type: "short", answers: ["3", "3m"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 11</b>은 옥외저장소 보유공지를 석유류 종류와 관계없이 지정수량 배수로만 정한다.<br><ul><li>10배 이하 — 너비 <b>3m</b> 이상이라 제1석유류와 제2석유류 모두 3m이다.</li><li>20배 초과 50배 이하 — 너비 <b>9m</b> 이상이라 제2석유류와 제3석유류 모두 9m이다.</li><li>제4석유류 — 공지 너비를 <b>3분의 1</b> 이상으로 줄일 수 있어 9m가 3m가 된다.</li></ul>혼동 주의 — 나머지 구간은 10배 초과 20배 이하 5m, 50배 초과 200배 이하 12m, 200배 초과 15m이다."
+      },
+      {
+        mainQuestion: "문제 2. [출제 22-1/20-4]<br>인화성액체 위험물 옥외탱크저장소의 방유제(이황화탄소 제외)에 대하여 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 방유제 내의 면적(m²): ( ① ) 이하", type: "short", answers: ["8만", "80000", "80,000", "8만 m2", "8만m2", "80000m2", "80,000m2"] },
+          { label: "② 방유제 안 옥외저장탱크 개수 제한을 두지 않을 수 있는 경우: ( ② )", type: "short", answers: ["인화점이 200℃ 이상인 위험물을 저장 또는 취급하는 경우", "인화점이 섭씨 200도 이상인 위험물을 저장 또는 취급하는 경우", "인화점이 200도C 이상인 위험물을 저장 또는 취급하는 경우", "인화점이 200도씨 이상인 위험물을 저장 또는 취급하는 경우,", "인화점이 200도시 이상인 위험물을 저장 또는 취급하는 경우,", "인화점이 200℃ 이상인 위험물을 저장 취급하는 경우", "인화점이 섭씨 200도 이상인 위험물을 저장 취급하는 경우", "인화점이 200도C 이상인 위험물을 저장 취급하는 경우", "인화점이 200도씨 이상인 위험물을 저장 취급하는 경우,", "인화점이 200도시 이상인 위험물을 또는 취급하는 경우,"] },
+          { label: "③ 제1석유류를 저장하는 옥외저장탱크 용량이 모두 15만L일 때 설치 가능 최대 기수: ( ③ )", type: "short", answers: ["10", "10기", "10개"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 6</b>의 옥외탱크저장소 방유제 기준이다.<br><ul><li>방유제 내 면적 — <b>8만 m²</b> 이하로 한다.</li><li>개수 제한 예외 — <b>인화점 200℃ 이상</b>인 위험물은 쉽게 불붙지 않아 탱크 수를 제한하지 않는다.</li><li>최대 기수 — 제1석유류는 완화 요건에 해당하지 않아 원칙대로 <b>10기</b> 이하이다.</li></ul>혼동 주의: 20기까지 늘리는 완화는 탱크가 모두 20만L 이하이면서 인화점 70℃ 이상 200℃ 미만이어야 하므로, 15만L라도 제1석유류에는 적용되지 않는다."
+      },
+      {
+        mainQuestion: "문제 3. [출제 25-1/22-1]<br>다음 용량의 지하저장탱크 2기를 인접 설치할 때 상호간 두어야 하는 거리를 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "① 경유 20,000L와 휘발유 8,000L: ( ① ) 이상", type: "short", answers: ["0.5", "0.5m", "0.5m 이상"] },
+          { label: "② 경유 8,000L와 휘발유 20,000L: ( ② ) 이상", type: "short", answers: ["1", "1m", "1m 이상"] },
+          { label: "③ 경유 20,000L와 휘발유 20,000L: ( ③ ) 이상", type: "short", answers: ["1", "1m", "1m 이상"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 8</b>에 따라 지하저장탱크 2기 이상을 붙여 설치하면 서로 1m 이상 띄운다. 다만 두 탱크 용량 합계가 지정수량의 <b>100배 이하</b>이면 0.5m 이상으로 줄일 수 있다.<br>지정수량이 경유(제2석유류 비수용성)는 1,000L, 휘발유(제1석유류 비수용성)는 200L이므로 탱크별 배수를 구해 더한다.<br>경유 20,000L + 휘발유 8,000L = 20 + 40 = 60배 → 0.5m<br>경유 8,000L + 휘발유 20,000L = 8 + 100 = 108배 → 1m<br>경유 20,000L + 휘발유 20,000L = 20 + 100 = 120배 → 1m<br>휘발유는 지정수량이 작아 용량이 조금만 늘어도 배수가 크게 뛴다. 그래서 휘발유 쪽 용량이 거리를 가른다."
+      },
+      {
+        mainQuestion: "문제 4. [출제 22-1]<br>주유취급소의 탱크 용량 기준이다. 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 고정주유설비에 직접 접속하는 전용탱크: ( ① )L 이하", type: "short", answers: ["50000", "50,000", "5만"] },
+          { label: "② 고정급유설비에 직접 접속하는 전용탱크: ( ② )L 이하", type: "short", answers: ["50000", "50,000", "5만"] },
+          { label: "③ 보일러 등에 직접 접속하는 전용탱크: ( ③ )L 이하", type: "short", answers: ["10000", "10,000", "1만"] },
+          { label: "④ 폐유·윤활유 등을 저장하는 탱크: ( ④ )L 이하", type: "short", answers: ["2000", "2,000", "2천"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 13</b>의 주유취급소 탱크 기준으로, 탱크 용도에 따라 용량 상한이 다르다.<br><ul><li>고정주유설비 전용탱크 — 자동차에 주유하는 연료 탱크로 <b>50,000L</b> 이하이다.</li><li>고정급유설비 전용탱크 — 이동저장탱크나 용기에 채우는 연료 탱크로 역시 50,000L 이하이다.</li><li>보일러 등 전용탱크 — 시설 자체 난방용 연료로 <b>10,000L</b> 이하이다.</li><li>폐유·윤활유 등 탱크 — 정비 과정의 부수 저장용으로 <b>2,000L</b> 이하이다.</li></ul>혼동 주의: 고속국도 도로변 주유취급소의 전용탱크는 60,000L까지 허용된다."
+      },
+      {
+        mainQuestion: "문제 5. [출제 22-1]<br>세로형 원통형 옥외저장탱크(지름 10m, r=5m, 원통부 높이 l=8m, 공간용적 10/100)에 대하여 답하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>V = π × 5² × 8 × (1 - 0.1)</span>",
+        score: 5,
+        subs: [
+          { label: "① 탱크 용량(L): ( ① )", type: "calc", answers: ["565486.68", "565,486.68"] },
+          { label: "② 기술검토 대상 여부: ( ② )", type: "short", answers: ["받아야 한다", "받아야한다", "O", "대상", "받는다", "받아야 한다.", "대상이다.", "대상이다"] },
+          { label: "③ 완공검사 대상 여부: ( ③ )", type: "short", answers: ["받아야 한다", "받아야한다", "O", "대상", "받는다", "받아야 한다.", "대상이다.", "대상이다"] },
+          { label: "④ 정기검사 대상 여부: ( ④ )", type: "short", answers: ["받아야 한다", "받아야한다", "O", "대상", "받는다", "받아야 한다.", "대상이다.", "대상이다"] }
+        ],
+        explanation: "[해설]<br>세로형 원통탱크 용량은 원기둥 부피에서 공간용적 10%를 뺀 값이다.<br>V = πr²l × (1 - 0.1)<br>V = π × 5² × 8 × 0.9 = 565.49m³ = 565,486.68L<br><b>위험물안전관리법 시행령상</b> 기술검토와 정기검사는 둘 다 저장용량 <b>50만L 이상</b>인 옥외탱크저장소가 대상이라 모두 받아야 한다.<br>완공검사는 용량과 상관없이 제조소등을 설치하면 사용 전에 반드시 받는다.<br>혼동 주의: 정기점검은 관계인이 연 1회 이상 스스로 하는 점검이고, 정기검사는 50만L 이상 옥외탱크저장소가 별도로 받는 법정 검사다."
+      },
+      {
+        mainQuestion: "문제 6. [출제 22-2]<br>지정과산화물 옥내저장소 저장창고의 지붕 기준이다. 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 중도리 또는 서까래의 간격: ( ① )cm 이하", type: "short", answers: ["30"] },
+          { label: "② 지붕 아래쪽 면에 설치하는 강제 격자(환강·경량형강 등) 한 변 길이: ( ② )cm 이하", type: "short", answers: ["45"] },
+          { label: "③ 지붕 아래쪽 면에 ( ③ )을(를) 쳐서 도리·보·서까래에 결합", type: "short", answers: ["철망"] },
+          { label: "④ 받침대 목재 두께: ( ④ )cm 이상", type: "short", answers: ["5"] },
+          { label: "⑤ 받침대 목재 너비: ( ⑤ )cm 이상", type: "short", answers: ["30"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>의 지정과산화물 옥내저장소 특례에 따른 지붕 구조 기준이다. 지붕 아래쪽을 촘촘한 뼈대와 철망으로 보강해 지붕이 쉽게 꺼지거나 부서져 떨어지지 않게 한다.<br><ul><li>중도리(서까래를 받치는 가로 부재)와 서까래의 간격은 <b>30cm</b> 이하로 촘촘히 둔다.</li><li>환강·경량형강 등으로 짠 강제 격자는 한 변을 <b>45cm</b> 이하로 한다.</li><li>지붕 아래쪽 면에 <b>철망</b>을 쳐서 불연재료의 도리·보·서까래에 단단히 결합한다.</li><li>받침대는 두께 <b>5cm</b> 이상, 너비 <b>30cm</b> 이상의 목재로 만든다.</li></ul>외우는 요령: 간격 30, 격자 45, 받침대 5×30으로 묶어 외운다."
+      },
+      {
+        mainQuestion: "문제 7. [출제 22-2]<br>분자량 100.5, 비중 1.76, 무색 유동성 액체, 물과 반응 시 발열하는 위험물에 대하여 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 시성식: ( ① )", type: "formula", answers: ["HClO4"] },
+          { label: "② 유별: ( ② )", type: "short", answers: ["제6류 위험물", "제6류", "제6류위험물"] },
+          { label: "③ 제조소와 병원 사이 안전거리: ( ③ )", type: "short", answers: ["해당없음", "없음"] },
+          { label: "④ 제조소에서 5,000kg 취급 시 보유공지 너비: ( ④ )", type: "short", answers: ["5m", "5", "5m 이상"] }
+        ],
+        explanation: "[해설]<br>분자량 100.5·비중 1.76이고 물과 만나면 발열하는 무색 액체는 <b>과염소산(HClO<sub>4</sub>)</b>이다. 과염소산은 산화성 액체인 <b>제6류 위험물</b>에 속한다.<br><ul><li>시성식 — 과염소산은 HClO<sub>4</sub>로 쓴다.</li><li>유별 — 강한 산화성을 가진 액체라서 제6류로 분류된다.</li><li>안전거리 — 위험물안전관리법 시행규칙 별표 4는 제6류 위험물 제조소를 안전거리 적용 대상에서 빼므로 <b>해당없음</b>이다.</li><li>보유공지 — 지정수량이 300kg이므로 5,000÷300=16.7배가 되고, 10배를 넘으니 <b>5m 이상</b>을 확보한다.</li></ul>혼동 주의: 제6류 제조소는 안전거리만 면제되고 보유공지 기준은 그대로 적용된다."
+      },
+      {
+        mainQuestion: "문제 8. [출제 22-2/20-3]<br>옥내저장소 기준이다. 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 자연발화 우려가 있는 위험물을 다량 저장 시 지정수량의 ( ① ) 이하마다 구분하고 상호간 ( ② ) 이상 간격", type: "short", answers: ["10배", "10"] },
+          { label: "② 상호간 간격", type: "short", answers: ["0.3m", "0.3"] },
+          { label: "③ 기계 하역 구조 용기를 겹쳐 쌓는 경우: ( ③ ) 높이 초과 금지", type: "short", answers: ["6m", "6"] },
+          { label: "④ 제3석유류·제4석유류·동식물유류 용기를 겹쳐 쌓는 경우: ( ④ ) 높이 초과 금지", type: "short", answers: ["4m", "4"] },
+          { label: "⑤ 그 밖의 경우: ( ⑤ ) 높이 초과 금지", type: "short", answers: ["3m", "3"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>의 옥내저장소 저장 기준이다. 자연발화 위험물은 구획과 간격으로 열이 번지는 것을 막고, 용기 적재 높이는 용기 종류와 위험성에 따라 제한한다.<br><ul><li>자연발화 우려가 있는 위험물은 지정수량 <b>10배</b> 이하마다 구분하고 서로 <b>0.3m</b> 이상 띄운다.</li><li>기계로 하역하는 구조의 용기만 겹쳐 쌓을 때는 <b>6m</b>까지 허용된다.</li><li>제3석유류·제4석유류·동식물유류 용기는 인화점이 높아 <b>4m</b>까지 쌓을 수 있다.</li><li>그 밖의 경우는 <b>3m</b>를 넘지 않는다.</li></ul>외우는 요령: 적재 높이는 기계 하역 6m, 고인화점 유류 4m, 그 밖의 경우 3m 순으로 낮아진다."
+      },
+      {
+        mainQuestion: "문제 9. [출제 22-2]<br>제4류 위험물(이황화탄소 제외) 옥외취급탱크 방유제 최소용량 합계를 구하시오. 탱크: 100만L 1기, 50만L 2기, 10만L 3기. 50만L 1기만 별도 방유제, 나머지는 하나의 방유제에 설치한다.",
+        score: 5,
+        subs: [
+          { label: "① 계산식: ( ① )", type: "descriptive", keywords: ["0.5", "0.1", "100", "50", "80"], answers: ["(50×0.5)+{(100×0.5)+(80×0.1)}=83"] },
+          { label: "② 최소용량 합계: ( ② )", type: "short", answers: ["83만L", "83만", "83", "830000", "830000L"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에 따르면 제조소 옥외 취급탱크의 방유제 용량은 탱크가 1기일 때 그 용량의 <b>50%</b> 이상이다. 탱크가 2기 이상이면 가장 큰 탱크 용량의 50%에 나머지 탱크 용량 합계의 <b>10%</b>를 더한 양 이상으로 한다.<br>50만L 1기만 둔 별도 방유제:<br>50 × 0.5 = 25만L<br>공동 방유제에는 100만L 1기, 50만L 1기, 10만L 3기가 있어 가장 큰 탱크를 뺀 나머지 합계가 80만L이다.<br>100 × 0.5 + 80 × 0.1 = 50 + 8 = 58만L<br>두 방유제를 합하면 25 + 58 = <b>83만L</b>이다.<br>혼동 주의: 옥외탱크저장소 방유제는 가장 큰 탱크 용량의 110% 이상이 기준이라 계산법이 다르다."
+      },
+      {
+        mainQuestion: "문제 10. [출제 24-3/22-2]<br>가로형 원통형 탱크(타원 단면 a=2m, b=1.5m, 중앙 원통부 l=3m, 양쪽 경판 l<sub>1</sub>=l<sub>2</sub>=0.3m)의 탱크 용량을 최대·최소값으로 구하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>V = (πab/4) × (l + (l<sub>1</sub>+l<sub>2</sub>)/3)</span>",
+        score: 5,
+        subs: [
+          { label: "① 최대값 (m³): ( ① )", type: "calc", answers: ["7.16", "7.16m3", "7.16m³"] },
+          { label: "② 최소값 (m³): ( ② )", type: "calc", answers: ["6.79", "6.79m3", "6.79m³"] }
+        ],
+        explanation: "[해설]<br>탱크 용량은 내용적 그대로가 아니라 <b>공간용적</b>을 제외한 값으로 산정하며, 공간용적은 내용적의 5~10% 범위에서 정하도록 되어 있어 이 범위의 양 끝값이 각각 최대·최소 용량을 만든다.<br>내용적 V = (πab/4) × (l + (l<sub>1</sub>+l<sub>2</sub>)/3) = (π × 2 × 1.5 / 4) × (3 + (0.3+0.3)/3) = 7.5398 m³<br><b>최대값</b>(공간용적 5%)은 7.5398 × 0.95 = <b>7.16 m³</b><br><b>최소값</b>(공간용적 10%)은 7.5398 × 0.90 = <b>6.79 m³</b>"
+      },
+      {
+        mainQuestion: "문제 11. [출제 22-3]<br>위험물제조소의 방화상 유효한 담 높이(h)를 구하시오. 조건: 제조소 외벽 높이 a=30m, 인근 건축물 높이 H=40m, 제조소~담 거리 d=5m, 제조소~인근 건축물 거리 D=10m, 상수 p=0.15.",
+        score: 5,
+        subs: [
+          { label: "① 담 높이 h는 ( ① ) 이상이어야 한다.", type: "calc", answers: ["2", "2m", "2m 이상"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에서 방화상 유효한 담의 높이는 인근 건축물 높이 H를 기준값 pD² + a와 비교해 정한다.<br>H ≤ pD² + a 이면 h=2m이다. H > pD² + a 이면 h = H - p(D² - d²) 로 계산한다.<br>pD² + a = 0.15 × 10² + 30 = 45<br>H = 40 ≤ 45이므로 담 높이는 <b>2m 이상</b>이다.<br>혼동 주의: 두 번째 식으로 계산한 값이 2m보다 작게 나와도 담 높이는 최소 2m로 한다."
+      },
+      {
+        mainQuestion: "문제 12. [출제 22-3/20-5]<br>위험물 제조소로부터 각 대상물까지 확보해야 할 안전거리를 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "ⓐ 주택: ( ① ) 이상", type: "short", answers: ["10", "10m"] },
+          { label: "ⓑ 학교·극장·병원: ( ② ) 이상", type: "short", answers: ["30", "30m"] },
+          { label: "ⓒ 지정문화재: ( ③ ) 이상", type: "short", answers: ["50", "50m"] },
+          { label: "ⓓ 고압가스 시설: ( ④ ) 이상", type: "short", answers: ["20", "20m"] },
+          { label: "ⓔ 고압 가공전선(7,000V 초과 35,000V 이하): ( ⑤ ) 이상", type: "short", answers: ["3", "3m"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>에 따라 제조소는 주변 대상물의 인명 피해 규모나 보호 가치가 클수록 안전거리를 길게 둔다. 거리는 제조소 외벽에서 대상물까지의 수평거리로 잰다.<br><ul><li>주택(제조소 부지 밖의 주거용 건축물)은 <b>10m</b> 이상 떨어져야 한다.</li><li>학교·병원·극장처럼 많은 사람을 수용하는 시설은 <b>30m</b> 이상이다.</li><li>지정문화재는 한번 훼손되면 되돌릴 수 없어 가장 긴 <b>50m</b> 이상이다.</li><li>고압가스 시설은 <b>20m</b> 이상이다.</li><li>사용전압 7,000V 초과 35,000V 이하 가공전선은 <b>3m</b> 이상이다.</li></ul>혼동 주의: 35,000V를 초과하는 가공전선은 5m 이상이다."
+      },
+      {
+        mainQuestion: "문제 13. [출제 26-1/22-4/22-3/21-3]<br>가로형 원통형 탱크(r=2m, 원통부 l=5m, 양쪽 경판 l<sub>1</sub>=l<sub>2</sub>=1.5m, 공간용적 외 최대용량)의 최대용량을 구하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>V = πr²(l + (l<sub>1</sub>+l<sub>2</sub>)/3) × 0.95</span>",
+        score: 5,
+        subs: [
+          { label: "① 최대용량(L): (  )", type: "calc", answers: ["71628.312", "71628.312L", "71,628.312", "71,628.312L"] }
+        ],
+        explanation: "[해설]<br>가로형 원통형 탱크의 내용적은 <b>V=πr²(l+(l₁+l₂)/3)</b>으로 구한다. 최대용량은 여기서 공간용적 5%를 뺀 95%이다.<br>V = π×2²×(5+(1.5+1.5)/3)×0.95<br>= π×4×6×0.95<br>= 71.628312m³<br>1m³=1,000L이므로 최대용량은 <b>71,628.312L</b>이다."
+      },
+      {
+        mainQuestion: "문제 14. [출제 21-3/19-2]<br>이동탱크저장소의 주입설비 기준이다. 빈칸을 채우시오.<br><br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 주입설비의 길이: ( ① )m 이내, 끝부분에 축적되는 ( ② )를 유효하게 제거하는 장치 설치<br>② 분당 배출량: ( ③ )L 이하<br>③ 주입호스: 내경 ( ④ )mm 이상, ( ⑤ )MPa 이상의 압력에 견딜 것</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["50", "50m"] },
+          { label: "②", type: "short", answers: ["정전기"] },
+          { label: "③", type: "short", answers: ["200", "200L"] },
+          { label: "④", type: "short", answers: ["23", "23mm"] },
+          { label: "⑤", type: "short", answers: ["0.3", "0.3MPa"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>의 이동탱크저장소 주입설비 기준으로, 핵심은 <b>정전기</b>가 쌓여 불이 붙는 것을 막는 것이다. 주입설비는 주입호스 끝에 개폐밸브를 단 설비로, 이동탱크의 위험물을 다른 탱크에 넣을 때 쓴다.<br><ul><li>주입설비 길이는 <b>50m</b> 이내로 하고, 끝부분에 쌓이는 정전기를 제거하는 장치를 단다.</li><li>분당 배출량은 <b>200L</b> 이하로 제한해 빠른 유속 때문에 생기는 정전기를 줄인다.</li><li>주입호스는 내경 <b>23mm</b> 이상이고 <b>0.3MPa</b> 이상의 압력을 견뎌야 한다.</li></ul>외우는 요령: 50m·200L·23mm·0.3MPa를 한 세트로 외운다."
+      },
+      {
+        mainQuestion: "문제 15. [출제 23-2/21-3]<br>지하탱크저장소 기준이다. 빈칸을 채우시오.<br><br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 탱크전용실은 시설물 및 대지경계선으로부터 ( ① )m 이상 이격<br>② 지하저장탱크 윗부분은 지면으로부터 ( ② )m 이상 아래<br>③ 2 이상 인접 설치 시 상호간 ( ③ )m{용량 합계 지정수량 100배 이하이면 ( ④ )m} 이상 간격, 다만 두께 ( ⑤ )cm 이상 콘크리트 구조물이 있으면 예외</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["0.1", "0.1m"] },
+          { label: "②", type: "short", answers: ["0.6", "0.6m"] },
+          { label: "③", type: "short", answers: ["1", "1m"] },
+          { label: "④", type: "short", answers: ["0.5", "0.5m"] },
+          { label: "⑤", type: "short", answers: ["20", "20cm"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 8</b>에 정한 지하탱크저장소의 위치 기준이다.<br><ul><li>탱크전용실은 지하의 벽·피트·가스관 등 시설물과 대지경계선에서 <b>0.1m</b> 이상 떨어뜨린다.</li><li>지하저장탱크의 윗부분은 지면에서 <b>0.6m</b> 이상 깊이에 묻는다.</li><li>탱크 2기 이상을 붙여 설치하면 서로 <b>1m</b> 이상 띄우고, 용량 합계가 지정수량 100배 이하이면 <b>0.5m</b> 이상으로 한다.</li><li>탱크 사이에 두께 <b>20cm</b> 이상의 콘크리트 구조물이 있으면 간격을 두지 않아도 된다.</li></ul>혼동 주의: 탱크전용실의 벽·바닥·뚜껑 두께 기준은 0.3m 이상으로, 탱크 사이 20cm 콘크리트 예외와는 다른 기준이다."
+      },
+      {
+        mainQuestion: "문제 16. [출제 21-3]<br>옥내탱크저장소의 펌프실 기준이다. 빈칸을 채우시오.<br><br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 펌프실 상층이 없는 경우 지붕의 재료: ( ① )<br>② 펌프실 출입구에 설치: ( ② )<br>③ 탱크전용실에 펌프설비 설치 시 주위 불연재료 턱의 최소 높이: ( ③ )m<br>④ 액상 위험물 옥내저장탱크 탱크전용실 바닥 최저부에 설치: ( ④ )<br>⑤ 창 및 출입구에 사용하는 유리: ( ⑤ )</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["불연재료"] },
+          { label: "②", type: "short", answers: ["갑종(60분+)방화문 또는 을종(30분)방화문", "갑종방화문 또는 을종방화문", "60분+방화문 또는 30분방화문", "갑종 또는 을종 방화문", "갑종, 을종 방화문"] },
+          { label: "③", type: "short", answers: ["0.2", "0.2m"] },
+          { label: "④", type: "short", answers: ["집유설비"] },
+          { label: "⑤", type: "short", answers: ["망입유리"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>의 옥내탱크저장소 펌프설비 기준이다. 펌프실 화재가 번지지 않게 하고, 새어 나온 위험물을 가두는 것이 목적이다.<br><ul><li>상층이 없으면 지붕을 <b>불연재료</b>로 한다.</li><li>출입구에는 60분+·60분방화문(구 갑종) 또는 30분방화문(구 을종)을 단다.</li><li>탱크전용실 안에 펌프를 두면 주위에 높이 <b>0.2m</b> 이상의 불연재료 턱을 둘러 누출된 위험물이 흘러나가지 않게 한다.</li><li>액상 위험물 탱크전용실은 바닥에 경사를 두고 가장 낮은 곳에 <b>집유설비</b>를 설치해 새어 나온 액체를 모은다.</li><li>창과 출입구 유리는 철망을 넣어 깨져도 흩어지지 않는 <b>망입유리</b>로 한다.</li></ul>혼동 주의: 법령 개정으로 갑종·을종 방화문의 명칭이 60분+·60분·30분방화문으로 바뀌었다."
+      },
+      {
+        mainQuestion: "문제 17. [출제 21-3]<br>지정수량 배수에 따른 제조소의 보유공지를 쓰시오.<br><br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① 1배: ( ① ) 이상<br>② 5배: ( ① ) 이상<br>③ 10배: ( ① ) 이상<br>④ 20배: ( ② ) 이상<br>⑤ 200배: ( ② ) 이상</span>",
+        score: 5,
+        subs: [
+          { label: "① (1배, 5배, 10배)", type: "short", answers: ["3m", "3"] },
+          { label: "② (20배, 200배)", type: "short", answers: ["5m", "5"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에서 제조소 보유공지는 지정수량 배수에 따라 두 단계로만 나뉜다.<br><ul><li>지정수량 10배 이하인 1배·5배·10배는 <b>3m</b> 이상이다.</li><li>10배를 넘는 20배·200배는 <b>5m</b> 이상이다.</li></ul>혼동 주의: 10배는 '이하' 구간에 들어가므로 3m이다. 옥외탱크저장소처럼 배수가 커질수록 공지가 계속 넓어지는 구조가 아니다."
+      },
+      {
+        mainQuestion: "문제 18. [출제 26-1/24-3/21-2/19-1]<br>옥외탱크저장소의 보유공지 기준이다. 빈칸을 채우시오.<br><br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>지정수량의 500배 이하: ( ① )m 이상<br>500배 초과 1000배 이하: ( ② )m 이상<br>1000배 초과 2000배 이하: ( ③ )m 이상<br>2000배 초과 3000배 이하: ( ④ )m 이상<br>3000배 초과 4000배 이하: ( ⑤ )m 이상</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["3", "3m"] },
+          { label: "②", type: "short", answers: ["5", "5m"] },
+          { label: "③", type: "short", answers: ["9", "9m"] },
+          { label: "④", type: "short", answers: ["12", "12m"] },
+          { label: "⑤", type: "short", answers: ["15", "15m"] }
+        ],
+        explanation: "[해설]<br>옥외탱크저장소 보유공지는 저장량(지정수량 배수)이 커질수록 화재 확산 위험이 커지므로 단계적으로 넓어진다.<br>500배 이하 3m, 500배 초과 1,000배 이하 5m, 1,000배 초과 2,000배 이하 9m, 2,000배 초과 3,000배 이하 12m, 3,000배 초과 4,000배 이하 15m 이상으로, <b>3·5·9·12·15m</b> 순으로 커진다.<br>값 자체보다 구간 경계값(500·1,000·2,000·3,000배)을 정확히 맞추는 것이 채점 포인트다."
+      },
+      {
+        mainQuestion: "문제 19. [출제 21-2]<br>액체위험물 옥외저장탱크 주입구 기준이다. 빈칸을 채우시오.<br><br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>① ( ① ), ( ② ), 그 밖에 정전기에 의한 재해 우려가 있는 액체위험물의 주입구 부근에는 접지전극을 설치한다.<br>② (①)의 답 중 겨울철 응고 가능하고 인화점이 낮아 고체 상태에서도 인화할 수 있는 방향족 탄화수소: ( ③ )(구조식: 정육각형 벤젠고리, 각 탄소에 H 1개)</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["벤젠"] },
+          { label: "②", type: "short", answers: ["휘발유"] },
+          { label: "③", type: "short", answers: ["벤젠", "벤젠(C6H6)", "C6H6"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 6</b>에 따라 휘발유·벤젠처럼 정전기로 재해가 날 우려가 있는 액체위험물은 옥외저장탱크 주입구 부근에 <b>접지전극</b>을 설치한다.<br><ul><li>벤젠·휘발유 — 전기가 잘 통하지 않는 비극성 액체라서 주입할 때 생긴 정전기가 빠져나가지 못하고 쌓이기 쉽다.</li><li>벤젠(C<sub>6</sub>H<sub>6</sub>) — 녹는점이 약 <b>5.5℃</b>라 겨울에 굳을 수 있지만, 인화점이 약 <b>-11℃</b>여서 고체 상태에서도 인화할 수 있다.<br>벤젠은 정육각형 벤젠고리의 각 탄소에 수소가 하나씩 붙은 구조의 방향족 탄화수소다.</li></ul>"
+      },
+      {
+        mainQuestion: "문제 20. [출제 21-2]<br>지정과산화물 옥내저장소 기준에 대하여 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 유기과산화물의 위험등급: ( ① )", type: "short", answers: ["I등급", "1등급", "I", "1", "제I등급", "제1등급"] },
+          { label: "② 저장창고 바닥면적: ( ② ) 이하", type: "short", answers: ["1000m2", "1,000m2", "1000", "1,000", "1000m²", "1,000m²"] },
+          { label: "③ 외벽을 철근콘크리트조로 할 경우 두께: ( ③ ) 이상", type: "short", answers: ["20cm", "20"] }
+        ],
+        explanation: "[해설]<br><b>지정과산화물</b>은 제5류 위험물 중 유기과산화물이나 이를 함유한 것으로서 지정수량이 10kg인 것이다. 폭발 위험이 커서 위험물안전관리법 시행규칙은 이를 저장하는 옥내저장소에 강화된 기준을 둔다.<br><ul><li>지정수량 10kg인 제5류 위험물이므로 <b>위험등급 I</b>에 해당한다.</li><li>저장창고 바닥면적은 <b>1,000m²</b> 이하로 제한한다.</li><li>외벽을 철근콘크리트조로 하면 두께가 <b>20cm</b> 이상이어야 한다.</li></ul>혼동 주의: 보강콘크리트블록조 외벽은 30cm 이상이고, 창고 안은 150m² 이내마다 격벽으로 나눈다."
+      },
+      {
+        mainQuestion: "문제 21. [출제 21-2]<br>덩어리 상태의 황 30,000kg을 면적 300m²인 옥외저장소에 저장하는 경우에 대하여 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 설치할 수 있는 경계표시 개수: ( ① )", type: "short", answers: ["3개", "3"] },
+          { label: "② 경계표시와 경계표시 사이의 거리: ( ② ) 이상", type: "short", answers: ["10m", "10"] },
+          { label: "③ 제4류 위험물(인화점 10℃ 이상)을 함께 저장할 수 있는지 여부: ( ③ )", type: "short", answers: ["저장이 가능하다.", "저장가능", "가능", "O", "저장 가능", "가능하다"] }
+        ],
+        explanation: "[해설]<br>경계표시 개수는 저장면적으로, 경계표시 상호간 거리는 저장 <b>지정수량 배수</b>로 정해진다.<br>황의 지정수량은 100kg이므로 30,000kg은 <b>300배</b>에 해당하고, 경계표시 하나의 내부 면적은 100m² 이하로 제한되므로 300m²를 저장하려면 경계표시가 <b>3개</b> 필요하다.<br>인접한 경계표시 상호간의 간격은 보유공지 너비의 1/2 이상으로 하되, 지정수량의 200배 이상을 저장하는 경우에는 <b>10m 이상</b>으로 해야 한다.<br>옥외저장소에는 제2류 위험물 중 황과, 제4류 위험물 중 인화점 0℃ 이상인 제1석유류·제2석유류 등을 저장할 수 있으므로 인화점 10℃ 이상인 제4류 위험물은 함께 저장할 수 있다."
+      },
+      {
+        mainQuestion: "문제 22. [출제 21-1]<br>바닥 지름 10m, 높이 4m, 지붕 1m인 세로형 원통형 탱크의 내용적을 구하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>V = πr²l = π × 5² × 4</span>",
+        score: 5,
+        subs: [
+          { label: "① 내용적: (  )", type: "calc", answers: ["314.16", "314.16m3", "314.16m³"] }
+        ],
+        explanation: "[해설]<br>세로형(수직) 원통형 탱크의 내용적은 옆판(측판) 안쪽의 원기둥 부피만으로 계산하며, <b>지붕 부분 1m는 내용적에 포함하지 않는다.</b><br>지름이 10m이므로 반지름 r = 5m, 높이 l = 4m를 V = πr²l에 대입하면<br>V = π × 5² × 4 = 314.159 m³<br>소수점 셋째 자리에서 반올림해 <b>314.16m³</b>로 답한다."
+      },
+      {
+        mainQuestion: "문제 23. [출제 21-1]<br>위험물 제조소의 배출설비 기준이다. 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 국소방식 배출능력은 1시간당 배출장소 용적의 ( ① )배 이상", type: "short", answers: ["20", "20배"] },
+          { label: "② 전역방식은 바닥면적 1m²당 ( ② )m³ 이상", type: "short", answers: ["18", "18m3", "18m³"] },
+          { label: "③ 배출구는 지상 ( ③ )m 이상으로 설치", type: "short", answers: ["2", "2m"] },
+          { label: "④ ( ④ )가 관통하는 벽부분 바로 가까이에 화재 시 자동 폐쇄되는 ( ⑤ )를 설치", type: "short", answers: ["배출덕트"] },
+          { label: "⑤ ", type: "short", answers: ["방화댐퍼"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>의 제조소 배출설비 기준으로, 가연성 증기가 실내에 머물지 않게 하는 규정이다.<br><ul><li>국소방식 — 1시간당 배출장소 용적의 <b>20배</b> 이상을 배출한다.</li><li>전역방식 — 바닥면적 1m²당 <b>18m³</b> 이상을 배출한다.</li><li>배출구 — 지상 <b>2m</b> 이상 높이에 두어 배출된 증기가 지면 부근에 머물지 않게 한다.</li><li>배출덕트·방화댐퍼 — 덕트가 벽을 관통하는 부분 바로 가까이에 방화댐퍼(덕트 속 불길·연기를 막는 차단판)를 둔다. 방화댐퍼는 화재가 나면 자동으로 닫힌다.</li></ul>외우는 요령: 국소 20배·전역 18m³·배출구 2m, 이 세 숫자를 한 묶음으로 기억한다."
+      },
+      {
+        mainQuestion: "문제 24. [출제 21-1]<br>지정과산화물 옥내저장소 격벽 기준이다. 빈칸을 채우시오.<br><br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>저장창고는 ( ① )m² 이내마다 격벽으로 완전 구획하고, 격벽은 두께 ( ② )cm 이상의 철근콘크리트조·철골철근콘크리트조 또는 두께 ( ③ )cm 이상의 보강콘크리트블록조로 하며, 양측 외벽으로부터 ( ④ )m 이상, 상부 지붕으로부터 ( ⑤ )cm 이상 돌출시킨다.</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["150"] },
+          { label: "②", type: "short", answers: ["30"] },
+          { label: "③", type: "short", answers: ["40"] },
+          { label: "④", type: "short", answers: ["1"] },
+          { label: "⑤", type: "short", answers: ["50"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 5</b>의 지정과산화물 옥내저장소 기준이다. 저장창고 안에서 폭발이 일어나도 옆 구획으로 번지지 않도록 창고를 격벽으로 잘게 나눈다.<br><ul><li>구획 면적 — <b>150m²</b> 이내마다 격벽으로 완전히 구획한다.</li><li>철근콘크리트조·철골철근콘크리트조 격벽 — 두께 <b>30cm</b> 이상으로 한다.</li><li>보강콘크리트블록조 격벽 — 강도가 낮아 두께 <b>40cm</b> 이상으로 더 두껍게 한다.</li><li>돌출 길이 — 양측 외벽에서 <b>1m</b> 이상, 상부 지붕에서 <b>50cm</b> 이상 내밀어 화염이 격벽을 돌아 넘지 못하게 한다.</li></ul>혼동 주의: 제조소 방화벽은 양단·상단 모두 <b>50cm</b> 이상 돌출이지만, 지정과산화물 격벽은 외벽 쪽이 1m 이상이다."
+      },
+      {
+        mainQuestion: "문제 25. [출제 23-1/21-1]<br>옥외탱크저장소 특례기준이다. 빈칸의 위험물을 채우시오.<br><br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>(1) ( ① ) 등: 불활성기체 봉입장치 설치, 누설된 ( ① ) 등을 안전한 조에 이끄는 설비 설치<br>(2) ( ② ) 등: 설비를 동·마그네슘·은·수은 또는 그 합금으로 만들지 않을 것, 불활성기체 봉입장치 설치<br>(3) ( ③ ) 등: 온도·농도 상승에 따른 위험반응 방지, 철이온 등 혼입에 따른 위험반응 방지 조치</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["알킬알루미늄"] },
+          { label: "②", type: "short", answers: ["아세트알데하이드"] },
+          { label: "③", type: "short", answers: ["하이드록실아민"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 6</b>의 위험물 성질에 따른 옥외탱크저장소 특례로, 물질마다 고유한 위험에 맞춘 설비를 추가로 둔다.<br><ul><li><b>알킬알루미늄등</b> — 공기·물과 닿으면 발화하므로 불활성기체를 봉입하고, 누설된 위험물은 안전한 조(槽)로 이끈다.</li><li><b>아세트알데하이드등</b> — 동·마그네슘·은·수은과 반응해 폭발성 화합물을 만들 수 있어 이 금속과 그 합금을 설비에 쓰지 않는다.</li><li><b>하이드록실아민등</b> — 온도·농도가 오르거나 철이온이 섞이면 분해 위험이 커지므로 이를 막는 조치를 한다.</li></ul>혼동 주의: 불활성기체 봉입장치는 알킬알루미늄등과 아세트알데하이드등 두 곳에 모두 나온다. 아세트알데하이드등은 동·마그네슘·은·수은 재질 제한으로 구별한다."
+      },
+      {
+        mainQuestion: "문제 26. [출제 20-3]<br>횡으로 누운 원통형 탱크(r=3m, 중앙 원통부 l=8m, 양쪽 경판 l<sub>1</sub>=l<sub>2</sub>=2m)에 대하여 답하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>V = πr²(l + (l<sub>1</sub>+l<sub>2</sub>)/3)</span>",
+        score: 5,
+        subs: [
+          { label: "① 내용적: ( ① )", type: "calc", answers: ["263.89", "263.89m3", "263.89m³"] },
+          { label: "② 탱크 용량(공간용적 10/100): ( ② )", type: "calc", answers: ["237.50", "237.5", "237.50m3", "237.5m³", "237.50m³", "237.5m3"] }
+        ],
+        explanation: "[해설]<br>횡으로 누운(수평) 원통형 탱크의 내용적은 중앙 원통부에 양쪽 <b>경판</b> 부피를 (l<sub>1</sub>+l<sub>2</sub>)/3 형태로 더해 계산한다.<br>V = πr²(l + (l<sub>1</sub>+l<sub>2</sub>)/3) 에 r=3m, l=8m, l<sub>1</sub>=l<sub>2</sub>=2m를 대입하면<br>V = π×3²×(8 + (2+2)/3) = 263.89m³<br>탱크 용량은 열팽창으로 위험물이 넘치지 않도록 <b>공간용적</b>을 뺀 값이므로<br>263.89 - 263.89 × 0.1 = 237.50m³"
+      },
+      {
+        mainQuestion: "문제 27. [출제 24-1/20-3]<br>지하탱크저장소(탱크전용실) 단면 기준이다. 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 탱크전용실 벽의 두께: ( ① ) 이상", type: "short", answers: ["0.3m", "0.3"] },
+          { label: "② 통기관 끝부분은 지면으로부터 ( ② ) 이상 높이", type: "short", answers: ["4m", "4"] },
+          { label: "③ 누유검사관 설치 개소: ( ③ ) 이상", type: "short", answers: ["4개소", "4", "4개"] },
+          { label: "④ 탱크 주위를 채우는 물질<br>(반드시 법령에 명시된 수식어를 모두 포함하여 풀네임으로 작성하셔야 합니다.)", type: "short", answers: ["마른 모래 또는 습기 등에 의하여 응고되지 아니하는 입자지름 5mm 이하의 마른 자갈분", "마른 모래 또는 습기 등에 의하여 응고되지 아니하는 입자지름 5 mm 이하의 마른 자갈분", "마른 모래 또는 습기 등에 의한 응고되지 아니하는 입자지름 5mm 이하의 마른 자갈분", "마른 모래 또는 습기 등에 의한 응고되지 아니하는 입자지름 5 mm 이하의 마른 자갈분"] },
+          { label: "⑤ 지하저장탱크 윗부분은 지면으로부터 ( ⑤ ) 이상 아래", type: "short", answers: ["0.6m", "0.6"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 8</b>의 지하탱크저장소 기준으로, 땅에 묻는 탱크의 구조 보호와 누설 감지를 함께 정한다.<br><ul><li>탱크전용실 벽 두께 — 토압을 견디도록 콘크리트 <b>0.3m</b> 이상으로 한다.</li><li>통기관 끝부분 — 지면에서 <b>4m</b> 이상 높여 증기가 지면 부근에 머물지 않게 한다.</li><li>누유검사관 — 누설을 일찍 확인하도록 <b>4개소</b> 이상 설치한다.</li><li>채움재 — 탱크 주위를 <b>마른 모래 또는 자갈분</b>(입자지름 5mm 이하)으로 채운다.</li><li>탱크 윗부분 — 지면에서 <b>0.6m</b> 이상 아래에 묻는다.</li></ul>혼동 주의: 탱크와 전용실 안쪽 사이 간격은 0.1m 이상이므로 벽 두께 0.3m와 구별해서 외운다."
+      },
+      {
+        mainQuestion: "문제 28. [출제 20-2]<br>제1종 판매취급소의 시설기준이다. 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 위험물 배합실 바닥면적: ( ① )m² 이상 ( ② )m² 이하로 제한", type: "short", answers: ["6"] },
+          { label: "②", type: "short", answers: ["15"] },
+          { label: "③ 벽은 ( ③ ) 또는 ( ④ )로 구획", type: "short", answers: ["내화구조"] },
+          { label: "④", type: "short", answers: ["불연재료"] },
+          { label: "⑤ 바닥은 위험물이 침투하지 않는 구조로 경사를 두어 ( ⑤ ) 설치", type: "short", answers: ["집유설비"] },
+          { label: "⑥ 출입구에 자동폐쇄식의 ( ⑥ ) 설치", type: "short", answers: ["갑종(60분+)방화문", "갑종방화문", "60분+방화문", "60분 방화문"] },
+          { label: "⑦ 출입구의 문턱 높이는 바닥면으로부터 ( ⑦ )m 이상 높게 설치", type: "short", answers: ["0.1"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 14</b>의 제1종 판매취급소 배합실 기준이다. 점포 안에서 위험물을 섞는 공간을 작게 떼어 막아 두는 규정이다.<br><ul><li>바닥면적 — <b>6m²</b> 이상 <b>15m²</b> 이하로 한정한다.</li><li>벽 — 내화구조 또는 불연재료로 된 벽으로 구획한다.</li><li>바닥 — 위험물이 스며들지 않는 구조로 하고, 경사를 두어 새어 나온 위험물을 한곳에 모으는 집유설비를 둔다.</li><li>출입구 — 수시로 열 수 있는 자동폐쇄식 갑종(60분+)방화문을 단다.</li><li>문턱 — 바닥면에서 <b>0.1m</b> 이상 높여 액체가 밖으로 흘러나가지 않게 한다.</li></ul>갑종방화문은 현행 법령에서 60분+방화문 또는 60분방화문으로 이름이 바뀌었다."
+      },
+      {
+        mainQuestion: "문제 29. [출제 20-2]<br>하나의 방유제 안에 옥외저장탱크 2기가 설치되어 있다. a: 내용적 5천만L에 휘발유 3천만L 저장, b: 내용적 1억2천만L에 경유 8천만L 저장.",
+        score: 5,
+        subs: [
+          { label: "① a 탱크의 최대용량(공간용적 5/100): ( ① )<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>V<sub>a</sub> = 50,000,000 × 0.95</span>", type: "calc", answers: ["47500000", "47500000L", "47,500,000", "47,500,000L"] },
+          { label: "② 방유제 용량(최대탱크의 110%): ( ② )", type: "calc", answers: ["125400000", "125400000L", "125400000L 이상", "125,400,000", "125,400,000L", "125,400,000L 이상"] },
+          { label: "③ 두 탱크 사이 방유제 바닥 구조물(ㄱ)의 명칭: ( ③ )", type: "short", answers: ["간막이둑"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 6</b>에 따라 탱크 용량은 내용적에서 공간용적을 뺀 값이고, 인화성 액체 방유제 용량은 <b>최대 탱크 용량의 110% 이상</b>으로 한다.<br>a 탱크 용량<br>50,000,000L × 0.95 = 47,500,000L<br>방유제 용량(용량이 더 큰 b 탱크 기준)<br>120,000,000L × 0.95 = 114,000,000L<br>114,000,000L × 1.1 = 125,400,000L 이상<br><b>간막이둑</b>은 용량 1,000만L 이상인 옥외저장탱크를 방유제 안에서 탱크별로 구획하는 낮은 둑으로, 한 탱크에서 샌 위험물이 이웃 탱크 쪽으로 번지지 않게 한다.<br>혼동 주의 — 방유제 용량은 실제 저장량(3천만L·8천만L)이 아닌 공간용적을 뺀 탱크 용량으로 계산한다."
+      },
+      {
+        mainQuestion: "문제 30. [출제 25-1/20-4]<br>주유취급소에 대하여 다음 거리를 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "① 고정주유설비와 부지경계선까지의 거리: ( ① ) 이상", type: "short", answers: ["2m", "2"] },
+          { label: "② 고정급유설비와 부지경계선까지의 거리: ( ② ) 이상", type: "short", answers: ["1m", "1"] },
+          { label: "③ 고정주유설비와 도로경계선까지의 거리: ( ③ ) 이상", type: "short", answers: ["4m", "4"] },
+          { label: "④ 고정급유설비와 도로경계선까지의 거리: ( ④ ) 이상", type: "short", answers: ["4m", "4"] },
+          { label: "⑤ 고정주유설비와 개구부가 없는 벽까지의 거리: ( ⑤ ) 이상", type: "short", answers: ["1m", "1"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 13</b>의 주유취급소 이격거리 기준이다. 고정주유설비는 자동차에 직접 주유하는 설비이고, 고정급유설비는 용기나 이동저장탱크에 옮겨 담는 설비다.<br><ul><li>부지경계선까지 — 고정주유설비는 2m 이상, 고정급유설비는 1m 이상 떨어뜨린다.</li><li>도로경계선까지 — 두 설비 모두 <b>4m</b> 이상 떨어뜨린다.</li><li>개구부가 없는 벽까지 — 고정주유설비는 1m 이상이며, 개구부가 있는 건축물 벽이면 2m 이상이다.</li></ul>혼동 주의: 부지경계선만 주유설비 <b>2m</b>·급유설비 1m로 다르고, 도로경계선은 둘 다 4m로 같다."
+      },
+      {
+        mainQuestion: "문제 31. [출제 20-4]<br>에틸알코올을 저장하는 옥내저장탱크(A, B) 2기를 하나의 탱크전용실에 설치할 때 다음을 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "① 탱크 상부·하부와 탱크전용실 벽 사이의 거리: ( ① ) 이상", type: "short", answers: ["0.5m", "0.5"] },
+          { label: "② 탱크 바깥쪽과 탱크전용실 벽 사이의 거리: ( ② ) 이상", type: "short", answers: ["0.5m", "0.5"] },
+          { label: "③ 탱크 A와 탱크 B 상호간의 거리: ( ③ ) 이상", type: "short", answers: ["0.5m", "0.5"] },
+          { label: "④ 옥내저장탱크 용량의 합: ( ④ ) 이하", type: "short", answers: ["16000L", "16,000L", "16000", "16,000"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 7</b>의 옥내탱크저장소 기준으로, 점검 공간을 확보하려고 이격거리를 두고 화재 규모를 줄이려고 용량 합계를 제한한다.<br>탱크와 탱크전용실 벽 사이(상부·하부·바깥쪽 모두), 그리고 탱크 상호간은 모두 <b>0.5m</b> 이상 띄운다.<br>용량 합계는 지정수량의 <b>40배</b> 이하이고 알코올류의 지정수량은 400L이다.<br>400L × 40 = 16,000L 이하<br>혼동 주의: 제4석유류·동식물유류를 뺀 제4류는 40배가 20,000L를 넘으면 20,000L로 제한하지만, 16,000L는 그보다 작아 40배 값을 그대로 쓴다."
+      },
+      {
+        mainQuestion: "문제 32. [출제 20-5]<br>위험물 제조소에 200m³ 탱크와 100m³ 탱크가 각각 1기씩 있다. 이 탱크 주위에 하나의 방유제를 설치할 때 방유제 용량(m³)을 구하시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>계산식: (200 × 0.5) + (100 × 0.1) = ( ① ) m³ 이상</span>",
+        score: 5,
+        subs: [
+          { label: "① 방유제 용량: ( ① )", type: "calc", answers: ["110", "110m3", "110m³"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>의 제조소 옥외 위험물취급탱크 방유제 기준이다. 탱크가 2기 이상이면 <b>최대 탱크 용량의 50%</b>에 나머지 탱크 용량 합계의 10%를 더한 양 이상으로 한다.<br>(200 × 0.5) + (100 × 0.1)<br>= 100 + 10<br>= <b>110 m³</b><br>혼동 주의: 옥외저장탱크의 방유제는 최대 탱크 용량의 <b>110%</b> 이상이라 기준이 다르다."
+      },
+      {
+        mainQuestion: "문제 33. [출제 20-5]<br>다음은 간이탱크저장소에 관한 내용이다. 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 옥외 설치 시 탱크 주위 공지 너비: ( ① )m 이상, 전용실 설치 시 탱크와 전용실 벽 사이 간격: ( ② )m 이상", type: "short", answers: ["1"] },
+          { label: "② ", type: "short", answers: ["0.5"] },
+          { label: "③ 간이저장탱크의 용량: ( ③ )L 이하", type: "short", answers: ["600", "600L"] },
+          { label: "④ 강판 두께: ( ④ )mm 이상", type: "short", answers: ["3.2", "3.2mm"] },
+          { label: "⑤ 수압시험 압력: ( ⑤ )kPa로 10분간", type: "short", answers: ["70", "70kPa"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 9</b>의 간이탱크저장소 기준으로, 작은 탱크를 다루므로 이격·구조 기준이 간단하다.<br><ul><li>옥외 설치 ㅡ 탱크 주위에 너비 <b>1m</b> 이상의 공지를 둔다.</li><li>전용실 설치 ㅡ 탱크와 전용실 벽 사이를 <b>0.5m</b> 이상 띄운다.</li><li>용량 ㅡ 간이저장탱크 하나당 <b>600L</b> 이하로 한다.</li><li>강판 두께 ㅡ <b>3.2mm</b> 이상으로 한다.</li><li>수압시험 ㅡ <b>70kPa</b>로 10분간 가했을 때 새거나 변형되지 않아야 한다.</li></ul>혼동 주의: 하나의 간이탱크저장소에 둘 수 있는 간이저장탱크는 3기 이하이다. 같은 품질의 위험물을 담는 탱크를 2기 이상 두어서도 안 된다."
+      },
+      {
+        mainQuestion: "문제 34. [출제 20-5]<br>다음은 제조소의 보유공지를 두지 않을 수 있는 격벽 설치기준이다. 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 방화벽은 ( ① )로 할 것(제6류 위험물은 불연재료 가능)", type: "short", answers: ["내화구조"] },
+          { label: "② 방화벽의 출입구 및 창에는 자동폐쇄식의 ( ② )을 설치할 것", type: "short", answers: ["갑종(60분+)방화문", "갑종방화문", "60분+방화문", "60분 방화문"] },
+          { label: "③ 방화벽의 양단 및 상단이 외벽 또는 지붕으로부터 ( ③ )cm 이상 돌출하도록 할 것", type: "short", answers: ["50", "50cm"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에 따라, 제조소와 인접 작업장 사이에 기준에 맞는 방화벽을 설치하면 보유공지를 두지 않을 수 있다.<br><ul><li>방화벽 구조 ㅡ <b>내화구조</b>로 하되, 제6류 위험물 제조소는 불연재료로 해도 된다.</li><li>출입구·창 ㅡ 개구부는 최소로 하고 자동폐쇄식 갑종(60분+)방화문을 단다.</li><li>돌출 ㅡ 양단과 상단을 외벽 또는 지붕에서 <b>50cm</b> 이상 내밀어 화염이 벽을 돌아 넘지 못하게 한다.</li></ul>혼동 주의: 지정과산화물 옥내저장소 격벽은 외벽에서 1m 이상 돌출시켜야 해서 기준이 다르다."
+      },
+      {
+        mainQuestion: "문제 35. [출제 19-1]<br>옥내탱크저장소 밸브 없는 통기관의 끝부분 설치기준이다. 빈칸을 채우시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>끝부분은 건축물의 창·출입구 등 개구부로부터 ( ① ) 이상 떨어진 옥외에 지면으로부터 ( ② ) 이상 높이로 설치하되, 인화점 40℃ 미만 위험물 탱크의 통기관은 부지경계선으로부터 ( ③ ) 이상 거리를 둘 것</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["1m", "1"] },
+          { label: "②", type: "short", answers: ["4m", "4"] },
+          { label: "③", type: "short", answers: ["1.5m", "1.5"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 7</b>의 옥내탱크저장소 밸브 없는 통기관 기준으로, 방출된 증기가 건물 안이나 이웃 부지로 퍼지지 않게 위치를 정한다.<br><ul><li>개구부 거리 ㅡ 창·출입구 등 개구부에서 <b>1m</b> 이상 떨어진 옥외에 둔다.</li><li>높이 ㅡ 지면에서 <b>4m</b> 이상 높여 증기가 지면 부근에 머물지 않게 한다.</li><li>부지경계선 거리 ㅡ 인화점 40℃ 미만 위험물 탱크는 부지경계선에서 <b>1.5m</b> 이상 더 띄운다.</li></ul>외우는 요령: 개구부 1m·높이 4m·경계선 1.5m 순서로 묶어 기억한다."
+      },
+      {
+        mainQuestion: "문제 36. [출제 19-3]<br>다음 위험물을 옥내저장소에 저장할 때 바닥면적을 각각 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "① 염소산염류: ( ① ) 이하", type: "short", answers: ["1000m2", "1,000m2", "1000", "1,000", "1000m²", "1,000m²"] },
+          { label: "② 제2석유류: ( ② ) 이하", type: "short", answers: ["2000m2", "2,000m2", "2000", "2,000", "2000m²", "2,000m²"] },
+          { label: "③ 유기과산화물: ( ③ ) 이하", type: "short", answers: ["1000m2", "1,000m2", "1000", "1,000", "1000m²", "1,000m²"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 5</b>는 위험성이 큰 위험물을 저장하는 옥내저장소의 바닥면적을 <b>1,000m²</b> 이하로 정한다. 그 밖의 위험물은 2,000m² 이하이다.<br><ul><li>염소산염류 ㅡ 제1류 중 지정수량이 50kg인 물질이라 1,000m² 이하이다.</li><li>제2석유류 ㅡ 1,000m² 대상(특수인화물·제1석유류·알코올류)에 들지 않아 <b>2,000m²</b> 이하이다.</li><li>유기과산화물 ㅡ 제5류 중 폭발 위험이 커서 1,000m² 이하로 묶인다.</li></ul>외우는 요령: 제4류는 특수인화물·제1석유류·알코올류까지만 1,000m²이고, 제2석유류부터는 2,000m²다."
+      },
+      {
+        mainQuestion: "문제 37. [출제 26-1/23-1]<br>제조소 등에 설치하는 배출설비에 관해 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 배출장소의 용적이 1m³일 때 국소방출방식 배출설비의 1시간당 배출능력은 용적의 20배이므로 1 × 20 = ( ① ) m³", type: "short", answers: ["20", "20m3", "20m³"] },
+          { label: "② 바닥면적이 100m²일 때 전역방출방식 배출설비의 1m²당 배출능력은 18m³이므로 100m² 기준 ( ② ) m³", type: "short", answers: ["1800", "1,800", "1800m3", "1,800m3", "1800m³", "1,800m³"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에 따라 배출능력은 국소방식이 1시간당 배출장소 용적의 20배 이상이다. 전역방식은 바닥면적 1m²당 18m³ 이상이다.<br>국소방출방식<br>1m³ × 20 = <b>20m³</b><br>전역방출방식<br>100 × 18 = <b>1,800m³</b>"
+      },
+      {
+        mainQuestion: "문제 38. [출제 26-1]<br>옥내저장소에 제2류 위험물을 저장할 때 옳은 설명을 고른 결과로, 다음 빈칸을 채우시오.<br><br>① 바닥면적은 ( ① )m² 이하로 해야 한다.<br>② 저장창고의 벽·기둥 및 바닥은 ( ② )재료로 할 수 있다. (단, 인화성 고체는 제외)<br>③ 철분·금속분·마그네슘 등을 함유하는 물질의 저장창고 바닥은 물이 스며 나오거나 스며들지 아니하는 구조로 해야 한다. → 옳은 번호: ( ③ )",
+        score: 5,
+        subs: [
+          { label: "①", type: "short", answers: ["2000", "2,000"] },
+          { label: "②", type: "short", answers: ["불연"] },
+          { label: "③", type: "short", answers: ["①, ②, ③ (모두 옳음)", "1, 2, 3", "①,②,③", "1,2,3", "모두 옳음", "전부"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 5</b>(옥내저장소 기준)에 따라 제2류 위험물은 바닥면적과 구조 기준이 완화된 쪽에 속한다. 따라서 제시된 세 설명이 모두 옳다.<br><ul><li>바닥면적 ㅡ 1,000m² 이하 그룹(제1류 위험등급 I, 특수인화물·제1석유류·알코올류, 유기과산화물 등)에 들지 않으므로 <b>2,000m²</b> 이하이다.</li><li>벽·기둥·바닥 ㅡ 원칙은 내화구조이지만 제2류(인화성 고체 제외)는 <b>불연재료</b>로 할 수 있다.</li><li>철분·금속분·마그네슘 ㅡ 물과 반응해 수소를 내고 발열하므로 바닥을 물이 스며 나오거나 스며들지 않는 구조로 한다.</li></ul>혼동 주의: 인화성 고체는 인화 위험이 커서 불연재료 완화 대상에서 빠진다."
+      },
+      {
+        mainQuestion: "문제 39. [출제 25-3]<br>제조소의 지정수량 배수에 따른 보유공지 너비를 쓰시오. (10배 이하 / 10배 초과 기준)",
+        score: 5,
+        subs: [
+          { label: "① 1배 → ( ① ) 이상", type: "short", answers: ["3m", "3"] },
+          { label: "② 5배 → ( ② ) 이상", type: "short", answers: ["3m", "3"] },
+          { label: "③ 10배 → ( ③ ) 이상", type: "short", answers: ["3m", "3"] },
+          { label: "④ 20배 → ( ④ ) 이상", type: "short", answers: ["5m", "5"] },
+          { label: "⑤ 200배 → ( ⑤ ) 이상", type: "short", answers: ["5m", "5"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에 따라 제조소 보유공지 너비는 지정수량 배수를 두 구간으로만 나눠 정한다.<br><ul><li>10배 이하 ㅡ 너비 <b>3m 이상</b>이며 1배·5배·10배가 여기에 든다.</li><li>10배 초과 ㅡ 너비 <b>5m 이상</b>이며 20배·200배가 여기에 든다.</li></ul>혼동 주의 ㅡ 10배는 '이하' 구간이라 3m이고, 200배처럼 배수가 커져도 5m에서 더 넓어지지 않는다."
+      },
+      {
+        mainQuestion: "문제 40. [출제 25-3]<br>옥외탱크저장소 방유제에 대하여 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 방유제 내의 면적은 ( ① )m² 이하로 해야 한다.", type: "short", answers: ["80000", "80,000", "8만"] },
+          { label: "② 저장탱크 개수를 제한하지 않는 경우: 인화점이 ( ② )℃ 이상인 위험물을 저장·취급하는 경우", type: "short", answers: ["200"] },
+          { label: "③ 제1석유류 15만L 저장 시 탱크 최대 개수: ( ③ )개", type: "short", answers: ["10"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 6</b>(옥외탱크저장소 방유제 기준)에서 방유제 내 면적과 탱크 개수를 함께 제한한다.<br><ul><li>방유제 내 면적은 <b>80,000m²</b> 이하로 한다.</li><li>인화점 <b>200℃</b> 이상 위험물은 인화 위험이 낮아 탱크 개수를 제한하지 않는다.</li><li>제1석유류는 인화점 21℃ 미만이라 완화 대상이 아니므로 탱크는 <b>10개</b> 이하이다.</li></ul>혼동 주의: 모든 탱크 용량이 20만L 이하이고 인화점 70℃ 이상 200℃ 미만이면 20개까지 허용된다."
+      },
+      {
+        mainQuestion: "문제 41. [출제 25-3]<br>배출장소 체적이 100m³일 때 국소방출방식 배출설비의 1시간당 배출능력[m³/hr]을 구하시오. (배출능력은 1시간당 용적의 20배 이상)<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>100 × 20 = ( ① ) m³/hr</span>",
+        score: 5,
+        subs: [
+          { label: "① 배출능력: (  )", type: "calc", answers: ["2000", "2,000"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에 따라 제조소 배출설비는 국소방식이 원칙이다. 배출능력은 1시간당 배출장소 용적의 <b>20배 이상</b>이어야 한다.<br>배출능력 = 배출장소 용적 × 20<br>= 100m³ × 20<br>= <b>2,000m³/hr</b><br>혼동 주의: 전역방식은 바닥면적 1m²당 18m³ 이상으로 계산할 수 있다."
+      },
+      {
+        mainQuestion: "문제 42. [출제 25-2]<br>다음 위험물을 옥내저장소에 저장할 때 바닥면적[m² 이하]을 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "① 염소산칼륨: ( ① )", type: "short", answers: ["1000m2", "1,000m2", "1000", "1,000", "1000m²", "1,000m²"] },
+          { label: "② 제2석유류: ( ② )", type: "short", answers: ["2000m2", "2,000m2", "2000", "2,000", "2000m²", "2,000m²"] },
+          { label: "③ 유기과산화물: ( ③ )", type: "short", answers: ["1000m2", "1,000m2", "1000", "1,000", "1000m²", "1,000m²"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 5</b>에서 옥내저장소 바닥면적은 위험성이 큰 위험물은 <b>1,000m²</b> 이하, 나머지는 <b>2,000m²</b> 이하로 정한다.<br><ul><li>염소산칼륨 ㅡ 제1류 염소산염류(위험등급 I)라서 1,000m² 이하이다.</li><li>제2석유류 ㅡ 1,000m² 그룹에 드는 제4류는 특수인화물·제1석유류·알코올류뿐이라 2,000m² 이하이다.</li><li>유기과산화물 ㅡ 제5류 중 유기과산화물·질산에스테르류가 이름으로 지정돼 있어 1,000m² 이하이다.</li></ul>외우는 요령: 1,000m² 그룹은 대부분 각 류의 위험등급 I 품명이고, 제4류만 제1석유류·알코올류(위험등급 II)까지 포함한다."
+      },
+      {
+        mainQuestion: "문제 43. [출제 25-2]<br>제조소 배출설비 기준의 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 배출능력은 1시간당 배출장소 용적의 ( ① )배 이상으로 한다.", type: "short", answers: ["20", "20배"] },
+          { label: "② 전역방식은 바닥면적 1m²당 ( ② )m³ 이상으로 할 수 있다.", type: "short", answers: ["18", "18m3", "18m³"] },
+          { label: "③ 배출구는 지상 ( ③ )m 이상에 설치한다.", type: "short", answers: ["2", "2m"] },
+          { label: "④ ( ④ )가 관통하는 벽 부분 가까이에 화재 시 자동 폐쇄되는 ( ⑤ )를 설치한다.", type: "short", answers: ["배출덕트"] },
+          { label: "⑤ ", type: "short", answers: ["방화댐퍼"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>에 나오는 제조소 배출설비 기준이다.<br><ul><li>배출능력은 1시간당 배출장소 용적의 <b>20배</b> 이상이 원칙이다.</li><li>전역방식은 바닥면적 1m²당 <b>18m³</b> 이상으로 할 수 있다.</li><li>배출구는 지상 2m 이상이면서 연소 우려가 없는 곳에 둔다.</li><li>배출덕트가 벽을 관통하는 부분 가까이에는 화재 때 자동으로 닫히는 <b>방화댐퍼</b>를 달아 불길이 덕트를 타고 번지지 않게 한다.</li></ul>외우는 요령: 국소 20배·전역 18m³·배출구 2m를 한 묶음으로 기억한다."
+      },
+      {
+        mainQuestion: "문제 44. [출제 25-2]<br>아세트알데하이드등 취급 제조소 특례기준의 빈칸을 채우시오.",
+        score: 5,
+        subs: [
+          { label: "① 특수인화물의 아세트알데하이드·( ① ) 또는 이를 함유하는 것", type: "short", answers: ["산화프로필렌"] },
+          { label: "②·③ 폭발 방지를 위해 ( ② ) 또는 ( ③ )를 봉입하는 장치를 갖출 것", type: "short", answers: ["불활성 기체", "불활성기체"] },
+          { label: "③ ", type: "short", answers: ["수증기"] },
+          { label: "④ 탱크에는 ( ④ ) 또는 저온 유지 장치(이하 ( ⑤ )) 및 불활성기체 봉입장치를 갖출 것", type: "short", answers: ["냉각장치"] },
+          { label: "⑤ ", type: "short", answers: ["보냉장치"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>의 아세트알데하이드등 제조소 특례 기준이다. 아세트알데하이드등은 특수인화물 중 아세트알데하이드·<b>산화프로필렌</b> 또는 이를 함유한 것을 말한다.<br><ul><li>취급 설비 ㅡ 연소성 혼합기체 생성에 의한 폭발을 막으려고 <b>불활성 기체</b> 또는 <b>수증기</b>를 봉입하는 장치를 갖춘다.</li><li>탱크 ㅡ 비점이 낮아 쉽게 기화하므로 <b>냉각장치</b> 또는 저온 유지 장치(<b>보냉장치</b>)를 갖춘다.</li><li>탱크에는 이와 함께 불활성기체 봉입장치도 갖춘다.</li></ul>혼동 주의: 수증기 봉입은 설비에만 해당하고 탱크는 불활성기체 봉입만 쓴다. 또 설비에는 은·수은·동·마그네슘이나 이들의 합금을 쓰지 않는다(폭발성 화합물 생성)."
+      },
+      {
+        mainQuestion: "문제 45. [출제 25-1]<br>지정과산화물(유기과산화물 지정수량 10kg) 옥내저장소 기준에 대하여 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 위험등급: ( ① )", type: "short", answers: ["I", "1", "I등급", "1등급", "제I등급", "제1등급"] },
+          { label: "② 옥내저장소 바닥면적: ( ② )m² 이하", type: "short", answers: ["1,000", "1000", "1,000m2", "1000m2", "1,000m²", "1000m²"] },
+          { label: "③ 저장창고 외벽은 두께 ( ③ )cm 이상의 철근콘크리트조(또는 30cm 이상 보강콘크리트블록조)로 할 것", type: "short", answers: ["20", "20cm"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 5</b>의 지정과산화물 옥내저장소 특례다. 지정과산화물은 제5류 유기과산화물 가운데 지정수량이 10kg인 것을 말한다.<br><ul><li>위험등급 ㅡ 지정수량 10kg인 제5류 위험물이므로 <b>위험등급 I</b>이다.</li><li>바닥면적 ㅡ 위험성이 가장 큰 위험물을 저장하므로 <b>1,000m²</b> 이하로 제한한다.</li><li>외벽 ㅡ 폭발에 견디도록 두께 <b>20cm</b> 이상의 철근콘크리트조(또는 30cm 이상 보강콘크리트블록조)로 짓는다.</li></ul>혼동 주의: 저장창고 안의 격벽은 두께 30cm 이상 철근콘크리트조(또는 40cm 이상 보강콘크리트블록조)로 외벽보다 두껍다."
+      },
+      {
+        mainQuestion: "문제 46. [출제 24-3]<br>주유취급소에 관한 다음 물음에 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 정전기 재해 우려 액체위험물 옥외저장탱크 주입구 부근에 정전기 제거를 위해 설치하는 것: ( ① )", type: "short", answers: ["접지전극", "접지 설비", "접지설비"] },
+          { label: "② 셀프주유취급소 휘발유 1회 연속주유량: ( ② ) 이하", type: "short", answers: ["100L", "100"] },
+          { label: "③ 셀프주유취급소 휘발유 1회 주유시간: ( ③ ) 이하", type: "short", answers: ["4분", "4"] },
+          { label: "④ 이동저장탱크 상부 주입 시 주입관 유속: ( ④ )m/s 이하", type: "short", answers: ["1", "1m/s"] },
+          { label: "⑤ 이동저장탱크 밑부분 주입 시 주입관 내 유속: ( ⑤ )m/s 이하", type: "short", answers: ["1", "1m/s"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙</b>의 시설·취급 기준 가운데 정전기와 과주유를 막기 위한 규정이다.<br><ul><li>접지전극 ㅡ 정전기 재해 우려가 있는 액체를 담는 옥외저장탱크 주입구 부근에 설치해 쌓인 정전기를 땅으로 흘려보낸다.</li><li>셀프주유 휘발유 ㅡ 1회 연속 주유량은 <b>100L</b> 이하, 주유시간은 <b>4분</b> 이하로 제한한다.</li><li>이동저장탱크 상부 주입 ㅡ 액표면이 주입관 끝을 넘을 때까지 유속 <b>1m/s</b> 이하로 한다.</li><li>이동저장탱크 밑부분 주입 ㅡ 같은 이유로 유속 1m/s 이하로 한다.</li></ul>유속이 빠를수록 마찰로 정전기가 많이 생기므로 주입 방식과 관계없이 1m/s 이하로 같다고 외운다."
+      },
+      {
+        mainQuestion: "문제 47. [출제 24-3]<br>에틸알코올에 대하여 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 에틸알코올과 나트륨이 반응하여 생성되는 가연성 기체의 명칭: ( ① )", type: "short", answers: ["수소(H2)", "수소", "H2"] },
+          { label: "② 진한 황산과 축합반응하여 생성되는 제4류 위험물의 명칭: ( ② )", type: "short", answers: ["다이에틸에터(C2H5OC2H5)", "디에틸에테르", "다이에틸에터", "디에틸에테르(C2H5OC2H5)"] },
+          { label: "③ 에틸알코올이 산화될 때 생성되는 특수인화물의 명칭: ( ③ )", type: "short", answers: ["아세트알데하이드(CH3CHO)", "아세트알데히드", "아세트알데하이드", "아세트알데히드(CH3CHO)"] }
+        ],
+        explanation: "[해설]<br>에틸알코올(C<sub>2</sub>H<sub>5</sub>OH)은 알칼리금속·진한 황산·산화제와 만날 때 각각 다른 물질을 만든다.<br>나트륨과 반응하면 하이드록시기의 수소가 떨어져 나와 <b>수소</b>가 발생한다.<br>2C<sub>2</sub>H<sub>5</sub>OH + 2Na → 2C<sub>2</sub>H<sub>5</sub>ONa + H<sub>2</sub><br>진한 황산과 약 140℃로 가열하면 두 분자에서 물이 빠지는 축합반응이 일어나 <b>다이에틸에터</b>가 생긴다.<br>2C<sub>2</sub>H<sub>5</sub>OH → C<sub>2</sub>H<sub>5</sub>OC<sub>2</sub>H<sub>5</sub> + H<sub>2</sub>O<br>산화되면 특수인화물인 <b>아세트알데하이드</b>가 되고, 더 산화되면 아세트산이 된다.<br>혼동 주의: 진한 황산과 160℃ 이상으로 가열하면 에터가 아니라 에틸렌이 생긴다."
+      },
+      {
+        mainQuestion: "문제 48. [출제 24-3]<br>다음 위험물의 품명을 쓰시오.",
+        score: 5,
+        subs: [
+          { label: "① t-부탄올: ( ① )", type: "short", answers: ["제1석유류", "1석유류"] },
+          { label: "② 아이소프로필 알코올: ( ② )", type: "short", answers: ["알코올류", "알코올"] },
+          { label: "③ n-부탄올: ( ③ )", type: "short", answers: ["제2석유류", "2석유류"] },
+          { label: "④ 아이소부틸 알코올: ( ④ )", type: "short", answers: ["제2석유류", "2석유류"] },
+          { label: "⑤ 1-프로판올: ( ⑤ )", type: "short", answers: ["알코올류", "알코올"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 알코올류는 탄소수 1~3개인 포화 1가 알코올만 해당한다. 탄소수 4 이상은 인화점으로 석유류를 나눈다(제1석유류 21℃ 미만, 제2석유류 21℃ 이상 70℃ 미만).<br><ul><li>t-부탄올 ㅡ 탄소수 4이고 인화점이 약 11℃라 <b>제1석유류</b>다.</li><li>아이소프로필 알코올 ㅡ 탄소수 3이라 <b>알코올류</b>다.</li><li>n-부탄올 ㅡ 인화점 약 35℃라 <b>제2석유류</b>다.</li><li>아이소부틸 알코올 ㅡ 인화점 약 28℃라 <b>제2석유류</b>다.</li><li>1-프로판올 ㅡ 탄소수 3이라 <b>알코올류</b>다.</li></ul>혼동 주의: 부탄올은 모두 탄소수 4라 알코올류가 아니며, 이성질체마다 인화점이 달라 석유류 구분이 갈린다."
+      },
+      {
+        mainQuestion: "문제 49. [출제 24-2]<br>물에는 녹지 않으나 이황화탄소에 녹고, 연소 시 오산화인을 생성하는 물질(황린)에 대해 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 수산화칼륨 수용액과 반응할 때 발생하는 기체의 화학식: ( ① )", type: "formula", answers: ["PH3"] },
+          { label: "② ①에서 발생한 기체의 연소반응식: 2( ① ) + ( ② ) → ( ③ ) + 3H<sub>2</sub>O", type: "formula", answers: ["4O2"] },
+          { label: "③ ", type: "formula", answers: ["P2O5"] },
+          { label: "④ 옥내저장 시 바닥면적: ( ④ ) 이하", type: "short", answers: ["1,000m²", "1000m2", "1000", "1,000", "1,000m2"] },
+          { label: "⑤ (황린) 위험등급: ( ⑤ )", type: "short", answers: ["I 등급", "I등급", "1등급", "1", "I", "제I등급", "제1등급"] }
+        ],
+        explanation: "[해설]<br>황린(P<sub>4</sub>)은 제3류 자연발화성 물질로, 강알칼리 수용액과 반응하면 맹독성 기체인 <b>포스핀(PH<sub>3</sub>)</b>이 발생한다.<br>P<sub>4</sub> + 3KOH + 3H<sub>2</sub>O → PH<sub>3</sub> + 3KH<sub>2</sub>PO<sub>2</sub><br>포스핀이 연소하면 산소 4분자와 반응해 오산화인과 물이 된다.<br>2PH<sub>3</sub> + 4O<sub>2</sub> → P<sub>2</sub>O<sub>5</sub> + 3H<sub>2</sub>O<br>황린은 지정수량 20kg으로 <b>위험등급 I</b>이다. 따라서 <b>위험물안전관리법 시행규칙 별표 5</b>에 따라 옥내저장소 바닥면적은 <b>1,000m² 이하</b>로 제한된다."
+      },
+      {
+        mainQuestion: "문제 50. [출제 24-2]<br>아이소프로필알코올을 산화시켜 얻으며 아이오딘폼 반응을 하는 제1석유류에 대해 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 이 물질의 명칭: ( ① )", type: "short", answers: ["아세톤"] },
+          { label: "② 아이오딘폼 반응에서 생성되는 노란색 침전물의 화학식: ( ② )", type: "formula", answers: ["CHI3"] },
+          { label: "③ 아이오딘폼 반응 후의 색깔: ( ③ )", type: "short", answers: ["노란색", "황색"] }
+        ],
+        explanation: "[해설]<br>2차 알코올인 아이소프로필알코올을 산화하면 케톤인 <b>아세톤</b>(CH<sub>3</sub>COCH<sub>3</sub>)이 된다. 아세톤은 CH<sub>3</sub>CO- 기를 가져 아이오딘폼 반응을 한다.<br>아이오딘과 수산화나트륨을 넣으면 노란색 침전인 아이오딘폼 <b>CHI<sub>3</sub></b>이 생긴다.<br>CH<sub>3</sub>COCH<sub>3</sub> + 3I<sub>2</sub> + 4NaOH → CHI<sub>3</sub> + CH<sub>3</sub>COONa + 3NaI + 3H<sub>2</sub>O<br>이 침전 때문에 반응 후 색깔은 <b>노란색</b>이다. 아이오딘폼 반응은 CH<sub>3</sub>CO- 또는 CH<sub>3</sub>CH(OH)- 구조를 확인하는 검출 반응이다."
+      },
+      {
+        mainQuestion: "문제 51. [출제 24-2]<br>제2류 위험물인 오황화인에 대해 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 물과의 반응식: P<sub>2</sub>S<sub>5</sub> + ( ① ) → ( ② ) + 2H<sub>3</sub>PO<sub>4</sub>", type: "formula", answers: ["8H2O"] },
+          { label: "② ", type: "formula", answers: ["5H2S"] },
+          { label: "③ ①에서 생성되는 황화수소 기체의 완전연소반응식: 2H<sub>2</sub>S + ( ③ ) → ( ④ ) + 2H<sub>2</sub>O", type: "formula", answers: ["3O2"] },
+          { label: "④ ", type: "formula", answers: ["2SO2"] }
+        ],
+        explanation: "[해설]<br>오황화인(P<sub>2</sub>S<sub>5</sub>)은 물과 반응해 <b>인산</b>과 <b>황화수소</b>를 내놓으며, 생성된 황화수소는 다시 연소 반응을 일으킨다.<br>① 양쪽의 P·S·H·O 원자 수를 맞추면 물 8분자가 소비되고 황화수소 5분자가 나온다.<br>P<sub>2</sub>S<sub>5</sub> + 8H<sub>2</sub>O → 5H<sub>2</sub>S + 2H<sub>3</sub>PO<sub>4</sub><br>② 황화수소의 완전연소에서는 산소 3분자가 소비되어 <b>이산화황</b>과 물이 생성된다.<br>2H<sub>2</sub>S + 3O<sub>2</sub> → 2SO<sub>2</sub> + 2H<sub>2</sub>O"
+      },
+      {
+        mainQuestion: "문제 52. [출제 24-2]<br>다음 위험물을 인화점이 낮은 순서대로 나열하시오.<br>[보기] 이황화탄소, 아세톤, 메탄올, 글리세린, 아닐린",
+        score: 5,
+        subs: [
+          { label: "정답:", type: "descriptive", keywords: ["이황화탄소", "아세톤", "메탄올", "아닐린", "글리세린"], answers: ["이황화탄소 - 아세톤 - 메탄올 - 아닐린 - 글리세린"] }
+        ],
+        explanation: "[해설]<br>인화점은 불꽃을 대면 불이 붙을 만큼 증기가 나오는 최저 온도다. 다섯 물질은 <b>이황화탄소 < 아세톤 < 메탄올 < 아닐린 < 글리세린</b> 순이다.<br><ul><li>이황화탄소 ㅡ 약 -30℃, <b>특수인화물</b>이다.</li><li>아세톤 ㅡ 약 -18℃, 제1석유류다.</li><li>메탄올 ㅡ 약 11℃, 알코올류다.</li><li>아닐린 ㅡ 약 70℃, <b>제3석유류</b>다.</li><li>글리세린 ㅡ 약 160℃, 제3석유류다.</li></ul>외우는 요령: 제4류 품명 순서(특수인화물 → 제1석유류 → 알코올류 → 제3석유류)를 따라가면 인화점 순서와 거의 맞는다."
+      },
+      {
+        mainQuestion: "문제 53. [출제 24-2]<br>다음 위험물이 열분해할 때 산소가 발생하는 반응식을 완성하시오.",
+        score: 5,
+        subs: [
+          { label: "① 과염소산칼륨: KClO<sub>4</sub> → ( ① ) + ( ② )", type: "formula", answers: ["KCl"] },
+          { label: "② ", type: "formula", answers: ["2O2"] },
+          { label: "③ 질산칼륨: 2KNO<sub>3</sub> → ( ③ ) + O<sub>2</sub>", type: "formula", answers: ["2KNO2"] },
+          { label: "④ 과산화칼륨: 2K<sub>2</sub>O<sub>2</sub> → ( ④ ) + O<sub>2</sub>", type: "formula", answers: ["2K2O"] }
+        ],
+        explanation: "[해설]<br>세 물질은 모두 제1류 산화성 고체로, 가열분해되면 공통적으로 <b>산소</b>를 방출해 주변 가연물의 연소를 크게 돕는다.<br>① 과염소산칼륨의 분해는 KClO<sub>4</sub> → KCl + 2O<sub>2</sub>로 <b>염화칼륨</b>과 산소가 생성된다.<br>② 질산칼륨은 2KNO<sub>3</sub> → 2KNO<sub>2</sub> + O<sub>2</sub>로 <b>아질산칼륨</b>과 산소를, ③ 과산화칼륨은 2K<sub>2</sub>O<sub>2</sub> → 2K<sub>2</sub>O + O<sub>2</sub>로 산화칼륨과 산소를 내놓는다."
+      },
+      {
+        mainQuestion: "문제 54. [출제 24-1]<br>옥외탱크저장소에 톨루엔을 50만L, 30만L, 20만L씩 각각 1기에 저장한다. 방유제의 용량(m³)을 구하시오. (가장 큰 탱크 용량의 110% 적용)<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>계산식: 500,000 × 1.1 = ( ① ) L = ( ② ) m³</span>",
+        score: 5,
+        subs: [
+          { label: "①", type: "calc", answers: ["550000", "550,000", "550000L", "550,000L"] },
+          { label: "②", type: "calc", answers: ["550", "550m3", "550m³"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 6</b>에 따라 인화성 액체 옥외탱크의 방유제는 탱크가 2기 이상이면 <b>가장 큰 탱크 용량의 110% 이상</b>으로 한다.<br>방유제 용량 = 최대 탱크 용량 × 1.1<br>= 500,000 L × 1.1<br>= 550,000 L = <b>550 m³</b><br>1 m³ = 1,000 L 로 환산한다. 혼동 주의: 세 탱크의 합계 100만 L가 아니라 가장 큰 탱크 하나만 기준으로 삼는다."
+      },
+      {
+        mainQuestion: "문제 55. [출제 24-1]<br>옥외탱크저장소 지중탱크(내경 100m, 높이 20m, 인화점 10℃ 제4류)에 대해 구하시오. (내경의 0.5배 적용)",
+        score: 5,
+        subs: [
+          { label: "① 부지 경계선에서 지중탱크 지반면 옆판까지의 거리: 100 × 0.5 = ( ① ) m", type: "calc", answers: ["50", "50m"] },
+          { label: "② 지중탱크 주위 보유공지 너비: 100 × 0.5 = ( ② ) m", type: "calc", answers: ["50", "50m"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 6</b>에 따라 땅속에 묻힌 지중탱크는 부지경계선 거리와 보유공지 너비를 높이가 아닌 <b>탱크 수평단면 내경 × 0.5</b>를 기준으로 정한다.<br>부지경계선에서 지반면 옆판까지의 거리:<br>100 m × 0.5 = <b>50 m</b><br>지중탱크 주위 보유공지 너비:<br>100 m × 0.5 = <b>50 m</b><br>혼동 주의: 보유공지는 내경의 0.5배와 밑판 표면에서 지반면까지의 높이 중 큰 값을 쓰는데, 이 문제는 높이가 20 m보다 50 m가 크므로 50 m가 답이다."
+      },
+      {
+        mainQuestion: "문제 56. [출제 23-4]<br>제5류 위험물인 히드록실아민에 대하여 답하시오.",
+        score: 5,
+        subs: [
+          { label: "① 히드록실아민 1톤을 취급하는 제조소와 학교 사이 안전거리: ( ① )", type: "short", answers: ["110.09m", "110.09"] },
+          { label: "② 주의사항 표지의 바탕색과 글자색: ( ② )", type: "short", answers: ["적색바탕 백색문자", "적색바탕백색문자", "적색 바탕 백색 문자", "적색 바탕, 백색 문자", "적색바탕, 백색문자"] },
+          { label: "③ 주위에 설치하는 토제 경사면의 경사도: ( ③ ) 미만", type: "short", answers: ["60도", "60"] }
+        ],
+        explanation: "[해설]<br><b>위험물안전관리법 시행규칙 별표 4</b>의 히드록실아민등 제조소 특례에서는 안전거리를 지정수량 배수 N의 세제곱근으로 계산한다.<br>N = 1,000 kg ÷ 100 kg = 10<br>D = 51.1 × ∛N<br>= 51.1 × ∛10 ≈ <b>110.09 m</b><br>제5류의 주의사항 게시판은 '화기엄금'이므로 <b>적색바탕 백색문자</b>로 한다. 제조소 주위에 두르는 담 또는 토제는 폭발 충격을 견딜 수 있도록 경사면 경사도를 <b>60도 미만</b>으로 한다."
+      },
+      {
+        mainQuestion: "문제 57. [출제 23-2]<br>옥외탱크저장소 하나의 방유제 안에 30만L 3기, 20만L(인화점 50℃) 9기, 총 12기의 인화성액체가 저장되어 있다. 다음을 구하시오.",
+        score: 5,
+        subs: [
+          { label: "① 질산(제6류)을 저장할 경우의 방유제 개수: ( ① )", type: "short", answers: ["2개", "2"] },
+          { label: "② 30만L 2기와 20만L 2기가 하나의 방유제 내에 있을 때 방유제 용량(최대탱크 110%): 30 × 1.1(만L) = ( ② )", type: "short", answers: ["33만L", "33만", "330000L", "330000"] },
+          { label: "③ 설치하여야 하는 방유제의 최소 개수: ( ③ )", type: "short", answers: ["2개", "2"] }
+        ],
+        explanation: "[해설]<br>하나의 방유제 안에 둘 수 있는 옥외저장탱크 수는 원칙적으로 <b>10기 이하</b>이며, 방유제 안 모든 탱크가 20만L 이하이고 인화점이 70℃ 이상 200℃ 미만인 경우에만 20기까지 완화된다.<br>① 질산은 제6류 위험물로 완화 요건인 인화점 구간에 해당하지 않으므로 원칙대로 10기 이하가 적용되고, 12기를 담으려면 방유제가 <b>2개</b> 필요하다.<br>② 방유제 용량은 탱크 용량의 합이 아니라 그 안에 있는 <b>최대 탱크 용량의 110%</b>로 정해지므로, 30만L와 20만L가 섞여 있어도 가장 큰 30만L를 기준으로 30 × 1.1 = 33만L가 된다.<br>③ 30만L 탱크는 20만L를 초과하고 20만L 탱크의 인화점도 50℃여서 완화 요건을 어느 쪽도 충족하지 못하므로, 총 12기는 10기 이하 원칙에 따라 최소 2개의 방유제로 나눠야 한다."
+      },
+      {
+        mainQuestion: "문제 58. [출제 23-1]<br>주유취급소 특례에 해당하는 것을 [보기]에서 모두 고르시오.<br><span style='font-weight:normal; font-size:0.9em; display:block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #ccc; border-radius:5px;'>[보기] ㉠ 주유공지 확보 불요 ㉡ 지하저장탱크 직접주유 시 탱크용량 제한 불요 ㉢ 주유관 길이 제한 불요 ㉣ 담·벽 설치 불요 ㉤ 캐노피 설치 불요</span>",
+        score: 5,
+        subs: [
+          { label: "① 항공기 주유취급소 특례: ( ① )", type: "unordered_comma", answers: ["㉠, ㉡, ㉢, ㉣, ㉤", "ㄱ, ㄴ, ㄷ, ㄹ, ㅁ"] },
+          { label: "② 자가용 주유취급소 특례: ( ② )", type: "unordered_comma", answers: ["㉠", "ㄱ"] },
+          { label: "③ 선박 주유취급소 특례: ( ③ )", type: "unordered_comma", answers: ["㉠, ㉡, ㉢, ㉣", "ㄱ, ㄴ, ㄷ, ㄹ"] }
+        ],
+        explanation: "[해설]<br>주유취급소 특례는 주유 대상의 이용 형태가 일반 자동차 주유취급소와 다르다는 점을 반영해, 일부 시설기준의 적용을 면제해 주는 규정이다.<br>① 항공기 주유취급소는 급유차·고정급유설비로 항공기에 직접 급유하는 형태여서 주유공지·탱크용량 제한·주유관 길이·담벽·캐노피 기준이 <b>모두 면제(㉠~㉤)</b>된다.<br>② 자가용 주유취급소는 관계자 차량만 주유할 뿐 설비 형태는 일반 주유취급소와 같으므로 완화 폭이 가장 좁아 <b>주유공지(㉠)</b> 확보 의무만 면제된다.<br>③ 선박 주유취급소는 수상의 선박에 급유하므로 항공기와 비슷하게 폭넓게 면제되지만 <b>캐노피(㉤)</b>는 제외되어 ㉠~㉣까지만 해당한다."
+      }
+    ];
+
+    // ================== 메인 렌더링 및 채점 로직 ==================
+    function toggleExplanation(qIndex) {
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (!expEl) return;
+      
+      if (expEl.style.display === 'none' || expEl.style.display === '') {
+        expEl.style.display = 'block';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 닫기';
+      } else {
+        expEl.style.display = 'none';
+        if(toggleBtn) toggleBtn.innerHTML = '📖 해설 열기';
+      }
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      let html = '';
+
+      quizData.forEach((q, qIndex) => {
+        gradingState[qIndex] = { subs: [], earnedScore: 0, isGraded: false };
+        
+        html += `<div class="question-card clearfix" id="qCard-${qIndex}">`;
+        html += `<div class="main-q-title">${q.mainQuestion} <span class="q-score-badge">배점: ${q.score}점</span></div>`;
+        
+        if (q.image) {
+            html += `<div style="margin-bottom: 15px; text-align: center;">
+                       <img src="${q.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px; cursor: zoom-in;" alt="문제 이미지" onclick="openImageModal(this.src)" title="클릭하여 확대">
+                       <div style="font-size:0.85em; color:#7f8c8d; margin-top:5px;">[이미지를 클릭하면 확대됩니다]</div>
+                     </div>`;
+        }
+
+        q.subs.forEach((sub, sIndex) => {
+          gradingState[qIndex].subs[sIndex] = { status: 0 }; 
+          
+          html += `<div class="sub-q-container">`;
+          html += `<div class="sub-q-label">${sub.label}</div>`;
+          
+          if (sub.image) {
+            html += `<div style="margin-bottom: 15px; text-align: center;">
+                       <img src="${sub.image}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px; cursor: zoom-in;" alt="문제 이미지" onclick="openImageModal(this.src)" title="클릭하여 확대">
+                       <div style="font-size:0.85em; color:#7f8c8d; margin-top:5px;">[이미지를 클릭하면 확대됩니다]</div>
+                     </div>`;
+          }
+
+          if (sub.type === 'calc') {
+            html += `<span class="calc-label">▶ 계산 과정 (채점 제외)</span>`;
+            html += `<textarea id="calc-${qIndex}-${sIndex}" class="textarea-formula" placeholder="필요시 계산식을 자유롭게 적어보세요."></textarea>`;
+            html += `<span class="calc-label">▶ 최종 정답 (채점 대상)</span>`;
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-calc" autocomplete="off" placeholder="최종 정답 입력">`;
+          } else if (sub.type === 'descriptive') {
+            html += `<textarea id="ans-${qIndex}-${sIndex}" class="textarea-formula" placeholder="※ 연습장에 직접 풀거나 구조식을 그린 후, [✔️ 정답 확인 및 채점] 버튼을 눌러 스스로 비교해 보세요."></textarea>`;
+          } else {
+            let placeholder = sub.placeholder || (sub.type === 'unordered_comma' ? '쉼표(,)로 구분하여 입력' : '정답 입력');
+            html += `<input type="text" id="ans-${qIndex}-${sIndex}" class="input-standard" autocomplete="off" placeholder="${placeholder}">`;
+          }
+          
+          html += `<div id="fb-${qIndex}-${sIndex}" class="feedback-box"></div>`;
+          html += `</div>`;
+        });
+        
+        html += `<div style="text-align: right; margin-top: 15px; margin-bottom: 10px; clear: both;">`;
+        html += `  <button id="btn-toggle-exp-${qIndex}" class="btn-grade-single" style="float: none; background-color: #8d6e63; margin-right: 8px; display: none;" onclick="toggleExplanation(${qIndex})">📖 해설 열기</button>`;
+        html += `  <button id="btn-grade-single-${qIndex}" class="btn-grade-single" style="float: none;" onclick="gradeSingleQuestion(${qIndex})">✔️ 정답 확인 및 채점</button>`;
+        html += `</div>`;
+        
+        if(q.explanation) {
+            html += `<div style="clear:both;"></div>`;
+            html += `<div id="exp-${qIndex}" class="feedback-box" style="background-color:#f8f9fa; border:1px solid #dee2e6; color:#495057; font-weight:normal; margin-top:10px; display:none;">💡 <strong>문제 핵심 해설:</strong><br>${q.explanation}</div>`;
+        }
+        html += `</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function setMode(mode) {
+      const labelBasic = document.getElementById('label-basic');
+      const labelStudy = document.getElementById('label-study');
+      
+      if (mode === 'study') {
+        if(labelStudy.classList.contains('active')) return; 
+        
+        labelBasic.classList.remove('active');
+        labelStudy.classList.add('active');
+        
+        quizData.forEach((q, qIndex) => {
+          const expEl = document.getElementById(`exp-${qIndex}`);
+          const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+          if (expEl) {
+            expEl.style.display = 'block';
+            if(toggleBtn) {
+              toggleBtn.style.display = 'inline-block';
+              toggleBtn.innerHTML = '📖 해설 닫기';
+            }
+          }
+        });
+        
+      } else if (mode === 'basic') {
+        if(confirm("기본 모드로 전환하면 현재 입력된 내용이 초기화됩니다. 전환하시겠습니까?")) {
+          location.reload();
+        }
+      }
+    }
+
+    function isEquationCorrect(userInput, ansList) {
+      let sanitizeEq = (str) => {
+        let s = str.replace(/\s+/g, '').replace(/=/g, '->');
+        let dashIdx = s.indexOf('-');
+        let arrowIdx = s.indexOf('->');
+        if (dashIdx !== -1 && arrowIdx !== -1 && dashIdx < arrowIdx) {
+          s = s.substring(dashIdx + 1);
+        }
+        return s;
+      };
+
+      let u = sanitizeEq(userInput);
+      let uParts = u.split('->');
+      if(uParts.length !== 2) return false;
+      let uLeft = uParts[0].split('+').sort().join('+');
+      let uRight = uParts[1].split('+').sort().join('+');
+      
+      for(let i=0; i<ansList.length; i++) {
+        let a = sanitizeEq(ansList[i]);
+        let aParts = a.split('->');
+        if(aParts.length !== 2) continue;
+        let aLeft = aParts[0].split('+').sort().join('+');
+        let aRight = aParts[1].split('+').sort().join('+');
+        if (uLeft === aLeft && uRight === aRight) return true;
+      }
+      return false;
+    }
+
+    function evaluateSub(qIndex, sIndex) {
+      const sub = quizData[qIndex].subs[sIndex];
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      if (inputEl.disabled) return; 
+
+      let userVal = inputEl.value;
+      let isCorrect = false;
+
+      if (userVal.trim() === "") {
+         isCorrect = false;
+      } else if (sub.type === 'short' || sub.type === 'calc') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '').toLowerCase() === uClean);
+      } else if (sub.type === 'formula') {
+        let uClean = userVal.replace(/\s+/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/\s+/g, '') === uClean);
+      } else if (sub.type === 'order') {
+        let uClean = userVal.replace(/[^0-9]/g, '');
+        isCorrect = sub.answers.some(a => a.replace(/[^0-9]/g, '') === uClean);
+      } else if (sub.type === 'unordered_comma') {
+        let uClean = userVal.replace(/\s+/g, '').toLowerCase();
+        isCorrect = sub.answers.some(a => {
+            let aClean = a.replace(/\s+/g, '').toLowerCase();
+            let uArr = uClean.split(',').filter(Boolean).sort();
+            let aArr = aClean.split(',').filter(Boolean).sort();
+            return uArr.length === aArr.length && uArr.every((val, index) => val === aArr[index]);
+        });
+      } else if (sub.type === 'equation') {
+        isCorrect = isEquationCorrect(userVal, sub.answers);
+      } else if (sub.type === 'descriptive') {
+        if (sub.keywords) {
+          let hasAllKeys = sub.keywords.every(kw => userVal.includes(kw));
+          isCorrect = hasAllKeys;
+        } else {
+          isCorrect = false; 
+        }
+      }
+
+      gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+      inputEl.disabled = true;
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (calcEl) calcEl.disabled = true;
+
+      updateFeedbackUI(qIndex, sIndex);
+    }
+
+    function updateFeedbackUI(qIndex, sIndex) {
+      const q = quizData[qIndex];
+      const sub = q.subs[sIndex];
+      const state = gradingState[qIndex].subs[sIndex];
+      const fbDiv = document.getElementById(`fb-${qIndex}-${sIndex}`);
+      
+      let html = "";
+      if (sub.isExcluded) {
+        fbDiv.className = "feedback-box";
+        fbDiv.style.backgroundColor = "#f1f5f9";
+        fbDiv.style.border = "1px solid #cbd5e1";
+        fbDiv.style.color = "#64748b";
+        html += `➖ 채점 제외 항목입니다.`;
+      } else if (state.status === 1) {
+        fbDiv.className = "feedback-box is-correct";
+        html += `✅ 정답입니다!`;
+      } else if (state.status === 0.5) {
+        fbDiv.className = "feedback-box is-partial";
+        html += `⚠ 부분 점수 (0.5개 인정)`;
+      } else {
+        fbDiv.className = "feedback-box is-incorrect";
+        if (q.isUnordered) {
+          html += `❌ 오답입니다. (모범 답안 중 하나: ${sub.answers[0]})`;
+        } else if (q.isUnordered || sub.type === 'unordered_comma') {
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        } else {
+          html += `❌ 오답입니다. (모범 답안: ${sub.answers[0]})`;
+        }
+      }
+
+      if (sub.answerImage) {
+        html += `<div style="margin-top: 15px; text-align: center;">
+                   <img src="${sub.answerImage}" style="max-width: 100%; border: 2px solid #2196f3; border-radius: 5px; cursor: zoom-in;" alt="정답 해설 이미지" onclick="openImageModal(this.src)" title="클릭하여 확대">
+                   <div style="font-size:0.85em; color:#1976d2; margin-top:5px;">[정답 참고 이미지 - 클릭 시 확대]</div>
+                 </div>`;
+      }
+
+      if (sub.type === 'descriptive') {
+        html += `<div class="override-btns">
+                  <span style="font-size:0.85em; color:#666; font-weight:normal; margin-right:8px;">▶ 서술/그림 자율 채점:</span><br><br>
+                  <button class="btn-override btn-correct" onclick="overrideScore(${qIndex}, ${sIndex}, 1)">정답 인정</button>
+                  <button class="btn-override btn-partial" onclick="overrideScore(${qIndex}, ${sIndex}, 0.5)">부분 점수</button>
+                  <button class="btn-override btn-incorrect" onclick="overrideScore(${qIndex}, ${sIndex}, 0)">오답 처리</button>
+                 </div>`;
+      }
+
+      fbDiv.innerHTML = html;
+      fbDiv.style.display = "block";
+    }
+
+    function updateCardScore(qIndex) {
+      const q = quizData[qIndex];
+      let correctSubs = 0;
+      let gradableCount = 0;
+      
+      q.subs.forEach((sub, sIndex) => {
+        if (!sub.isExcluded) {
+          correctSubs += gradingState[qIndex].subs[sIndex].status;
+          gradableCount++;
+        }
+      });
+      
+      gradingState[qIndex].earnedScore = gradableCount > 0 ? (correctSubs / gradableCount) * q.score : 0;
+      
+      const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
+      if(cardTitle) {
+        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
+        cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
+        if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
+        else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
+        else cardTitle.style.backgroundColor = "#ffebee";
+      }
+    }
+
+    function gradeSingleQuestion(qIndex) {
+      const q = quizData[qIndex];
+
+      if (q.isUnordered) {
+        let answerPool = [];
+        q.subs.forEach(sub => {
+          if (!sub.isExcluded) {
+            answerPool.push(sub.answers);
+          }
+        });
+
+        let usedAnswers = []; 
+
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          if (!inputEl || inputEl.disabled) return;
+
+          let userVal = inputEl.value;
+          let isCorrect = false;
+
+          if (sub.isExcluded) {
+            gradingState[qIndex].subs[sIndex].status = 0;
+            inputEl.disabled = true;
+            updateFeedbackUI(qIndex, sIndex);
+            return;
+          }
+
+          if (userVal.trim() !== "") {
+            for (let i = 0; i < answerPool.length; i++) {
+              let possibleAnswers = answerPool[i];
+              
+              if (sub.type === 'equation') {
+                if (isEquationCorrect(userVal, possibleAnswers)) {
+                  isCorrect = true;
+                  answerPool.splice(i, 1);
+                  break;
+                }
+              } else {
+                let uClean = sub.type === 'formula' ? userVal.replace(/\s+/g, '') : userVal.replace(/\s+/g, '').toLowerCase();
+                let matched = possibleAnswers.some(a => {
+                  let aClean = sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase();
+                  return aClean === uClean;
+                });
+                
+                let standardAnswer = sub.type === 'formula' ? possibleAnswers[0].replace(/\s+/g, '') : possibleAnswers[0].replace(/\s+/g, '').toLowerCase();
+                
+                if(matched && !usedAnswers.includes(standardAnswer)) {
+                  isCorrect = true;
+                  usedAnswers.push(standardAnswer); 
+                  answerPool.splice(i, 1);
+                  break;
+                }
+              }
+            }
+          }
+
+          gradingState[qIndex].subs[sIndex].status = isCorrect ? 1 : 0;
+          inputEl.disabled = true;
+          updateFeedbackUI(qIndex, sIndex);
+        });
+      } else {
+        const poolUsed = {};
+        const normPool = v => v.replace(/\s+/g, '').toLowerCase();
+        q.subs.forEach((sub, sIndex) => {
+          if (sub.type === 'pool') {
+            const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+            if (!inputEl || inputEl.disabled) return;
+            const u = normPool(inputEl.value);
+            const used = poolUsed[sub.poolId] = poolUsed[sub.poolId] || [];
+            let ok = false;
+            if (u !== '' && sub.answers.some(a => normPool(a) === u) && !used.includes(u)) { ok = true; used.push(u); }
+            gradingState[qIndex].subs[sIndex].status = ok ? 1 : 0;
+            inputEl.disabled = true;
+            updateFeedbackUI(qIndex, sIndex);
+          } else {
+            evaluateSub(qIndex, sIndex);
+          }
+        });
+      }
+
+      updateCardScore(qIndex);
+      gradingState[qIndex].isGraded = true;
+
+      const expEl = document.getElementById(`exp-${qIndex}`);
+      const toggleBtn = document.getElementById(`btn-toggle-exp-${qIndex}`);
+      if (expEl) {
+          expEl.style.display = 'block';
+          if(toggleBtn) {
+            toggleBtn.style.display = 'inline-block';
+            toggleBtn.innerHTML = '📖 해설 닫기';
+          }
+      }
+      
+      const btnEl = document.getElementById(`btn-grade-single-${qIndex}`);
+      if (btnEl) btnEl.style.display = 'none';
+      if (isTestSubmitted) calculateFinalTotal();
+    }
+
+    function gradeAll() {
+      isTestSubmitted = true;
+      quizData.forEach((q, qIndex) => {
+        if (!gradingState[qIndex].isGraded) {
+          gradeSingleQuestion(qIndex);
+        }
+      });
+      document.getElementById('submit-btn').style.display = 'none';
+      calculateFinalTotal();
+    }
+
+    function overrideScore(qIndex, sIndex, newStatus) {
+      gradingState[qIndex].subs[sIndex].status = newStatus;
+      updateFeedbackUI(qIndex, sIndex);
+      updateCardScore(qIndex);
+      if (isTestSubmitted) calculateFinalTotal(); 
+    }
+
+    function calculateFinalTotal() {
+      let totalEarned = 0;
+      let totalMax = 0;
+
+      quizData.forEach((q, qIndex) => {
+        totalMax += q.score;
+        totalEarned += gradingState[qIndex].earnedScore;
+      });
+
+      const resDiv = document.getElementById('final-result');
+      resDiv.style.display = "block";
+      
+      totalEarned = Math.round(totalEarned * 10) / 10;
+      let percent = Math.round((totalEarned / totalMax) * 100);
+      let passMsg = percent >= 60 
+        ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
+        : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
+
+      resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
+    }
+
+    renderQuiz();
+
+    // ================== 이미지 클릭(확대) 자동 연결 ==================
+    document.getElementById('quiz-container').addEventListener('click', function(e) {
+      if (e.target && e.target.tagName === 'IMG') {
+        openImageModal(e.target.src);
+      }
+    });
+
+    // ================== 우측 문항 내비게이션 ==================
+    function initNavPanel() {
+      const navHtml = `
+        <div id="q-nav-panel">
+          <div class="q-nav-header">📌 문항 이동</div>
+          <div class="q-nav-grid" id="q-nav-grid"></div>
+          <div class="q-nav-legend">
+            <div><span class="box" style="background:#fff; border:1px solid #dee2e6;"></span>미작성</div>
+            <div><span class="box" style="background:#e3f2fd; border:1px solid #90caf9;"></span>답안 입력됨</div>
+            <div><span class="box" style="background:#e8f5e9; border:1px solid #81c784;"></span>정답 / 채점완료</div>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', navHtml);
+
+      const navGrid = document.getElementById('q-nav-grid');
+      let gridHtml = '';
+      quizData.forEach((q, qIndex) => {
+        let displayNum = qIndex + 1;
+        gridHtml += `<button class="q-nav-btn" id="nav-btn-${qIndex}" onclick="scrollToQuestion(${qIndex})">${displayNum}</button>`;
+      });
+      navGrid.innerHTML = gridHtml;
+
+      document.getElementById('quiz-container').addEventListener('input', updateNavStatus);
+
+      if (typeof gradeSingleQuestion === 'function') {
+        const originalGradeSingle = gradeSingleQuestion;
+        gradeSingleQuestion = function(qIndex) {
+          originalGradeSingle(qIndex);
+          updateNavStatus();
+        };
+      }
+
+      if (typeof overrideScore === 'function') {
+        const originalOverrideScore = overrideScore;
+        overrideScore = function(qIndex, sIndex, newStatus) {
+          originalOverrideScore(qIndex, sIndex, newStatus);
+          updateNavStatus();
+        };
+      }
+
+      if (typeof gradeAll === 'function') {
+        const originalGradeAll = gradeAll;
+        gradeAll = function() {
+          originalGradeAll();
+          updateNavStatus();
+        };
+      }
+      updateNavStatus();
+    }
+
+    function scrollToQuestion(qIndex) {
+      const target = document.getElementById(`qCard-${qIndex}`);
+      if(target) {
+        const topPos = target.getBoundingClientRect().top + window.pageYOffset - 20;
+        window.scrollTo({ top: topPos, behavior: 'smooth' });
+      }
+    }
+
+    function updateNavStatus() {
+      quizData.forEach((q, qIndex) => {
+        const navBtn = document.getElementById(`nav-btn-${qIndex}`);
+        if(!navBtn) return;
+
+        if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
+          let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
+          navBtn.className = 'q-nav-btn'; 
+          if (qEarnedScore === q.score) navBtn.classList.add('correct');
+          else if (qEarnedScore > 0) navBtn.classList.add('partial');
+          else navBtn.classList.add('incorrect');
+          return;
+        }
+
+        let hasAnswer = false;
+        q.subs.forEach((sub, sIndex) => {
+          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+          const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+          if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
+          if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
+        });
+
+        if (hasAnswer) {
+          navBtn.classList.add('answered'); 
+        } else {
+          navBtn.classList.remove('answered'); 
+        }
+      });
+    }
+
+    // ================== 이미지 확대 및 PAN(드래그) 모달 스크립트 ==================
+    let currentZoom = 1;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let translateX = 0, translateY = 0;
+
+    function openImageModal(src) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      modalImg.src = src;
+      currentZoom = 1;
+      translateX = 0;
+      translateY = 0;
+      updateImageTransform();
+      modal.style.display = 'flex';
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      modal.style.display = 'none';
+    }
+
+    function zoomImage(step) {
+      currentZoom += step;
+      if (currentZoom < 0.5) currentZoom = 0.5;
+      if (currentZoom > 5) currentZoom = 5; 
+      updateImageTransform();
+    }
+
+    function resetZoom() {
+      currentZoom = 1;
+      translateX = 0;
+      translateY = 0;
+      updateImageTransform();
+    }
+
+    function updateImageTransform() {
+      const modalImg = document.getElementById('modal-img');
+      modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+    }
+
+    const modalImg = document.getElementById('modal-img');
+    modalImg.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      modalImg.style.cursor = 'grabbing';
+      modalImg.style.transition = 'none'; 
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      updateImageTransform();
+    });
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        modalImg.style.cursor = 'grab';
+        modalImg.style.transition = 'transform 0.05s linear'; 
+      }
+    });
+
+    modalImg.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX - translateX;
+        startY = e.touches[0].clientY - translateY;
+        modalImg.style.transition = 'none';
+      }
+    }, { passive: false });
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault(); 
+      translateX = e.touches[0].clientX - startX;
+      translateY = e.touches[0].clientY - startY;
+      updateImageTransform();
+    }, { passive: false });
+    document.addEventListener('touchend', () => {
+      if (isDragging) {
+        isDragging = false;
+        modalImg.style.transition = 'transform 0.05s linear';
+      }
+    });
+    modalImg.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) zoomImage(0.1);
+      else zoomImage(-0.1);
+    }, { passive: false });
+
+// ================== 전체화면 필기 모드 (MEMO) 스크립트 ==================
+    let memoCanvas, memoCtx;
+    let isMemoDrawing = false;
+    let memoCurrentTool = 'pen';
+    let isMemoMode = false;
+    let memoCurrentColor = '#333333'; // 기본 검정
+    let memoPenWidth = 3;
+    let memoEraserWidth = 30;
+
+    function toggleMemoMode() {
+      isMemoMode = !isMemoMode;
+      const btn = document.getElementById('memo-toggle-btn');
+      
+      if (isMemoMode) {
+        document.body.classList.add('drawing-mode');
+        btn.innerHTML = "필기 끄기";
+        btn.classList.add('active');
+        if (!memoCanvas) initMemoCanvas();
+        else updateCanvasSize(); 
+      } else {
+        document.body.classList.remove('drawing-mode');
+        btn.innerHTML = "필기 켜기";
+        btn.classList.remove('active');
+      }
+    }
+
+    function updateCanvasSize() {
+      if (!memoCanvas) return;
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = memoCanvas.width;
+      tempCanvas.height = memoCanvas.height;
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCtx.drawImage(memoCanvas, 0, 0);
+
+      // 문서 전체의 스크롤 높이/너비로 캔버스 크기 설정
+      memoCanvas.width = Math.max(document.documentElement.scrollWidth, window.innerWidth);
+      memoCanvas.height = Math.max(document.documentElement.scrollHeight, window.innerHeight);
+
+      memoCtx.drawImage(tempCanvas, 0, 0);
+    }
+
+    function initMemoCanvas() {
+      memoCanvas = document.getElementById('overlay-canvas');
+      memoCtx = memoCanvas.getContext('2d');
+      
+      updateCanvasSize();
+      window.addEventListener('resize', updateCanvasSize);
+      
+      memoCanvas.addEventListener('mousedown', startMemoDraw);
+      memoCanvas.addEventListener('mousemove', drawMemo);
+      memoCanvas.addEventListener('mouseup', stopMemoDraw);
+      memoCanvas.addEventListener('mouseout', stopMemoDraw);
+      memoCanvas.addEventListener('touchstart', startMemoDraw, { passive: false });
+      memoCanvas.addEventListener('touchmove', drawMemo, { passive: false });
+      memoCanvas.addEventListener('touchend', stopMemoDraw);
+      
+      document.getElementById('memo-width-slider').value = memoPenWidth;
+    }
+
+    function getMemoCoordinates(e) {
+      const rect = memoCanvas.getBoundingClientRect();
+      if (e.touches && e.touches.length > 0) {
+        return { 
+          x: e.touches[0].clientX - rect.left, 
+          y: e.touches[0].clientY - rect.top 
+        };
+      }
+      return { 
+        x: e.clientX - rect.left, 
+        y: e.clientY - rect.top 
+      };
+    }
+
+    function startMemoDraw(e) {
+      if (!isMemoMode) return;
+      if (e.target.closest('#memo-wrapper') || e.target.closest('#q-nav-panel')) return;
+      
+      e.preventDefault(); 
+      isMemoDrawing = true;
+      const pos = getMemoCoordinates(e);
+      memoCtx.beginPath();
+      memoCtx.moveTo(pos.x, pos.y);
+    }
+
+    function drawMemo(e) {
+      if (!isMemoDrawing || !isMemoMode) return;
+      e.preventDefault(); 
+      const pos = getMemoCoordinates(e);
+      memoCtx.lineTo(pos.x, pos.y);
+      
+      if (memoCurrentTool === 'eraser') {
+        memoCtx.globalCompositeOperation = 'destination-out';
+        memoCtx.lineWidth = memoEraserWidth;       
+      } else {
+        memoCtx.globalCompositeOperation = 'source-over';
+        memoCtx.strokeStyle = memoCurrentColor;
+        memoCtx.lineWidth = memoPenWidth;        
+      }
+      memoCtx.lineCap = 'round';
+      memoCtx.lineJoin = 'round';
+      memoCtx.stroke();
+    }
+
+    function stopMemoDraw() {
+      if (!isMemoDrawing) return;
+      isMemoDrawing = false;
+      memoCtx.closePath();
+    }
+
+    function setMemoTool(tool) {
+      memoCurrentTool = tool;
+      document.getElementById('memo-pen').classList.remove('active');
+      document.getElementById('memo-eraser').classList.remove('active');
+      document.getElementById('memo-' + tool).classList.add('active');
+      
+      const slider = document.getElementById('memo-width-slider');
+      if (tool === 'eraser') {
+        slider.value = memoEraserWidth;
+      } else {
+        slider.value = memoPenWidth;
+      }
+    }
+
+    function setMemoColor(color, btnElement) {
+      memoCurrentColor = color;
+      setMemoTool('pen'); 
+      
+      const colorBtns = document.querySelectorAll('.color-btn');
+      colorBtns.forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+    }
+
+    function updateMemoWidth(val) {
+      if (memoCurrentTool === 'eraser') {
+        memoEraserWidth = parseInt(val);
+      } else {
+        memoPenWidth = parseInt(val);
+      }
+    }
+
+    function clearMemoCanvas() {
+      if(memoCtx) memoCtx.clearRect(0, 0, memoCanvas.width, memoCanvas.height);
+    }
+
+    // 초기 실행
+    renderQuiz();
+    setTimeout(initNavPanel, 100);
+  </script>
+</body>
+</html>
