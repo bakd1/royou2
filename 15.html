@@ -179,7 +179,7 @@
 <div style="margin-bottom:15px;"><a href="index.html#section3" style="display:inline-block;padding:8px 16px;background:#e0e0e0;color:#333;text-decoration:none;border-radius:8px;font-weight:bold;font-family:'Malgun Gothic',sans-serif;">◀ 뒤로가기</a></div>
 
   <h1>📝 위험물산업기사 실기(필답형) 2022년 1회</h1>
-  <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.</p>
+  <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.<br><span style='font-size:0.85em; color:#e65100;'>※ [참고] 제5류 위험물은 새로고침 시 제1종/제2종 조건이 랜덤으로 부여되도록 스크립트 처리되어 있습니다. 부여된 조건에 맞는 지정수량을 기재하세요.</span></p>
   
   <div class="mode-selection" id="mode-selection">
     <label class="active" id="label-basic" onclick="setMode('basic')">📝 시험 모드 (실전 테스트)</label>
@@ -248,6 +248,12 @@
   <script>
     let gradingState = [];
     let isTestSubmitted = false;
+ 
+    // 제5류 랜덤 종별 생성 (1종 또는 2종)
+    const azoType = Math.random() < 0.5 ? 1 : 2;
+    const nitroType = Math.random() < 0.5 ? 1 : 2;
+    const azoWeight = azoType === 1 ? "10" : "100";
+    const nitroWeight = nitroType === 1 ? "10" : "100";
 
     const quizData = [
       {
@@ -306,12 +312,12 @@
         mainQuestion: "문제 6. 다음 위험물의 유별과 지정수량을 각각 쓰시오.",
         score: 5,
         subs: [
-          { label: "① 칼륨", type: "short", answers: ["제3류, 10kg", "3류, 10kg", "3류, 10", "제3류, 10"] },
-          { label: "② 황린", type: "short", answers: ["제3류, 20kg", "3류, 20kg", "3류, 20", "제3류, 20"] },
-          { label: "③ 질산", type: "short", answers: ["제6류, 300kg", "6류, 300kg", "6류, 300", "제6류, 300"] },
-          { label: "④ 질산염류", type: "short", answers: ["제1류, 300kg", "1류, 300kg", "1류, 300", "제1류, 300"] },
-          { label: "⑤ 아조화합물", type: "short", answers: ["제5류, 10kg(제1종)/100kg(제2종)", "5류, 10kg/100kg", "제5류, 10/100", "5류, 10/100", "제5류, 10kg, 100kg", "5류, 10kg, 100kg"] },
-          { label: "⑥ 나이트로화합물", type: "short", answers: ["제5류, 10kg(제1종)/100kg(제2종)", "5류, 10kg/100kg", "제5류, 10/100", "5류, 10/100", "제5류, 10kg, 100kg", "5류, 10kg, 100kg"] }
+          { label: "① 칼륨", type: "short", answers: ["제3류, 10kg", "3류, 10kg", "3류, 10", "제3류, 10", "제3류 위험물, 10kg", "3류 위험물, 10kg"] },
+          { label: "② 황린", type: "short", answers: ["제3류, 20kg", "3류, 20kg", "3류, 20", "제3류, 20", "제3류 위험물, 20kg", "3류 위험물, 20kg"] },
+          { label: "③ 질산", type: "short", answers: ["제6류, 300kg", "6류, 300kg", "6류, 300", "제6류, 300", "제6류 위험물, 300kg", "6류 위험물, 300kg"] },
+          { label: "④ 질산염류", type: "short", answers: ["제1류, 300kg", "1류, 300kg", "1류, 300", "제1류, 300", "제1류 위험물, 300kg", "1류 위험물, 300kg"] },
+          { label: `⑤ 아조화합물<br> 위험성 시험 결과 (제${azoType}종)`, type: "short", answers: [`제5류, ${azoWeight}kg`, `5류, ${azoWeight}kg`, `제5류, ${azoWeight}`, `5류, ${azoWeight}`, `제5류 위험물, ${azoWeight}kg`, `5류 위험물, ${azoWeight}kg`] },
+          { label: `⑥ 나이트로화합물<br> 위험성 시험 결과 (제${nitroType}종)`, type: "short", answers: [`제5류, ${nitroWeight}kg`, `5류, ${nitroWeight}kg`, `제5류, ${nitroWeight}`, `5류, ${nitroWeight}`, `제5류 위험물, ${nitroWeight}kg`, `5류 위험물, ${nitroWeight}kg`] }
         ],
         explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에 정해진 유별·지정수량 기준이다.<br>· 칼륨 ㅡ 제3류 자연발화성·금수성 물질로 지정수량 10kg이다.<br>· 황린 ㅡ 제3류이지만 금수성이 아닌 자연발화성 물질이며 20kg이다.<br>· 질산 ㅡ 제6류 산화성 액체로 300kg이다.<br>· 질산염류 ㅡ 제1류 산화성 고체로 300kg이다.<br>· 아조화합물 ㅡ 제5류 자기반응성 물질로 위험성 시험 결과 제1종이면 10kg, 제2종이면 100kg이다.<br>· 나이트로화합물 ㅡ 역시 제5류로 제1종 10kg, 제2종 100kg이다.<br>혼동 주의: <b>질산(제6류)</b>과 <b>질산염류(제1류)</b>는 지정수량이 300kg으로 같지만 유별이 다르다."
       },
@@ -683,28 +689,31 @@
       fbDiv.style.display = "block";
     }
 
-    function updateCardScore(qIndex) {
-      const q = quizData[qIndex];
-      let correctSubs = 0;
-      let gradableCount = 0;
-      
-      q.subs.forEach((sub, sIndex) => {
-        if (!sub.isExcluded) {
-          correctSubs += gradingState[qIndex].subs[sIndex].status;
-          gradableCount++;
-        }
-      });
-      
-      gradingState[qIndex].earnedScore = gradableCount > 0 ? (correctSubs / gradableCount) * q.score : 0;
-      
-      const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
-      if(cardTitle) {
-        let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
-        cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
-        if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
-        else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
-        else cardTitle.style.backgroundColor = "#ffebee";
-      }
+function updateCardScore(qIndex) {
+  const q = quizData[qIndex];
+  let correctSubs = 0;
+  let gradableCount = 0;
+  
+  q.subs.forEach((sub, sIndex) => {
+    if (!sub.isExcluded) {
+      correctSubs += gradingState[qIndex].subs[sIndex].status;
+      gradableCount++;
+    }
+  });
+  
+  // 변경: 획득 점수 자체를 1의 자리에서 반올림(Math.round)하여 정수로 저장
+  gradingState[qIndex].earnedScore = gradableCount > 0 ? Math.round((correctSubs / gradableCount) * q.score) : 0;
+  
+  const cardTitle = document.querySelector(`#qCard-${qIndex} .q-score-badge`);
+  if(cardTitle) {
+    // 변경: 소수점 계산 로직 삭제, 반올림된 정수 바로 사용
+    let qEarnedScore = gradingState[qIndex].earnedScore;
+    cardTitle.innerHTML = `배점: ${q.score}점 (획득: <strong>${qEarnedScore}점</strong>)`;
+    
+    if (qEarnedScore === q.score) cardTitle.style.backgroundColor = "#e8f5e9";
+    else if (qEarnedScore > 0) cardTitle.style.backgroundColor = "#fff3e0";
+    else cardTitle.style.backgroundColor = "#ffebee";
+  }
     }
 
     function gradeSingleQuestion(qIndex) {
@@ -717,6 +726,8 @@
             answerPool.push(sub.answers);
           }
         });
+
+        let usedAnswers = []; // 중복 입력 방지용 배열
 
         q.subs.forEach((sub, sIndex) => {
           const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
@@ -748,8 +759,13 @@
                   let aClean = sub.type === 'formula' ? a.replace(/\s+/g, '') : a.replace(/\s+/g, '').toLowerCase();
                   return aClean === uClean;
                 });
-                if(matched) {
+                
+                // 중복 정답 방지 로직 (usedAnswers에 매칭된 대표값이 있는지 확인)
+                let standardAnswer = sub.type === 'formula' ? possibleAnswers[0].replace(/\s+/g, '') : possibleAnswers[0].replace(/\s+/g, '').toLowerCase();
+                
+                if(matched && !usedAnswers.includes(standardAnswer)) {
                   isCorrect = true;
+                  usedAnswers.push(standardAnswer); // 사용된 정답 리스트에 추가
                   answerPool.splice(i, 1);
                   break;
                 }
@@ -817,27 +833,27 @@
       if (isTestSubmitted) calculateFinalTotal(); 
     }
 
-    function calculateFinalTotal() {
-      let totalEarned = 0;
-      let totalMax = 0;
+function calculateFinalTotal() {
+  let totalEarned = 0;
+  let totalMax = 0;
 
-      quizData.forEach((q, qIndex) => {
-        totalMax += q.score;
-        totalEarned += gradingState[qIndex].earnedScore;
-      });
+  quizData.forEach((q, qIndex) => {
+    totalMax += q.score;
+    totalEarned += gradingState[qIndex].earnedScore;
+  });
 
-      const resDiv = document.getElementById('final-result');
-      resDiv.style.display = "block";
-      
-      totalEarned = Math.round(totalEarned * 10) / 10;
-      let percent = Math.round((totalEarned / totalMax) * 100);
-      let passMsg = percent >= 60 
-        ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
-        : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
+  const resDiv = document.getElementById('final-result');
+  resDiv.style.display = "block";
+  
+  // 변경: 전체 점수도 깔끔하게 정수로 처리
+  totalEarned = Math.round(totalEarned);
+  let percent = Math.round((totalEarned / totalMax) * 100);
+  let passMsg = percent >= 60 
+    ? `<div style="color:#2e7d32; margin-top:10px;">🎉 합격을 축하합니다! 완벽에 가까워지고 있습니다.</div>`
+    : `<div style="color:#c62828; margin-top:10px;">😢 불합격입니다. 부족한 부분의 해설을 꼭 복습하세요!</div>`;
 
-      resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
-    }
-
+  resDiv.innerHTML = `총 획득 점수: <strong>${totalEarned}점</strong> / ${totalMax}점 만점 <br> ${passMsg}`;
+}
     renderQuiz();
 
     // ================== 이미지 클릭(확대) 자동 연결 ==================
@@ -906,34 +922,35 @@
       }
     }
 
-    function updateNavStatus() {
-      quizData.forEach((q, qIndex) => {
-        const navBtn = document.getElementById(`nav-btn-${qIndex}`);
-        if(!navBtn) return;
+function updateNavStatus() {
+  quizData.forEach((q, qIndex) => {
+    const navBtn = document.getElementById(`nav-btn-${qIndex}`);
+    if(!navBtn) return;
 
-        if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
-          let qEarnedScore = Math.round(gradingState[qIndex].earnedScore * 10) / 10;
-          navBtn.className = 'q-nav-btn'; 
-          if (qEarnedScore === q.score) navBtn.classList.add('correct');
-          else if (qEarnedScore > 0) navBtn.classList.add('partial');
-          else navBtn.classList.add('incorrect');
-          return;
-        }
+    if (gradingState[qIndex] && gradingState[qIndex].isGraded) {
+      // 변경: 소수점 계산식 삭제하고 정수화된 earnedScore 그대로 가져옴
+      let qEarnedScore = gradingState[qIndex].earnedScore;
+      navBtn.className = 'q-nav-btn'; 
+      if (qEarnedScore === q.score) navBtn.classList.add('correct');
+      else if (qEarnedScore > 0) navBtn.classList.add('partial');
+      else navBtn.classList.add('incorrect');
+      return;
+    }
 
-        let hasAnswer = false;
-        q.subs.forEach((sub, sIndex) => {
-          const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
-          const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
-          if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
-          if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
-        });
+    let hasAnswer = false;
+    q.subs.forEach((sub, sIndex) => {
+      const inputEl = document.getElementById(`ans-${qIndex}-${sIndex}`);
+      const calcEl = document.getElementById(`calc-${qIndex}-${sIndex}`);
+      if (inputEl && inputEl.value.trim() !== '') hasAnswer = true;
+      if (calcEl && calcEl.value.trim() !== '') hasAnswer = true;
+    });
 
-        if (hasAnswer) {
-          navBtn.classList.add('answered'); 
-        } else {
-          navBtn.classList.remove('answered'); 
-        }
-      });
+    if (hasAnswer) {
+      navBtn.classList.add('answered'); 
+    } else {
+      navBtn.classList.remove('answered'); 
+    }
+  });
     }
 
     // ================== 이미지 확대 및 PAN(드래그) 모달 스크립트 ==================
