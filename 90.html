@@ -140,7 +140,7 @@
 <body>
 
   <h1>📝 1. 위험물 분류·품명·지정수량</h1>
-  <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.</p>
+  <p class="instruction">개별 문제의 [해설 확인] 버튼을 누르거나, 맨 아래 [전체 제출]을 눌러 채점하세요.<br>※ 화학식 입력 시 대소문자를 정확하게 구분하여 입력해야 정답 처리됩니다.<br>서술형이나 그림 문제는 정답 확인 후 자율 채점(정답 인정/부분 점수)이 가능합니다.<br><span style='font-size:0.85em; color:#e65100;'>※ [참고] 제5류 위험물은 새로고침 시 제1종/제2종 조건이 랜덤으로 부여되도록 스크립트 처리되어 있습니다. 부여된 조건에 맞는 지정수량을 기재하세요.</span></p>
   
 <div class="mode-selection" id="mode-selection">
     <label class="active" id="label-basic" onclick="setMode('basic')">
@@ -161,6 +161,12 @@
   <script>
     let gradingState = [];
     let isTestSubmitted = false;
+
+        // 제5류 랜덤 종별 생성 (1종 또는 2종)
+    const azoType = Math.random() < 0.5 ? 1 : 2;
+    const nitroType = Math.random() < 0.5 ? 1 : 2;
+    const azoWeight = azoType === 1 ? "10" : "100";
+    const nitroWeight = nitroType === 1 ? "10" : "100";
 
     // 문제 데이터 배열 (1~55)
     const quizData = [
@@ -213,16 +219,16 @@
         mainQuestion: "문제 5. [출제 22-2]<br>나이트로셀룰로오스에 대하여 답하시오.<br>① 제조 방법: 셀룰로오스에 진한 ( ① )과 진한 ( ② )을 혼합하여 제조<br>③ 품명: ( ③ )<br>④ 지정수량: ( ④ )<br>⑤ 운반용기 외부 표시 주의사항: ( ⑤ )",
         score: 1.8,
         subs: [
-          { label: "①", type: "short", answers: ["황산"] },
-          { label: "②", type: "short", answers: ["질산"] },
+          { label: "①", type: "short", answers: ["황산", "질산"] },
+          { label: "②", type: "short", answers: ["질산", "황산"] },
           { label: "③", type: "short", answers: ["질산에스테르류", "질산에스테르"] },
-          { label: "④", type: "short", answers: ["10kg", "10"] },
+          { label: `④ 위험성 시험 결과 (제${azoType}종)`, type: "short", answers: [`${azoWeight}kg`, `${azoWeight}kg`, `${azoWeight}`, `${azoWeight}`, `${azoWeight}kg`, `${azoWeight}kg`] },
           { label: "⑤", type: "short", answers: ["화기엄금, 충격주의", "화기엄금,충격주의", "충격주의, 화기엄금", "충격주의,화기엄금"] }
         ],
         explanation: "[해설]<br>나이트로셀룰로오스는 셀룰로오스를 <b>진한 황산</b>과 <b>진한 질산</b>의 혼산으로 나이트로화해 만들며, 제5류 <b>질산에스테르류</b>에 속한다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>질산 — 셀룰로오스의 -OH를 질산에스테르(-ONO<sub>2</sub>)로 바꾸는 원료다.</li><li>황산 — 반응에서 생기는 물을 흡수하는 탈수제 역할을 한다.</li><li>지정수량 — 현행 제5류는 위험성 시험 결과에 따라 제1종 10kg, 제2종 100kg이며, 나이트로셀룰로오스는 제1종으로 <b>10kg</b>이다.</li><li>주의사항 — 제5류 운반용기에는 <b>화기엄금</b>과 <b>충격주의</b>를 함께 표시한다.</li></ul>혼동 주의: 제조소 게시판에는 제5류라도 화기엄금만 쓴다. 충격주의는 운반용기 표시에만 붙는다."
       },
       {
-        mainQuestion: "문제 6. [출제 22-2]<br>유별·성질·품명·지정수량 표의 빈칸을 채우시오.<br>제2류 / 성질 ( ① ) / 철분 500kg<br>제2류 / ( ① ) / 금속분<br>제2류 / ( ① ) / 마그네슘<br>제2류 / ( ① ) / ( ② ) / 1,000kg<br>제1류 / 산화성고체 / 아이오딘산염류 / ( ③ )kg<br>제1류 / 산화성고체 / ( ④ ), 과망간산염류 / 1,000kg<br>제4류 / 제2석유류 비수용성 / ( ⑤ )L<br>제4류 / 제3석유류 수용성 / ( ⑥ )L",
+        mainQuestion: "문제 6. [출제 22-2]<br>유별·성질·품명·지정수량 표의 빈칸을 채우시오.<br>제2류 / ( ① ) / 철분 500kg<br>제2류 / ( ① ) / 금속분<br>제2류 / ( ① ) / 마그네슘<br>제2류 / ( ① ) / ( ② ) / 1,000kg<br>제1류 / 산화성고체 / 아이오딘산염류 / ( ③ )kg<br>제1류 / 산화성고체 / ( ④ ), 과망간산염류 / 1,000kg<br>제4류 / 제2석유류 비수용성 / ( ⑤ )L<br>제4류 / 제3석유류 수용성 / ( ⑥ )L",
         score: 1.8,
         subs: [
           { label: "①", type: "short", answers: ["가연성고체"] },
@@ -301,7 +307,7 @@
         score: 1.8,
         subs: [
           { label: "①", type: "formula", answers: ["(C6H5CO)2O2", "C14H10O4"] },
-          { label: "②", type: "short", answers: ["10kg", "10"] },
+          { label: `④ 위험성 시험 결과 (제${azoType}종)`, type: "short", answers: [`${azoWeight}kg`, `${azoWeight}kg`, `${azoWeight}`, `${azoWeight}`, `${azoWeight}kg`, `${azoWeight}kg`] },
           { label: "③", type: "formula", answers: ["NH4MnO4"] },
           { label: "④", type: "short", answers: ["1000kg", "1000", "1,000kg", "1,000"] },
           { label: "⑤", type: "formula", answers: ["Zn3P2"] },
@@ -315,19 +321,19 @@
         subs: [
           { label: "①", type: "formula", answers: ["C6H2(OH)(NO2)3", "C6H2OH(NO2)3"] },
           { label: "②", type: "short", answers: ["나이트로화합물", "니트로화합물"] },
-          { label: "③", type: "short", answers: ["10kg(제1종)/100kg(제2종)", "10kg", "100kg", "10", "100", "10kg 또는 100kg"] }
+          { label: `③위험성 시험 결과 (제${azoType}종)`, type: "short", answers: [`${azoWeight}kg`, `${azoWeight}kg`, `${azoWeight}`, `${azoWeight}`, `${azoWeight}kg`, `${azoWeight}kg`] },
         ],
         explanation: "[해설]<br>트리나이트로페놀(피크린산)은 <b>위험물안전관리법 시행령 별표 1</b>의 제5류 자기반응성물질이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>화학식 — C<sub>6</sub>H<sub>2</sub>(OH)(NO<sub>2</sub>)<sub>3</sub>이며, 페놀의 2·4·6번 자리에 나이트로기 3개가 붙은 구조다.</li><li>품명 — 나이트로기(-NO<sub>2</sub>)가 탄소에 직접 결합하므로 <b>나이트로화합물</b>이다.</li><li>지정수량 — 위험성 시험 결과가 제1종이면 <b>10kg</b>, 제2종이면 <b>100kg</b>이다.</li></ul>혼동 주의: 나이트로셀룰로오스·나이트로글리세린은 이름에 '나이트로'가 들어가도 질산에스테르류다."
       },
       {
-        mainQuestion: "문제 15. [출제 20-2]<br>[보기]의 제5류 위험물을 위험등급별로 구분하시오. (없으면 없음)<br>[보기] 히드라진유도체, 질산에스테르류, 나이트로화합물, 아조화합물, 유기과산화물, 하이드록실아민<br>① I등급: ( ① )<br>② II등급: ( ② )<br>③ III등급: ( ③ )",
+        mainQuestion: "문제 15. [출제 20-2]<br>[보기]의 제5류 위험물을 위험등급별로 구분하시오. (없으면 없음)<br>[보기] 히드라진유도체, 질산에스테르류, 나이트로화합물, 아조화합물, 유기과산화물, 하이드록실아민<br>① I등급: ( ① )<br>② II등급: ( ② )<br>③ III등급: ( ③ )지정수량 체계<br>2024년 7월 위험물안전관리법 시행령 개정(해설 참고)",
         score: 1.8,
         subs: [
           { label: "①", type: "short", answers: ["질산에스테르류, 유기과산화물", "질산에스테르류,유기과산화물", "유기과산화물, 질산에스테르류", "유기과산화물,질산에스테르류"] },
           { label: "②", type: "short", answers: ["히드라진유도체, 나이트로화합물, 아조화합물, 하이드록실아민", "히드라진유도체,나이트로화합물,아조화합물,하이드록실아민"] },
           { label: "③", type: "short", answers: ["없음"] }
         ],
-        explanation: "[해설]<br>제5류 위험물의 위험등급은 지정수량을 기준으로 정해지며, 지정수량이 10kg인 품명만 위험등급 I에 해당한다.<br>질산에스테르류와 유기과산화물은 지정수량 10kg으로 <b>위험등급 I</b>이고, 나머지 히드라진유도체·나이트로화합물·아조화합물·하이드록실아민 등은 지정수량 100~200kg으로 <b>위험등급 II</b>에 속한다.<br>제5류 위험물에는 위험등급 III로 분류되는 품명이 존재하지 않는다는 점도 함께 기억해 둔다."
+        explanation: "[해설](현행기준)<br>제1종: 10kg(위험등급 I)<br>제2종: 100kg (위험등급 Ⅱ)<br>과거 200kg으로 분류되던 품명들도 현재는 위험성 평가 결과에 따라 위 두 등급 중 하나로 적용받습니다.<br>이전<br>제5류 위험물의 위험등급은 지정수량을 기준으로 정해지며, 지정수량이 10kg인 품명만 위험등급 I에 해당한다.<br>질산에스테르류와 유기과산화물은 지정수량 10kg으로 <b>위험등급 I</b>이고, 나머지 히드라진유도체·나이트로화합물·아조화합물·하이드록실아민 등은 지정수량 100~200kg으로 <b>위험등급 II</b>에 속한다.<br>제5류 위험물에는 위험등급 III로 분류되는 품명이 존재하지 않는다는 점도 함께 기억해 둔다."
       },
       {
         mainQuestion: "문제 16. [출제 20-2]<br>다음 위험물의 품명과 지정수량을 쓰시오.<br>① KIO<sub>3</sub>: 품명 ( ① ), 지정수량 ( ② )<br>② AgNO<sub>3</sub>: 품명 ( ③ ), 지정수량 ( ② )<br>③ KMnO<sub>4</sub>: 품명 ( ④ ), 지정수량 ( ⑤ )",
@@ -359,7 +365,7 @@
         subs: [
           { label: "①", type: "short", answers: ["아이오딘(I2)", "아이오딘", "요오드", "I2"] },
           { label: "②", type: "short", answers: ["130"] },
-          { label: "③", type: "short", answers: ["100~130", "100 ~ 130", "100-130"] },
+          { label: "③", type: "short", answers: ["100~130", "100 ~ 130", "100-130", "100~130 미만", "100 ~ 130 미만", "100-130 미만"] },
           { label: "④", type: "short", answers: ["100"] }
         ],
         explanation: "[해설]<br><b>요오드값(아이오딘값)</b>은 유지 100g에 부가되는 <b>아이오딘(I<sub>2</sub>)</b>의 g수로, 불포화 이중결합이 많을수록 커진다. 이중결합이 많으면 공기 중 산소와 잘 반응해 산화·자연발화하기 쉽다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>건성유 — 요오드값 <b>130 이상</b>으로, 공기 중에서 잘 굳고 자연발화 위험이 가장 크다(아마인유·들기름).</li><li>반건성유 — 요오드값 100~130으로, 중간 정도로 굳는다(참기름·콩기름).</li><li>불건성유 — 요오드값 <b>100 이하</b>로, 잘 굳지 않는다(올리브유·피마자유).</li></ul>외우는 요령: 요오드값이 클수록 잘 마르고(건성) 자연발화 위험도 커진다."
@@ -418,10 +424,10 @@
         mainQuestion: "문제 24. [출제 20-4]<br>제3류 위험물의 품명·지정수량(kg) 빈칸을 채우시오.<br>칼륨: ( ① )<br>나트륨: ( ① )<br>알킬알루미늄: ( ① )<br>( ② ): 10<br>( ③ ): 20<br>알칼리금속(K, Na 제외) 및 알칼리토금속(Mg 제외): ( ④ )<br>유기금속화합물: ( ④ )",
         score: 1.8,
         subs: [
-          { label: "①", type: "short", answers: ["10"] },
+          { label: "①", type: "short", answers: ["10", "10kg", "10 kg"] },
           { label: "②", type: "short", answers: ["알킬리튬"] },
           { label: "③", type: "short", answers: ["황린"] },
-          { label: "④", type: "short", answers: ["50"] }
+          { label: "④", type: "short", answers: ["50", "50kg", "50 kg"] }
         ],
         explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>의 제3류(자연발화성 및 금수성 물질)는 반응성이 클수록 지정수량이 작다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>10kg — 칼륨·나트륨·알킬알루미늄에 <b>알킬리튬</b>까지 네 가지로, 물·공기와 격렬히 반응한다.</li><li>20kg — <b>황린</b>으로, 공기 중에서 스스로 발화하므로 물속에 저장한다.</li><li>50kg — 알칼리금속(K·Na 제외)·알칼리토금속(Mg 제외)과 유기금속화합물(알킬알루미늄·알킬리튬 제외)이다.</li></ul>외우는 요령: 10kg은 「칼·나·알·알(칼륨·나트륨·알킬알루미늄·알킬리튬)」로 묶어 외운다."
       },
@@ -488,16 +494,15 @@
         explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>에서 제4류 지정수량은 인화점에 따른 품명과 수용성 여부로 정해진다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>중유 — 제3석유류 비수용성으로 2,000L.</li><li>경유 — 제2석유류 비수용성으로 1,000L.</li><li>다이에틸에터 — 인화점이 약 -45℃인 <b>특수인화물</b>로, 가장 작은 50L.</li><li>아세톤 — 제1석유류 <b>수용성</b>으로 400L.</li></ul>혼동 주의: 휘발유 같은 제1석유류 비수용성은 200L로, 아세톤의 절반이다."
       },
       {
-        mainQuestion: "문제 31. [출제 19-2]<br>다음 위험물의 유별과 지정수량을 쓰시오.<br>① 질산염류 - 유별 ( ① ), 지정수량 ( ② )<br>② 칼륨 - 유별 ( ③ ), 지정수량 ( ④ )<br>③ 황린 - 유별 ( ③ ), 지정수량 ( ⑤ )<br>④ 나이트로화합물 - 유별 ( ⑥ ), 지정수량 ( ⑦ )",
+        mainQuestion: "문제 31. [출제 19-2]<br>다음 위험물의 유별과 지정수량을 쓰시오.<br>① 질산염류 - 유별 ( ① ), 지정수량 ( ② )<br>② 칼륨 - 유별 ( ③ ), 지정수량 ( ④ )<br>③ 황린 - 유별 ( ③ ), 지정수량 ( ⑤ )<br>④ 나이트로화합물 - 유별 ( ⑥ ), 지정수량 ( 삭제 )",
         score: 1.8,
         subs: [
-          { label: "①", type: "short", answers: ["제1류 위험물", "제1류", "1류", "1"] },
-          { label: "②", type: "short", answers: ["300kg", "300"] },
-          { label: "③", type: "short", answers: ["제3류 위험물", "제3류", "3류", "3"] },
-          { label: "④", type: "short", answers: ["10kg", "10"] },
-          { label: "⑤", type: "short", answers: ["20kg", "20"] },
-          { label: "⑥", type: "short", answers: ["제5류 위험물", "제5류", "5류", "5"] },
-          { label: "⑦", type: "short", answers: ["10kg(제1종)/100kg(제2종)", "10kg 또는 100kg", "10kg", "100kg", "10", "100"] }
+          { label: "①", type: "short", answers: ["제1류 위험물", "제1류위험물"] },
+          { label: "②", type: "short", answers: ["300kg", "300 kg"] },
+          { label: "③", type: "short", answers: ["제3류 위험물", "제3류위험물"] },
+          { label: "④", type: "short", answers: ["10kg", "10 kg"] },
+          { label: "⑤", type: "short", answers: ["20kg", "20 kg"] },
+          { label: "⑥", type: "short", answers: ["제5류 위험물", "제5류위험물"] }
         ],
         explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>의 품명별 유별과 지정수량을 묻는 문항이다.<br><ul style='margin-top: 5px; margin-bottom: 5px; padding-left: 20px;'><li>질산염류 — <b>제1류</b>(산화성 고체), 300kg.</li><li>칼륨 — <b>제3류</b>(자연발화성·금수성), 10kg.</li><li>황린 — 칼륨과 같은 제3류지만 지정수량은 20kg.</li><li>나이트로화합물 — <b>제5류</b>(자기반응성), 제1종 10kg·제2종 100kg.</li></ul>혼동 주의: 제5류의 제1종·제2종은 위험등급이 아니라 열분석·압력용기 시험 결과로 가른다."
       },
@@ -516,7 +521,7 @@
         score: 2,
         subs: [
           { label: "①", type: "short", answers: ["나이트로화합물", "니트로화합물"] },
-          { label: "②", type: "short", answers: ["10kg(제1종)", "10kg", "10", "제1종-10kg", "제1종 10kg"] },
+          { label: `④ 위험성 시험 결과 (제${azoType}종)`, type: "short", answers: [`${azoWeight}kg`, `${azoWeight}kg`, `${azoWeight}`, `${azoWeight}`, `${azoWeight}kg`, `${azoWeight}kg`] },
           { label: "③", type: "short", answers: ["톨루엔"] },
           { label: "④", type: "formula", answers: ["C6H5CH3"] }
         ],
@@ -599,15 +604,15 @@
         mainQuestion: "문제 40. [출제 25-2]<br>다음 중 수용성인 것만 골라 지정수량 배수의 총합을 구하시오.<br>① 아세톤 1,200L ② 폼산메틸 1,200L ③ 피리딘 2,000L ④ 에틸알코올 1,600L ⑤ 휘발유 1,800L<br>→ 수용성 대상: ( ① ), ( ② ), ( ③ ) / 배수 총합 = ( ④ )배",
         score: 1.8,
         subs: [
-          { label: "①", type: "short", answers: ["아세톤"] },
-          { label: "②", type: "short", answers: ["폼산메틸"] },
-          { label: "③", type: "short", answers: ["피리딘"] },
-          { label: "④", type: "short", answers: ["11", "11배"] }
+          { label: "①", type: "short", answers: ["아세톤,에틸알코올,피리딘", "아세톤", "에틸알코올", "피리딘"] },
+          { label: "②", type: "short", answers: ["아세톤,에틸알코올,피리딘", "아세톤", "에틸알코올", "피리딘"] },
+          { label: "③", type: "short", answers: ["아세톤,에틸알코올,피리딘", "아세톤", "에틸알코올", "피리딘"] },
+          { label: "④", type: "short", answers: ["12", "12배"] }
         ],
-        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>의 수용성·비수용성 구분은 제1~3석유류에만 있고, 알코올류는 따로 떨어진 품명(400L)이다.<br>아세톤·폼산메틸·피리딘은 모두 <b>제1석유류 수용성</b>이라 지정수량이 400L이다. 휘발유는 제1석유류 비수용성이고 에틸알코올은 알코올류이므로 대상에서 빠진다.<br>배수 = 저장량 ÷ 지정수량<br>1,200/400 + 1,200/400 + 2,000/400<br>= 3 + 3 + 5 = <b>11배</b>"
+        explanation: "[해설]<br><b>위험물안전관리법 시행령 별표 1</b>의 수용성·비수용성 구분은 제1~3석유류에만 있고, 알코올류는 따로 떨어진 품명(400L)이다.<br>아세톤·폼산메틸·피리딘은 모두 <b>제1석유류 수용성</b>이라 지정수량이 400L이다. 휘발유는 제1석유류 비수용성이고 에틸알코올은 알코올류이므로 대상에서 빠진다.<br>배수 = 저장량 ÷ 지정수량<br>1,200/400 + 1,200/400 + 2,000/400<br>= 3 + 3 + 5 = <b>11배</b><br>※ 폼산메틸(의산메틸)은 수용성이지만 위험물안전관리세부기준에 의해 비수용성 위험물로 분류된다.<br>알코올류의 에틸알코올은 '석유류'로 대상을 한정하지 않았기 때문에 수용성인 에틸알코올류가 정답이다.<br>배수 = 저장량 ÷ 지정수량<br>1,200/400 + 2,000/400 + 1,600/400<br>= 3 + 3 + 5 = <b>12배</b>"
       },
       {
-        mainQuestion: "문제 41. [출제 25-2]<br>제3류 위험물의 빈칸을 채우시오.<br>① 칼륨 지정수량: ( ① )kg<br>② 나트륨 지정수량: ( ② )kg<br>③ 알킬알루미늄 지정수량: ( ③ )kg<br>④ 지정수량 10kg인 품명(알킬알루미늄 외): ( ④ )<br>⑤ 지정수량 20kg인 품명: ( ⑤ )<br>⑥ 알칼리금속(칼륨·나트륨 제외)·알칼리토금속 지정수량: ( ⑥ )kg<br>⑦ 유기금속화합물(알킬알루미늄·알킬리튬 제외) 지정수량: ( ⑦ )kg",
+        mainQuestion: "문제 41. [출제 25-2]<br>제3류 위험물의 빈칸을 채우시오.<br>① 칼륨 지정수량: ( ① )kg<br>② 나트륨 지정수량: ( ② )kg<br>③ 알킬알루미늄 지정수량: ( ③ )kg<br>④ ( ④ ) 지정수량: 10kg<br>⑤ ( ⑤ ) 지정수량: 20kg<br>⑥ 알칼리금속(칼륨·나트륨 제외)·알칼리토금속 지정수량: ( ⑥ )kg<br>⑦ 유기금속화합물(알킬알루미늄·알킬리튬 제외) 지정수량: ( ⑦ )kg",
         score: 1.8,
         subs: [
           { label: "①", type: "short", answers: ["10"] },
@@ -716,7 +721,7 @@
         score: 1.8,
         subs: [
           { label: "①", type: "short", answers: ["디니트로톨루엔", "다이나이트로톨루엔"] },
-          { label: "②", type: "short", answers: ["10(제1종)/100(제2종)", "10/100", "10, 100"] },
+          { label: `④ 위험성 시험 결과(제${azoType}종)`, type: "short", answers: [`${azoWeight}kg`, `${azoWeight}kg`, `${azoWeight}`, `${azoWeight}`, `${azoWeight}kg`, `${azoWeight}kg`] },
           { label: "③", type: "formula", answers: ["NH4MnO4"] },
           { label: "④", type: "formula", answers: ["Zn3P2"] },
           { label: "⑤", type: "short", answers: ["300"] }
